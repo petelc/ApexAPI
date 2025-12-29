@@ -8,6 +8,11 @@ using Apex.API.Infrastructure.Identity;
 using Apex.API.Infrastructure.Services;
 using Apex.API.UseCases.Common.Interfaces;
 using Apex.API.UseCases.Tenants.Create;
+using Apex.API.UseCases.Tenants.Events;
+using Apex.API.Core.Aggregates.TenantAggregate.Events;
+using Apex.API.Core.ValueObjects;
+using Mediator;
+using Ardalis.Result;
 
 namespace Apex.API.Infrastructure;
 
@@ -31,10 +36,10 @@ public static class DependencyInjection
                     errorNumbersToAdd: null);
             });
 
-#if DEBUG
+            #if DEBUG
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
-#endif
+            #endif
         });
 
         // Required services
@@ -57,8 +62,23 @@ public static class DependencyInjection
         // Services
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
 
-        // ADDED: Register handlers directly (bypass Mediator source generator issues)
-        services.AddScoped<CreateTenantHandler>();
+        // ===================================================================
+        // MEDIATOR: Register Command Handlers
+        // ===================================================================
+        services.AddScoped<IRequestHandler<CreateTenantCommand, Result<TenantId>>, CreateTenantHandler>();
+        
+        // Add more command handlers here as you create them:
+        // services.AddScoped<IRequestHandler<UpdateTenantCommand, Result>, UpdateTenantHandler>();
+        // services.AddScoped<IRequestHandler<DeleteTenantCommand, Result>, DeleteTenantHandler>();
+
+        // ===================================================================
+        // MEDIATOR: Register Event Handlers (Domain Events)
+        // ===================================================================
+        services.AddScoped<INotificationHandler<TenantCreatedEvent>, TenantCreatedEventHandler>();
+        
+        // Add more event handlers here as you create them:
+        // services.AddScoped<INotificationHandler<TenantStatusChangedEvent>, TenantStatusChangedEventHandler>();
+        // services.AddScoped<INotificationHandler<TenantTierUpgradedEvent>, TenantTierUpgradedEventHandler>();
 
         return services;
     }

@@ -146,3 +146,18 @@ WHERE [t].[Subdomain] = @subdomain
 2025-12-29 11:06:10.100 -05:00 [INF] Executed endpoint 'HTTP: GET /api/api/tenants/current'
 2025-12-29 11:06:10.101 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/api/api/tenants/current - 400 null application/json; charset=utf-8 50.7573ms
 2025-12-29 11:10:01.082 -05:00 [INF] Application is shutting down...
+2025-12-29 11:45:12.022 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 11:45:12.046 -05:00 [INF] Registered 3 endpoints in 120 milliseconds.
+2025-12-29 11:45:12.072 -05:00 [INF] No validators found in the system!
+2025-12-29 11:45:12.199 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-29 11:45:12.199 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 11:45:12.199 -05:00 [INF] Hosting environment: Development
+2025-12-29 11:45:12.199 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 11:45:58.748 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger - null null
+2025-12-29 11:45:58.770 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger - 302 0 null 22.972ms
+2025-12-29 11:45:58.772 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-29 11:45:58.812 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 40.0747ms
+2025-12-29 11:45:58.887 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 11:45:58.889 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-12-29 11:45:59.061 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 174.4654ms
+2025-12-29 11:47:06.605 -05:00 [INF] Application is shutting down...

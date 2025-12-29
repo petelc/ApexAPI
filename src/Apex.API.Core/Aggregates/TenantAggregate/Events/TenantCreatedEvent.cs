@@ -1,27 +1,29 @@
+using Mediator;
 using Traxs.SharedKernel;
-using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.Core.Aggregates.TenantAggregate.Events;
 
 /// <summary>
-/// Raised when a new tenant is created
+/// Domain event raised when a new tenant is created
+/// Inherits from DomainEventBase (for domain event infrastructure)
+/// Implements INotification (for Mediator dispatching)
 /// </summary>
-public sealed class TenantCreatedEvent : DomainEventBase
+public class TenantCreatedEvent : DomainEventBase, INotification
 {
-    public TenantId TenantId { get; }
+    public Guid TenantId { get; }
     public string CompanyName { get; }
     public string Subdomain { get; }
-    public SubscriptionTier Tier { get; }
+    public string SchemaName { get; }
 
     public TenantCreatedEvent(
-        TenantId tenantId, 
-        string companyName, 
+        Guid tenantId,
+        string companyName,
         string subdomain,
-        SubscriptionTier tier)
+        string schemaName)
     {
         TenantId = tenantId;
         CompanyName = companyName;
         Subdomain = subdomain;
-        Tier = tier;
+        SchemaName = schemaName;
     }
 }

@@ -86,10 +86,10 @@ public class Tenant : EntityBase, IAggregateRoot
 
         // Raise domain event
         tenant.RegisterDomainEvent(new TenantCreatedEvent(
-            tenant.Id,
+            tenant.Id.Value,              // ✅ Extract Guid
             companyName,
             subdomain,
-            SubscriptionTier.Trial));
+            tenant.SchemaName));          // ✅ Use SchemaName (string)
 
         return tenant;
     }
