@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/appsettings.json",
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=ApexSaaS;User Id=sa;Password=YOUR_PASSWORD_HERE;TrustServerCertificate=True"
+  },
+  "Deployment": {
+    "Mode": "SaaS",
+    "BaseDomain": "localhost",
+    "Protocol": "https"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning",
+      "Microsoft.EntityFrameworkCore": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "Kestrel": {
+    "Endpoints": {
+      "Https": {
+        "Url": "https://localhost:5000"
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Apex.API.ServiceDefaults -> /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.ServiceDefaults/bin/Debug/net10.0/Apex.API.ServiceDefaults.dll
+  Apex.API.Core -> /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Core/bin/Debug/net10.0/Apex.API.Core.dll
+  Apex.API.UseCases -> /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/bin/Debug/net10.0/Apex.API.UseCases.dll
+  Apex.API.UnitTests -> /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/tests/Apex.API.UnitTests/bin/Debug/net10.0/Apex.API.UnitTests.dll
+  Apex.API.Infrastructure -> /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Infrastructure/bin/Debug/net10.0/Apex.API.Infrastructure.dll
+  Apex.API.IntegrationTests -> /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/tests/Apex.API.IntegrationTests/bin/Debug/net10.0/Apex.API.IntegrationTests.dll
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetTenant.cs(68,19): error CS0103: The name 'SendNotFoundAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetTenant.cs(90,15): error CS0103: The name 'SendAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs(78,23): error CS0103: The name 'SendAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs(97,19): error CS0103: The name 'SendCreatedAtAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs(109,19): error CS0103: The name 'SendErrorsAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetCurrentTenant.cs(74,19): error CS0103: The name 'SendAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetCurrentTenant.cs(79,19): error CS0103: The name 'SendErrorsAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetCurrentTenant.cs(76,26): error CS0168: The variable 'ex' is declared but never used [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+
+Build FAILED.
+
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetTenant.cs(68,19): error CS0103: The name 'SendNotFoundAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetTenant.cs(90,15): error CS0103: The name 'SendAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs(78,23): error CS0103: The name 'SendAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs(97,19): error CS0103: The name 'SendCreatedAtAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs(109,19): error CS0103: The name 'SendErrorsAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetCurrentTenant.cs(74,19): error CS0103: The name 'SendAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetCurrentTenant.cs(79,19): error CS0103: The name 'SendErrorsAsync' does not exist in the current context [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/GetCurrentTenant.cs(76,26): error CS0168: The variable 'ex' is declared but never used [/Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Apex.API.Web.csproj]
+    0 Warning(s)
+    8 Error(s)
+
+Time Elapsed 00:00:01.69

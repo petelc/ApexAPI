@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: apex-sqlserver
+    hostname: apex-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "ApexDev!2025#Strong"
+      MSSQL_PID: "Developer"
+      MSSQL_AGENT_ENABLED: "true"
+      MSSQL_COLLATION: "SQL_Latin1_General_CP1_CI_AS"
+    
+    ports:
+      - "1433:1433"
+    
+    volumes:
+      - apex-sqlserver-data:/var/opt/mssql
+      - ./docker/sql-init:/docker-entrypoint-initdb.d:ro
+      - ./docker/sql-backups:/var/opt/mssql/backups
+    
+    networks:
+      - apex-network
+    
+    # FIXED health check for SQL Server 2022
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P ApexDev!2025#Strong -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: apex-redis
+    hostname: apex-redis
+    ports:
+      - "6379:6379"
+    
+    volumes:
+      - apex-redis-data:/data
+    
+    command: redis-server --appendonly yes --requirepass "ApexRedis!2025"
+    
+    networks:
+      - apex-network
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    
+    restart: unless-stopped
+
+volumes:
+  apex-sqlserver-data:
+    name: apex-sqlserver-data
+  apex-redis-data:
+    name: apex-redis-data
+
+networks:
+  apex-network:
+    name: apex-network
