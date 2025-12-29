@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mediator;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.UseCases.Tenants.Create;
@@ -8,20 +9,20 @@ using Apex.API.UseCases.Tenants.Create;
 namespace Apex.API.Web.Endpoints.Tenants;
 
 /// <summary>
-/// Endpoint for tenant signup (bypasses Mediator for now)
+/// Endpoint for tenant signup using Mediator pattern
 /// </summary>
 public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantResponse>
 {
-    private readonly CreateTenantHandler _handler;
+    private readonly IMediator _mediator;
     private readonly IReadRepository<Tenant> _tenantRepository;
     private readonly IConfiguration _configuration;
 
     public CreateTenantEndpoint(
-        CreateTenantHandler handler,  // Inject handler directly
+        IMediator mediator,  // ✅ Using Mediator now!
         IReadRepository<Tenant> tenantRepository,
         IConfiguration configuration)
     {
-        _handler = handler;
+        _mediator = mediator;
         _tenantRepository = tenantRepository;
         _configuration = configuration;
     }
@@ -43,8 +44,8 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
             req.AdminLastName,
             req.Region);
 
-        // Call handler directly (bypass Mediator)
-        var result = await _handler.Handle(command, ct);
+        // Send command via Mediator ✅
+        var result = await _mediator.Send(command, ct);
 
         if (result.IsSuccess)
         {
@@ -61,7 +62,7 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
                     SubscriptionTier = "Trial",
                     Message = "Your account has been created successfully!"
                 };
-
+                
                 await HttpContext.Response.WriteAsJsonAsync(fallbackResponse, ct);
                 HttpContext.Response.StatusCode = StatusCodes.Status201Created;
                 return;

@@ -7,7 +7,7 @@ namespace Apex.API.Infrastructure.Data;
 
 /// <summary>
 /// Main database context for APEX
-/// TEMPORARY: Domain events disabled until Mediator is properly configured
+/// NOW WITH DOMAIN EVENTS ENABLED! ✅
 /// </summary>
 public class ApexDbContext : DbContext
 {
@@ -19,7 +19,7 @@ public class ApexDbContext : DbContext
 
     public ApexDbContext(
         DbContextOptions<ApexDbContext> options,
-        IDomainEventDispatcher domainEventDispatcher)
+        IDomainEventDispatcher domainEventDispatcher) 
         : base(options)
     {
         _domainEventDispatcher = domainEventDispatcher;
@@ -51,25 +51,14 @@ public class ApexDbContext : DbContext
             .Where(e => e.DomainEvents.Any())
             .ToArray();
 
-        // Save changes
+        // Save changes to database first
         var result = await base.SaveChangesAsync(cancellationToken);
 
-        // TEMPORARILY DISABLED: Domain event dispatching
-        // TODO: Re-enable once Mediator is properly configured with event handlers
-        /*
+        // ✅ DOMAIN EVENTS NOW ENABLED!
+        // Dispatch events AFTER successful save
         if (entitiesWithEvents.Any())
         {
             await _domainEventDispatcher.DispatchAndClearEvents(entitiesWithEvents);
-        }
-        */
-
-        // For now, just clear the events without dispatching
-        if (entitiesWithEvents.Any())
-        {
-            foreach (var entity in entitiesWithEvents)
-            {
-                entity.ClearDomainEvents();
-            }
         }
 
         return result;
