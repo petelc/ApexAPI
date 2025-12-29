@@ -1,7 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mediator;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.UseCases.Tenants.Create;
@@ -9,27 +8,27 @@ using Apex.API.UseCases.Tenants.Create;
 namespace Apex.API.Web.Endpoints.Tenants;
 
 /// <summary>
-/// Endpoint for tenant signup using Mediator pattern
+/// Endpoint for tenant signup - DIRECT INJECTION (works reliably)
 /// </summary>
 public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantResponse>
 {
-    private readonly IMediator _mediator;
+    private readonly CreateTenantHandler _handler;
     private readonly IReadRepository<Tenant> _tenantRepository;
     private readonly IConfiguration _configuration;
 
     public CreateTenantEndpoint(
-        IMediator mediator,  // ✅ Using Mediator now!
+        CreateTenantHandler handler,  // Direct injection - works!
         IReadRepository<Tenant> tenantRepository,
         IConfiguration configuration)
     {
-        _mediator = mediator;
+        _handler = handler;
         _tenantRepository = tenantRepository;
         _configuration = configuration;
     }
 
     public override void Configure()
     {
-        Post("/api/tenants/signup");
+        Post("/tenants/signup");
         AllowAnonymous();
     }
 
@@ -44,8 +43,8 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
             req.AdminLastName,
             req.Region);
 
-        // Send command via Mediator ✅
-        var result = await _mediator.Send(command, ct);
+        // Call handler directly
+        var result = await _handler.Handle(command, ct);
 
         if (result.IsSuccess)
         {
@@ -62,7 +61,7 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
                     SubscriptionTier = "Trial",
                     Message = "Your account has been created successfully!"
                 };
-                
+
                 await HttpContext.Response.WriteAsJsonAsync(fallbackResponse, ct);
                 HttpContext.Response.StatusCode = StatusCodes.Status201Created;
                 return;

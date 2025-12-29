@@ -161,3 +161,86 @@ WHERE [t].[Subdomain] = @subdomain
 2025-12-29 11:45:58.889 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
 2025-12-29 11:45:59.061 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 174.4654ms
 2025-12-29 11:47:06.605 -05:00 [INF] Application is shutting down...
+2025-12-29 16:40:27.905 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 16:40:27.931 -05:00 [INF] Registered 3 endpoints in 131 milliseconds.
+2025-12-29 16:40:27.960 -05:00 [INF] No validators found in the system!
+2025-12-29 16:40:28.099 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-29 16:40:28.099 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 16:40:28.099 -05:00 [INF] Hosting environment: Development
+2025-12-29 16:40:28.099 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 16:41:00.393 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 175
+2025-12-29 16:41:00.411 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 404 0 null 18.8227ms
+2025-12-29 16:41:00.418 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST https://localhost:5000/api/tenants/signup, Response status code: 404
+2025-12-29 16:45:57.469 -05:00 [INF] Application is shutting down...
+2025-12-29 16:46:14.293 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 16:46:14.320 -05:00 [INF] Registered 3 endpoints in 130 milliseconds.
+2025-12-29 16:46:14.347 -05:00 [INF] No validators found in the system!
+2025-12-29 16:46:14.476 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-29 16:46:14.476 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 16:46:14.476 -05:00 [INF] Hosting environment: Development
+2025-12-29 16:46:14.476 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 16:46:20.291 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 175
+2025-12-29 16:46:20.309 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-29 16:46:20.338 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-29 16:46:20.342 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+Mediator.MissingMessageHandlerException: No handler registered for message type: Apex.API.UseCases.Tenants.Create.CreateTenantCommand
+   at Mediator.Mediator.ThrowMissingHandler(Object msg) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 943
+   at Mediator.Mediator.ThrowInvalidRequest[T](T msg, String paramName) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 968
+   at Mediator.Mediator.Send[TResponse](IRequest`1 request, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 744
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-29 16:46:20.344 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 54.2361ms
+2025-12-29 16:51:56.114 -05:00 [INF] Application is shutting down...
+2025-12-29 16:52:17.979 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 16:52:18.002 -05:00 [INF] Registered 3 endpoints in 109 milliseconds.
+2025-12-29 16:52:18.025 -05:00 [INF] No validators found in the system!
+2025-12-29 16:52:18.179 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-29 16:52:18.180 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 16:52:18.180 -05:00 [INF] Hosting environment: Development
+2025-12-29 16:52:18.186 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 16:52:47.344 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 175
+2025-12-29 16:52:47.363 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-29 16:52:47.391 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-29 16:52:47.395 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+Mediator.MissingMessageHandlerException: No handler registered for message type: Apex.API.UseCases.Tenants.Create.CreateTenantCommand
+   at Mediator.Mediator.ThrowMissingHandler(Object msg) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 943
+   at Mediator.Mediator.ThrowInvalidRequest[T](T msg, String paramName) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 968
+   at Mediator.Mediator.Send[TResponse](IRequest`1 request, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 744
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-29 16:52:47.398 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 54.9635ms
+2025-12-29 16:53:52.095 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-29 16:53:52.156 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 61.2996ms
+2025-12-29 16:53:52.233 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 16:53:52.236 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-12-29 16:53:52.427 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 193.4807ms
+2025-12-29 16:54:37.444 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 175
+2025-12-29 16:54:37.445 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-29 16:54:37.450 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-29 16:54:37.451 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+Mediator.MissingMessageHandlerException: No handler registered for message type: Apex.API.UseCases.Tenants.Create.CreateTenantCommand
+   at Mediator.Mediator.ThrowMissingHandler(Object msg) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 943
+   at Mediator.Mediator.ThrowInvalidRequest[T](T msg, String paramName) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 968
+   at Mediator.Mediator.Send[TResponse](IRequest`1 request, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/obj/Debug/net10.0/Mediator.SourceGenerator/Mediator.SourceGenerator.IncrementalMediatorGenerator/Mediator.g.cs:line 744
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-29 16:54:37.452 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 8.8337ms
+2025-12-29 17:06:38.996 -05:00 [INF] Application is shutting down...
