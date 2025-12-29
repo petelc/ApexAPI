@@ -1,0 +1,148 @@
+2025-12-29 09:43:28.145 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 09:43:28.168 -05:00 [INF] Registered 3 endpoints in 130 milliseconds.
+2025-12-29 09:43:28.197 -05:00 [INF] No validators found in the system!
+2025-12-29 09:43:28.504 -05:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+2025-12-29 09:43:28.513 -05:00 [INF] Now listening on: https://localhost:58133
+2025-12-29 09:43:28.513 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 09:43:28.513 -05:00 [INF] Hosting environment: Development
+2025-12-29 09:43:28.513 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 09:44:19.750 -05:00 [INF] Application is shutting down...
+2025-12-29 09:51:37.724 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 09:51:37.748 -05:00 [INF] Registered 3 endpoints in 124 milliseconds.
+2025-12-29 09:51:37.774 -05:00 [INF] No validators found in the system!
+2025-12-29 09:51:37.918 -05:00 [INF] Now listening on: https://localhost:59704
+2025-12-29 09:51:37.918 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 09:51:37.918 -05:00 [INF] Hosting environment: Development
+2025-12-29 09:51:37.918 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 09:52:05.830 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/scalar - null null
+2025-12-29 09:52:05.852 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/scalar - 404 0 null 28.9151ms
+2025-12-29 09:52:05.859 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5000/scalar, Response status code: 404
+2025-12-29 09:52:17.383 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger - null null
+2025-12-29 09:52:17.388 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger - 302 0 null 5.2343ms
+2025-12-29 09:52:17.390 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-29 09:52:17.444 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 54.355ms
+2025-12-29 09:52:17.451 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/swagger-ui.css - null null
+2025-12-29 09:52:17.451 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.css - null null
+2025-12-29 09:52:17.451 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/swagger-ui-bundle.js - null null
+2025-12-29 09:52:17.452 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/swagger-ui-standalone-preset.js - null null
+2025-12-29 09:52:17.455 -05:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2025-12-29 09:52:17.455 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.css - 200 218 text/css 3.8816ms
+2025-12-29 09:52:17.458 -05:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-12-29 09:52:17.458 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/swagger-ui.css - 200 154988 text/css 7.4697ms
+2025-12-29 09:52:17.458 -05:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-12-29 09:52:17.458 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/swagger-ui-standalone-preset.js - 200 229224 text/javascript 6.5712ms
+2025-12-29 09:52:17.465 -05:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-12-29 09:52:17.465 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/swagger-ui-bundle.js - 200 1468327 text/javascript 13.3749ms
+2025-12-29 09:52:17.546 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 09:52:17.548 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-12-29 09:52:17.554 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/favicon-32x32.png - null null
+2025-12-29 09:52:17.554 -05:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-12-29 09:52:17.554 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/favicon-32x32.png - 200 628 image/png 0.499ms
+2025-12-29 09:52:17.730 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 184.3472ms
+2025-12-29 09:52:30.240 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/api/tenants/current - null null
+2025-12-29 09:52:30.244 -05:00 [INF] Executing endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 09:52:30.254 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 09:52:30.289 -05:00 [INF] Executed endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 09:52:30.290 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/api/tenants/current - 400 null application/json; charset=utf-8 50.3897ms
+2025-12-29 09:56:39.107 -05:00 [INF] Application is shutting down...
+2025-12-29 09:56:59.323 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 09:56:59.347 -05:00 [INF] Registered 3 endpoints in 135 milliseconds.
+2025-12-29 09:56:59.375 -05:00 [INF] No validators found in the system!
+2025-12-29 09:56:59.510 -05:00 [INF] Now listening on: https://localhost:60650
+2025-12-29 09:56:59.510 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 09:56:59.510 -05:00 [INF] Hosting environment: Development
+2025-12-29 09:56:59.510 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 10:07:26.809 -05:00 [INF] Application is shutting down...
+2025-12-29 10:08:46.703 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 10:08:46.728 -05:00 [INF] Registered 3 endpoints in 142 milliseconds.
+2025-12-29 10:08:46.755 -05:00 [INF] No validators found in the system!
+2025-12-29 10:08:46.892 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-29 10:08:46.892 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 10:08:46.892 -05:00 [INF] Hosting environment: Development
+2025-12-29 10:08:46.892 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 10:10:09.105 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger - null null
+2025-12-29 10:10:09.128 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger - 302 0 null 23.5802ms
+2025-12-29 10:10:09.130 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-29 10:10:09.174 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 44.7484ms
+2025-12-29 10:10:09.285 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 10:10:09.287 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-12-29 10:10:09.464 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 178.9001ms
+2025-12-29 10:10:19.821 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/api/tenants/current - null null
+2025-12-29 10:10:19.827 -05:00 [INF] Executing endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 10:10:19.836 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 10:10:19.870 -05:00 [INF] Executed endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 10:10:19.871 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/api/tenants/current - 400 null application/json; charset=utf-8 50.7915ms
+2025-12-29 10:12:44.734 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-29 10:12:44.737 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 2.6465ms
+2025-12-29 10:12:44.795 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 10:12:44.796 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 1.1805ms
+2025-12-29 10:12:49.847 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/api/tenants/current - null null
+2025-12-29 10:12:49.848 -05:00 [INF] Executing endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 10:12:49.854 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 10:12:49.855 -05:00 [INF] Executed endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 10:12:49.855 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/api/tenants/current - 400 null application/json; charset=utf-8 8.4428ms
+2025-12-29 10:16:24.224 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger - null null
+2025-12-29 10:16:24.228 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger - 302 0 null 3.8159ms
+2025-12-29 10:16:24.230 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/index.html - null null
+2025-12-29 10:16:24.231 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 1.4333ms
+2025-12-29 10:16:24.239 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/swagger-ui.css - null null
+2025-12-29 10:16:24.242 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/index.css - null null
+2025-12-29 10:16:24.242 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/swagger-ui-bundle.js - null null
+2025-12-29 10:16:24.242 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/swagger-ui-standalone-preset.js - null null
+2025-12-29 10:16:24.253 -05:00 [INF] Sending file. Request path: '/index.css'. Physical path: 'N/A'
+2025-12-29 10:16:24.254 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/index.css - 200 218 text/css 11.76ms
+2025-12-29 10:16:24.257 -05:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-12-29 10:16:24.257 -05:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-12-29 10:16:24.257 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/swagger-ui-standalone-preset.js - 200 229224 text/javascript 14.7337ms
+2025-12-29 10:16:24.257 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/swagger-ui.css - 200 154988 text/css 18.6663ms
+2025-12-29 10:16:24.261 -05:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-12-29 10:16:24.261 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/swagger-ui-bundle.js - 200 1468327 text/javascript 19.178ms
+2025-12-29 10:16:24.338 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 10:16:24.341 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/favicon-32x32.png - null null
+2025-12-29 10:16:24.342 -05:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-12-29 10:16:24.342 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/favicon-32x32.png - 200 628 image/png 0.8035ms
+2025-12-29 10:16:24.370 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 32.4933ms
+2025-12-29 10:16:33.141 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/api/tenants/current - null null
+2025-12-29 10:16:33.143 -05:00 [INF] Executing endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 10:16:33.143 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 10:16:33.352 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-29 10:16:33.627 -05:00 [INF] Executed DbCommand (20ms) [Parameters=[@subdomain='demo' (Size = 63)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [t].[Id], [t].[CompanyName], [t].[CreatedDate], [t].[IsActive], [t].[LastModifiedDate], [t].[MaxRequestsPerMonth], [t].[MaxStorageGB], [t].[MaxUsers], [t].[Region], [t].[Status], [t].[Subdomain], [t].[Tier], [t].[TrialEndsDate]
+FROM [shared].[Tenants] AS [t]
+WHERE [t].[Subdomain] = @subdomain
+2025-12-29 10:16:33.668 -05:00 [INF] Executed endpoint 'HTTP: GET /api/tenants/current'
+2025-12-29 10:16:33.670 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/api/tenants/current - 200 null application/json; charset=utf-8 528.3555ms
+2025-12-29 10:28:07.890 -05:00 [INF] Application is shutting down...
+2025-12-29 11:00:43.015 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 11:00:43.043 -05:00 [INF] Registered 3 endpoints in 132 milliseconds.
+2025-12-29 11:00:43.070 -05:00 [INF] No validators found in the system!
+2025-12-29 11:00:43.199 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-29 11:00:43.199 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-29 11:00:43.199 -05:00 [INF] Hosting environment: Development
+2025-12-29 11:00:43.199 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-29 11:01:08.714 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/index.html - null null
+2025-12-29 11:01:08.773 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 60.4026ms
+2025-12-29 11:01:08.849 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/favicon-32x32.png - null null
+2025-12-29 11:01:08.849 -05:00 [INF] Request starting HTTP/2 GET https://demo.localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 11:01:08.852 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-12-29 11:01:08.855 -05:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-12-29 11:01:08.855 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/favicon-32x32.png - 200 628 image/png 6.4449ms
+2025-12-29 11:01:09.032 -05:00 [INF] Request finished HTTP/2 GET https://demo.localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 182.9876ms
+2025-12-29 11:03:24.938 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger - null null
+2025-12-29 11:03:24.939 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger - 302 0 null 1.5869ms
+2025-12-29 11:03:24.941 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-29 11:03:24.943 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 2.2048ms
+2025-12-29 11:03:25.022 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 11:03:25.051 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 28.9189ms
+2025-12-29 11:04:03.183 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger - null null
+2025-12-29 11:04:03.184 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger - 302 0 null 1.0763ms
+2025-12-29 11:04:03.186 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-29 11:04:03.187 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 0.8683ms
+2025-12-29 11:04:03.231 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-29 11:04:03.232 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 1.032ms
+2025-12-29 11:06:10.050 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/api/api/tenants/current - null null
+2025-12-29 11:06:10.055 -05:00 [INF] Executing endpoint 'HTTP: GET /api/api/tenants/current'
+2025-12-29 11:06:10.065 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-29 11:06:10.100 -05:00 [INF] Executed endpoint 'HTTP: GET /api/api/tenants/current'
+2025-12-29 11:06:10.101 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/api/api/tenants/current - 400 null application/json; charset=utf-8 50.7573ms
+2025-12-29 11:10:01.082 -05:00 [INF] Application is shutting down...
