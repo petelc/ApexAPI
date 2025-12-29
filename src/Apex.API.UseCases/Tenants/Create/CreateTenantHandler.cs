@@ -5,6 +5,7 @@ using Apex.API.Core.ValueObjects;
 using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.Core.Aggregates.TenantAggregate.Specifications;
 using Apex.API.UseCases.Common.Interfaces;
+using MediatR;
 
 namespace Apex.API.UseCases.Tenants.Create;
 
@@ -33,7 +34,7 @@ public class CreateTenantHandler : IRequestHandler<CreateTenantCommand, Result<T
         _logger = logger;
     }
 
-    public async ValueTask<Result<TenantId>> Handle(
+    public async Task<Result<TenantId>> Handle(
     CreateTenantCommand request,
     CancellationToken cancellationToken)
     {

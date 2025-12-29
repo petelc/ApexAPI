@@ -1,5 +1,6 @@
 using Ardalis.Result;
 using Apex.API.Core.ValueObjects;
+using MediatR;
 
 namespace Apex.API.UseCases.Tenants.Create;
 

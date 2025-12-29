@@ -1,4 +1,4 @@
-using Mediator;
+using MediatR;
 using Traxs.SharedKernel;
 
 namespace Apex.API.Core.Aggregates.TenantAggregate.Events;
