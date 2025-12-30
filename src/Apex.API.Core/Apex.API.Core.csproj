@@ -10,7 +10,7 @@
     <PackageReference Include="Traxs.SharedKernel" />
     <PackageReference Include="Ardalis.SmartEnum" />
     <PackageReference Include="Ardalis.Specification" />
-    
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Vogen" />
   </ItemGroup>

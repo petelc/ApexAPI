@@ -266,3 +266,821 @@ System.IO.IOException: The encryption operation failed, see inner exception.
    at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
    at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
    at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.KestrelConnection`1.ExecuteAsync()
+2025-12-30 08:41:33.113 -05:00 [INF] Application is shutting down...
+2025-12-30 10:40:07.107 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 10:40:07.349 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 10:40:22.501 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 10:40:22.757 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 10:40:22.981 -05:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-30 10:40:22.986 -05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-12-30 10:40:22.996 -05:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-12-30 10:40:23.029 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-12-30 10:40:23.036 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-30 10:40:23.037 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-12-30 10:40:23.043 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-12-30 10:40:23.048 -05:00 [INF] Applying migration '20251230154007_AddIdentityTables'.
+2025-12-30 10:40:23.062 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF SCHEMA_ID(N'shared') IS NULL EXEC(N'CREATE SCHEMA [shared];');
+2025-12-30 10:40:23.067 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[Roles] (
+    [Id] uniqueidentifier NOT NULL,
+    [TenantId] uniqueidentifier NOT NULL,
+    [Description] nvarchar(500) NOT NULL,
+    [IsSystemRole] bit NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-12-30 10:40:23.076 -05:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[Tenants] (
+    [Id] uniqueidentifier NOT NULL,
+    [CompanyName] nvarchar(200) NOT NULL,
+    [Subdomain] nvarchar(63) NOT NULL,
+    [SchemaName] nvarchar(100) NOT NULL,
+    [Tier] int NOT NULL,
+    [Status] int NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [TrialEndsDate] datetime2 NULL,
+    [LastModifiedDate] datetime2 NULL,
+    [IsActive] bit NOT NULL,
+    [MaxUsers] int NOT NULL,
+    [MaxRequestsPerMonth] int NOT NULL,
+    [MaxStorageGB] int NOT NULL,
+    [Region] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_Tenants] PRIMARY KEY ([Id])
+);
+2025-12-30 10:41:46.170 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 10:41:46.433 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 10:41:46.640 -05:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-30 10:41:46.644 -05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-12-30 10:41:46.655 -05:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-12-30 10:41:46.685 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-12-30 10:41:46.693 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-30 10:41:46.695 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-12-30 10:41:46.697 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-12-30 10:41:46.702 -05:00 [INF] Applying migration '20251230154007_AddIdentityTables'.
+2025-12-30 10:41:46.717 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF SCHEMA_ID(N'shared') IS NULL EXEC(N'CREATE SCHEMA [shared];');
+2025-12-30 10:41:46.723 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[Roles] (
+    [Id] uniqueidentifier NOT NULL,
+    [TenantId] uniqueidentifier NOT NULL,
+    [Description] nvarchar(500) NOT NULL,
+    [IsSystemRole] bit NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-12-30 10:41:46.726 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[Tenants] (
+    [Id] uniqueidentifier NOT NULL,
+    [CompanyName] nvarchar(200) NOT NULL,
+    [Subdomain] nvarchar(63) NOT NULL,
+    [SchemaName] nvarchar(100) NOT NULL,
+    [Tier] int NOT NULL,
+    [Status] int NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [TrialEndsDate] datetime2 NULL,
+    [LastModifiedDate] datetime2 NULL,
+    [IsActive] bit NOT NULL,
+    [MaxUsers] int NOT NULL,
+    [MaxRequestsPerMonth] int NOT NULL,
+    [MaxStorageGB] int NOT NULL,
+    [Region] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_Tenants] PRIMARY KEY ([Id])
+);
+2025-12-30 10:41:46.728 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[Users] (
+    [Id] uniqueidentifier NOT NULL,
+    [TenantId] uniqueidentifier NOT NULL,
+    [FirstName] nvarchar(100) NOT NULL,
+    [LastName] nvarchar(100) NOT NULL,
+    [IsActive] bit NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [LastLoginDate] datetime2 NULL,
+    [LastModifiedDate] datetime2 NULL,
+    [TimeZone] nvarchar(50) NULL,
+    [ProfileImageUrl] nvarchar(500) NULL,
+    [UserName] nvarchar(256) NULL,
+    [NormalizedUserName] nvarchar(256) NULL,
+    [Email] nvarchar(256) NULL,
+    [NormalizedEmail] nvarchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id])
+);
+2025-12-30 10:41:46.733 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[RoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] uniqueidentifier NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_RoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RoleClaims_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [shared].[Roles] ([Id]) ON DELETE CASCADE
+);
+2025-12-30 10:41:46.735 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[UserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] uniqueidentifier NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_UserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserClaims_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [shared].[Users] ([Id]) ON DELETE CASCADE
+);
+2025-12-30 10:41:46.737 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[UserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_UserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_UserLogins_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [shared].[Users] ([Id]) ON DELETE CASCADE
+);
+2025-12-30 10:41:46.739 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[UserRoles] (
+    [UserId] uniqueidentifier NOT NULL,
+    [RoleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_UserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_UserRoles_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [shared].[Roles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserRoles_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [shared].[Users] ([Id]) ON DELETE CASCADE
+);
+2025-12-30 10:41:46.741 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[UserTokens] (
+    [UserId] uniqueidentifier NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_UserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_UserTokens_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [shared].[Users] ([Id]) ON DELETE CASCADE
+);
+2025-12-30 10:41:46.742 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RoleClaims_RoleId] ON [shared].[RoleClaims] ([RoleId]);
+2025-12-30 10:41:46.743 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Roles_TenantId] ON [shared].[Roles] ([TenantId]);
+2025-12-30 10:41:46.746 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Roles_TenantId_Name] ON [shared].[Roles] ([TenantId], [Name]) WHERE [Name] IS NOT NULL;
+2025-12-30 10:41:46.747 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [RoleNameIndex] ON [shared].[Roles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
+2025-12-30 10:41:46.748 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Tenants_Subdomain] ON [shared].[Tenants] ([Subdomain]);
+2025-12-30 10:41:46.749 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserClaims_UserId] ON [shared].[UserClaims] ([UserId]);
+2025-12-30 10:41:46.750 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserLogins_UserId] ON [shared].[UserLogins] ([UserId]);
+2025-12-30 10:41:46.751 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserRoles_RoleId] ON [shared].[UserRoles] ([RoleId]);
+2025-12-30 10:41:46.752 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [EmailIndex] ON [shared].[Users] ([NormalizedEmail]);
+2025-12-30 10:41:46.753 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_Email] ON [shared].[Users] ([Email]);
+2025-12-30 10:41:46.754 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_TenantId] ON [shared].[Users] ([TenantId]);
+2025-12-30 10:41:46.755 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_TenantId_Email] ON [shared].[Users] ([TenantId], [Email]) WHERE [Email] IS NOT NULL;
+2025-12-30 10:41:46.756 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [UserNameIndex] ON [shared].[Users] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+2025-12-30 10:41:46.761 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251230154007_AddIdentityTables', N'10.0.0');
+2025-12-30 10:41:46.764 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2025-12-30 10:46:06.933 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 10:46:07.009 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 10:46:07.015 -05:00 [INF] Registered 5 endpoints in 134 milliseconds.
+2025-12-30 10:46:07.044 -05:00 [INF] No validators found in the system!
+2025-12-30 10:46:07.056 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-30 10:46:07.212 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 10:46:07.212 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 10:46:07.212 -05:00 [INF] Hosting environment: Development
+2025-12-30 10:46:07.212 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 10:46:42.026 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 168
+2025-12-30 10:46:42.051 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 10:46:42.084 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 10:46:42.084 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 10:46:42.088 -05:00 [INF] Validation passed for CreateTenantCommand
+2025-12-30 10:46:42.089 -05:00 [INF] Creating tenant: Company=Auth Test Co, Subdomain=authtest
+2025-12-30 10:46:42.287 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 10:46:42.600 -05:00 [INF] Executed DbCommand (38ms) [Parameters=[@subdomain='authtest' (Size = 63)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [t].[Id], [t].[CompanyName], [t].[CreatedDate], [t].[IsActive], [t].[LastModifiedDate], [t].[MaxRequestsPerMonth], [t].[MaxStorageGB], [t].[MaxUsers], [t].[Region], [t].[SchemaName], [t].[Status], [t].[Subdomain], [t].[Tier], [t].[TrialEndsDate]
+FROM [shared].[Tenants] AS [t]
+WHERE [t].[Subdomain] = @subdomain
+2025-12-30 10:46:42.614 -05:00 [INF] DIAGNOSTIC: Tenant created in memory - Subdomain=authtest, SchemaName=tenant_authtest, SchemaNameIsNull=false
+2025-12-30 10:46:42.652 -05:00 [INF] 🎉 NEW TENANT CREATED! TenantId: "84e0d3a3-262c-4d08-ac36-dd1c451c2b9c", Company: Auth Test Co, Subdomain: authtest, Schema: tenant_authtest
+2025-12-30 10:46:42.690 -05:00 [INF] Executed DbCommand (16ms) [Parameters=[@p0='84e0d3a3-262c-4d08-ac36-dd1c451c2b9c', @p1='Auth Test Co' (Nullable = false) (Size = 200), @p2='2025-12-30T15:46:42.6143900Z', @p3='True', @p4=NULL (DbType = DateTime2), @p5='50', @p6='1', @p7='5', @p8='USEast' (Nullable = false) (Size = 50), @p9='tenant_authtest' (Nullable = false) (Size = 100), @p10='1', @p11='authtest' (Nullable = false) (Size = 63), @p12='0', @p13='2026-01-13T15:46:42.6144010Z' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Tenants] ([Id], [CompanyName], [CreatedDate], [IsActive], [LastModifiedDate], [MaxRequestsPerMonth], [MaxStorageGB], [MaxUsers], [Region], [SchemaName], [Status], [Subdomain], [Tier], [TrialEndsDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13);
+2025-12-30 10:46:42.739 -05:00 [INF] Starting provisioning for tenant 84e0d3a3-262c-4d08-ac36-dd1c451c2b9c with schema tenant_authtest
+2025-12-30 10:46:42.766 -05:00 [INF] Created schema tenant_authtest
+2025-12-30 10:46:42.766 -05:00 [INF] Successfully provisioned tenant 84e0d3a3-262c-4d08-ac36-dd1c451c2b9c
+2025-12-30 10:46:42.766 -05:00 [INF] Tenant created successfully: TenantId="84e0d3a3-262c-4d08-ac36-dd1c451c2b9c", Subdomain=authtest
+2025-12-30 10:46:42.776 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 10:46:42.780 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 201 null application/json; charset=utf-8 754.4124ms
+2025-12-30 10:46:55.196 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 120
+2025-12-30 10:46:55.198 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 10:46:55.205 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 10:46:55.205 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 10:46:55.206 -05:00 [INF] Validation passed for RegisterUserCommand
+2025-12-30 10:46:55.209 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 10:46:55.210 -05:00 [INF] Registering user: Email=john@authtest.com, Tenant=00000000-0000-0000-0000-000000000000
+2025-12-30 10:46:55.269 -05:00 [INF] Executed DbCommand (18ms) [Parameters=[@normalizedEmail='JOHN@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 10:46:55.330 -05:00 [INF] Executed DbCommand (10ms) [Parameters=[@normalizedUserName='JOHN@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-30 10:46:55.333 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedEmail='JOHN@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 10:46:55.369 -05:00 [INF] Executed DbCommand (10ms) [Parameters=[@p0='8a88a224-5979-4392-ab5e-434444c870bf', @p1='0', @p2='33b89585-5e17-429f-a6cc-4184cd0c2c05' (Size = 4000), @p3='2025-12-30T15:46:55.2701830Z', @p4='john@authtest.com' (Size = 256), @p5='False', @p6='John' (Nullable = false) (Size = 100), @p7='True', @p8=NULL (DbType = DateTime2), @p9=NULL (DbType = DateTime2), @p10='Doe' (Nullable = false) (Size = 100), @p11='True', @p12=NULL (DbType = DateTimeOffset), @p13='JOHN@AUTHTEST.COM' (Size = 256), @p14='JOHN@AUTHTEST.COM' (Size = 256), @p15='AQAAAAIAAYagAAAAEANjqgY+li6Ct53ikqGCKASrmNRc6w0loFX+b2ALfp36pTtJjgYagSHT9O+r0JOWWA==' (Size = 4000), @p16=NULL (Size = 4000), @p17='False', @p18=NULL (Size = 500), @p19='MF7NKSACGELFG3I2B6JLHEXNM6FVPOWD' (Size = 4000), @p20='00000000-0000-0000-0000-000000000000', @p21=NULL (Size = 50), @p22='False', @p23='john@authtest.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Users] ([Id], [AccessFailedCount], [ConcurrencyStamp], [CreatedDate], [Email], [EmailConfirmed], [FirstName], [IsActive], [LastLoginDate], [LastModifiedDate], [LastName], [LockoutEnabled], [LockoutEnd], [NormalizedEmail], [NormalizedUserName], [PasswordHash], [PhoneNumber], [PhoneNumberConfirmed], [ProfileImageUrl], [SecurityStamp], [TenantId], [TimeZone], [TwoFactorEnabled], [UserName])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+2025-12-30 10:46:55.379 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedRoleName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedRoleName
+2025-12-30 10:46:55.381 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedRoleName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedRoleName
+2025-12-30 10:46:55.385 -05:00 [ERR] Unexpected error registering user: Email=john@authtest.com
+System.InvalidOperationException: Role USER does not exist.
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`10.AddToRoleAsync(TUser user, String normalizedRoleName, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.AddToRoleCoreAsync(TUser user, String role)
+   at Microsoft.AspNetCore.Identity.UserManager`1.AddToRoleAsync(TUser user, String role)
+   at Apex.API.UseCases.Users.Register.RegisterUserHandler.Handle(RegisterUserCommand request, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Users/Register/RegisterUserHandler.cs:line 68
+2025-12-30 10:46:55.389 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 10:46:55.389 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 193.1874ms
+2025-12-30 10:50:41.671 -05:00 [INF] Application is shutting down...
+2025-12-30 10:52:58.312 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 10:52:58.365 -05:00 [INF] Starting database seeding...
+2025-12-30 10:52:58.563 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 10:52:58.881 -05:00 [INF] Executed DbCommand (32ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:58.900 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:58.973 -05:00 [INF] Executed DbCommand (18ms) [Parameters=[@p0='dc0c5bcd-ad39-4022-8ce8-069d8ab8f708', @p1='4d6b421b-5efc-4379-8642-183539a3b039' (Size = 4000), @p2='2025-12-30T15:52:58.8948050Z', @p3='Administrator with full access to tenant' (Nullable = false) (Size = 500), @p4='True', @p5='TenantAdmin' (Size = 256), @p6='TENANTADMIN' (Size = 256), @p7='00000000-0000-0000-0000-000000000000'], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Roles] ([Id], [ConcurrencyStamp], [CreatedDate], [Description], [IsSystemRole], [Name], [NormalizedName], [TenantId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-12-30 10:52:58.977 -05:00 [INF] Created system role: TenantAdmin
+2025-12-30 10:52:59.003 -05:00 [INF] Executed DbCommand (25ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:59.004 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:59.007 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='80fb5a4c-0a32-46af-a437-5a0cb88c1caf', @p1='a0076519-c815-4dc9-b812-bac8cd1aa1d4' (Size = 4000), @p2='2025-12-30T15:52:59.0034420Z', @p3='Standard user with basic access' (Nullable = false) (Size = 500), @p4='True', @p5='User' (Size = 256), @p6='USER' (Size = 256), @p7='00000000-0000-0000-0000-000000000000'], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Roles] ([Id], [ConcurrencyStamp], [CreatedDate], [Description], [IsSystemRole], [Name], [NormalizedName], [TenantId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-12-30 10:52:59.008 -05:00 [INF] Created system role: User
+2025-12-30 10:52:59.008 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:59.009 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:59.011 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='0b60f4d5-9a2c-4191-91e4-c8c66a125324', @p1='82972e8d-61a8-41e4-a823-7926ccb44876' (Size = 4000), @p2='2025-12-30T15:52:59.0090930Z', @p3='Manager with elevated privileges' (Nullable = false) (Size = 500), @p4='True', @p5='Manager' (Size = 256), @p6='MANAGER' (Size = 256), @p7='00000000-0000-0000-0000-000000000000'], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Roles] ([Id], [ConcurrencyStamp], [CreatedDate], [Description], [IsSystemRole], [Name], [NormalizedName], [TenantId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-12-30 10:52:59.011 -05:00 [INF] Created system role: Manager
+2025-12-30 10:52:59.012 -05:00 [INF] Executed DbCommand (0ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:59.012 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 10:52:59.014 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='123ec30f-8728-42d8-9eba-c4db1f6b37b9', @p1='ea4959f9-cee0-4d82-9c62-4b1dfa6b1201' (Size = 4000), @p2='2025-12-30T15:52:59.0122660Z', @p3='Read-only access user' (Nullable = false) (Size = 500), @p4='True', @p5='ReadOnly' (Size = 256), @p6='READONLY' (Size = 256), @p7='00000000-0000-0000-0000-000000000000'], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Roles] ([Id], [ConcurrencyStamp], [CreatedDate], [Description], [IsSystemRole], [Name], [NormalizedName], [TenantId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2025-12-30 10:52:59.014 -05:00 [INF] Created system role: ReadOnly
+2025-12-30 10:52:59.014 -05:00 [INF] Database seeding completed.
+2025-12-30 10:52:59.039 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 10:52:59.043 -05:00 [INF] Registered 5 endpoints in 787 milliseconds.
+2025-12-30 10:52:59.068 -05:00 [INF] No validators found in the system!
+2025-12-30 10:52:59.077 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-30 10:52:59.224 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 10:52:59.224 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 10:52:59.224 -05:00 [INF] Hosting environment: Development
+2025-12-30 10:52:59.224 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 10:53:06.494 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 120
+2025-12-30 10:53:06.520 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 10:53:06.548 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 10:53:06.548 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 10:53:06.552 -05:00 [INF] Validation passed for RegisterUserCommand
+2025-12-30 10:53:06.555 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 10:53:06.555 -05:00 [INF] Registering user: Email=john@authtest.com, Tenant=00000000-0000-0000-0000-000000000000
+2025-12-30 10:53:06.605 -05:00 [INF] Executed DbCommand (17ms) [Parameters=[@normalizedEmail='JOHN@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 10:53:06.627 -05:00 [WRN] User already exists: john@authtest.com
+2025-12-30 10:53:06.631 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 10:53:06.633 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 140.7469ms
+2025-12-30 10:53:45.595 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 120
+2025-12-30 10:53:45.598 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 10:53:45.600 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 10:53:45.600 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 10:53:45.600 -05:00 [INF] Validation passed for RegisterUserCommand
+2025-12-30 10:53:45.601 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 10:53:45.602 -05:00 [INF] Registering user: Email=jane@authtest.com, Tenant=00000000-0000-0000-0000-000000000000
+2025-12-30 10:53:45.620 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@normalizedEmail='JANE@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 10:53:45.692 -05:00 [INF] Executed DbCommand (16ms) [Parameters=[@normalizedUserName='JANE@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-30 10:53:45.695 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedEmail='JANE@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 10:53:45.706 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='c06a8404-5640-4ddb-8294-facddb0a518f', @p1='0', @p2='0d6efec0-0000-4a01-9ca9-7b737a265c1c' (Size = 4000), @p3='2025-12-30T15:53:45.6216220Z', @p4='jane@authtest.com' (Size = 256), @p5='False', @p6='Jane' (Nullable = false) (Size = 100), @p7='True', @p8=NULL (DbType = DateTime2), @p9=NULL (DbType = DateTime2), @p10='Doe' (Nullable = false) (Size = 100), @p11='True', @p12=NULL (DbType = DateTimeOffset), @p13='JANE@AUTHTEST.COM' (Size = 256), @p14='JANE@AUTHTEST.COM' (Size = 256), @p15='AQAAAAIAAYagAAAAEPq8Et0Mmv2PM8iHFZYh+PLanEpK0dTlCdbutgvE6W1b5pdGZ9YdHURKkcOSee9k4A==' (Size = 4000), @p16=NULL (Size = 4000), @p17='False', @p18=NULL (Size = 500), @p19='SVTEMKDW5B5MNDGQ7PPPSG6OSMHCI2GU' (Size = 4000), @p20='00000000-0000-0000-0000-000000000000', @p21=NULL (Size = 50), @p22='False', @p23='jane@authtest.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Users] ([Id], [AccessFailedCount], [ConcurrencyStamp], [CreatedDate], [Email], [EmailConfirmed], [FirstName], [IsActive], [LastLoginDate], [LastModifiedDate], [LastName], [LockoutEnabled], [LockoutEnd], [NormalizedEmail], [NormalizedUserName], [PasswordHash], [PhoneNumber], [PhoneNumberConfirmed], [ProfileImageUrl], [SecurityStamp], [TenantId], [TimeZone], [TwoFactorEnabled], [UserName])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+2025-12-30 10:53:45.716 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@normalizedRoleName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedRoleName
+2025-12-30 10:53:45.747 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[@p='c06a8404-5640-4ddb-8294-facddb0a518f' (Nullable = true), @p0='80fb5a4c-0a32-46af-a437-5a0cb88c1caf' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[UserId], [u].[RoleId]
+FROM [shared].[UserRoles] AS [u]
+WHERE [u].[UserId] = @p AND [u].[RoleId] = @p0
+2025-12-30 10:53:45.750 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedRoleName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedRoleName
+2025-12-30 10:53:45.757 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedUserName='JANE@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-30 10:53:45.759 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedEmail='JANE@AUTHTEST.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 10:53:45.808 -05:00 [INF] Executed DbCommand (37ms) [Parameters=[@p0='80fb5a4c-0a32-46af-a437-5a0cb88c1caf', @p1='c06a8404-5640-4ddb-8294-facddb0a518f', @p25='c06a8404-5640-4ddb-8294-facddb0a518f', @p2='0', @p3='43378f49-5325-4286-9ff7-ccd771791b18' (Size = 4000), @p26='0d6efec0-0000-4a01-9ca9-7b737a265c1c' (Size = 4000), @p4='2025-12-30T15:53:45.6216220Z', @p5='jane@authtest.com' (Size = 256), @p6='False', @p7='Jane' (Nullable = false) (Size = 100), @p8='True', @p9=NULL (DbType = DateTime2), @p10=NULL (DbType = DateTime2), @p11='Doe' (Nullable = false) (Size = 100), @p12='True', @p13=NULL (DbType = DateTimeOffset), @p14='JANE@AUTHTEST.COM' (Size = 256), @p15='JANE@AUTHTEST.COM' (Size = 256), @p16='AQAAAAIAAYagAAAAEPq8Et0Mmv2PM8iHFZYh+PLanEpK0dTlCdbutgvE6W1b5pdGZ9YdHURKkcOSee9k4A==' (Size = 4000), @p17=NULL (Size = 4000), @p18='False', @p19=NULL (Size = 500), @p20='SVTEMKDW5B5MNDGQ7PPPSG6OSMHCI2GU' (Size = 4000), @p21='00000000-0000-0000-0000-000000000000', @p22=NULL (Size = 50), @p23='False', @p24='jane@authtest.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [shared].[UserRoles] ([RoleId], [UserId])
+VALUES (@p0, @p1);
+UPDATE [shared].[Users] SET [AccessFailedCount] = @p2, [ConcurrencyStamp] = @p3, [CreatedDate] = @p4, [Email] = @p5, [EmailConfirmed] = @p6, [FirstName] = @p7, [IsActive] = @p8, [LastLoginDate] = @p9, [LastModifiedDate] = @p10, [LastName] = @p11, [LockoutEnabled] = @p12, [LockoutEnd] = @p13, [NormalizedEmail] = @p14, [NormalizedUserName] = @p15, [PasswordHash] = @p16, [PhoneNumber] = @p17, [PhoneNumberConfirmed] = @p18, [ProfileImageUrl] = @p19, [SecurityStamp] = @p20, [TenantId] = @p21, [TimeZone] = @p22, [TwoFactorEnabled] = @p23, [UserName] = @p24
+OUTPUT 1
+WHERE [Id] = @p25 AND [ConcurrencyStamp] = @p26;
+2025-12-30 10:53:45.815 -05:00 [INF] User registered successfully: UserId="c06a8404-5640-4ddb-8294-facddb0a518f", Email=jane@authtest.com
+2025-12-30 10:53:45.818 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 10:53:45.818 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 201 null application/json; charset=utf-8 222.7182ms
+2025-12-30 11:49:46.382 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/index.html - null null
+2025-12-30 11:49:46.435 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/index.html - 200 null text/html; charset=utf-8 52.9058ms
+2025-12-30 11:49:46.523 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - null null
+2025-12-30 11:49:46.526 -05:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-12-30 11:49:46.719 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/swagger/v1/swagger.json - 200 null application/json; charset=utf-8 195.0427ms
+2025-12-30 11:49:51.795 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5000/api/tenants/current - null null
+2025-12-30 11:49:51.797 -05:00 [INF] Executing endpoint 'HTTP: GET /api/tenants/current'
+2025-12-30 11:49:51.798 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 11:49:51.819 -05:00 [INF] Executed endpoint 'HTTP: GET /api/tenants/current'
+2025-12-30 11:49:51.819 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5000/api/tenants/current - 400 null application/json; charset=utf-8 23.6197ms
+2025-12-30 11:55:15.210 -05:00 [INF] Application is shutting down...
+2025-12-30 11:55:43.185 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 11:55:43.238 -05:00 [INF] Starting database seeding...
+2025-12-30 11:55:43.440 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 11:55:43.731 -05:00 [INF] Executed DbCommand (19ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 11:55:43.767 -05:00 [INF] Role TenantAdmin already exists
+2025-12-30 11:55:43.771 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 11:55:43.772 -05:00 [INF] Role User already exists
+2025-12-30 11:55:43.774 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 11:55:43.774 -05:00 [INF] Role Manager already exists
+2025-12-30 11:55:43.775 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 11:55:43.776 -05:00 [INF] Role ReadOnly already exists
+2025-12-30 11:55:43.776 -05:00 [INF] Database seeding completed.
+2025-12-30 11:55:43.800 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 11:55:43.804 -05:00 [INF] Registered 5 endpoints in 678 milliseconds.
+2025-12-30 11:55:43.828 -05:00 [INF] No validators found in the system!
+2025-12-30 11:55:43.836 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-30 11:55:44.020 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 11:55:44.020 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 11:55:44.020 -05:00 [INF] Hosting environment: Development
+2025-12-30 11:55:44.021 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 11:57:52.096 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - null null
+2025-12-30 11:57:52.121 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 11:57:52.121 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 11:57:52.122 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 415 null null 26.8569ms
+2025-12-30 14:51:08.783 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 135
+2025-12-30 14:51:08.788 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 14:51:08.836 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 14:51:08.837 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 14:51:08.841 -05:00 [INF] Validation passed for CreateTenantCommand
+2025-12-30 14:51:08.842 -05:00 [INF] Creating tenant: Company=Auth Test Co, Subdomain=authtest
+2025-12-30 14:51:08.907 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@subdomain='authtest' (Size = 63)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [t].[Id], [t].[CompanyName], [t].[CreatedDate], [t].[IsActive], [t].[LastModifiedDate], [t].[MaxRequestsPerMonth], [t].[MaxStorageGB], [t].[MaxUsers], [t].[Region], [t].[SchemaName], [t].[Status], [t].[Subdomain], [t].[Tier], [t].[TrialEndsDate]
+FROM [shared].[Tenants] AS [t]
+WHERE [t].[Subdomain] = @subdomain
+2025-12-30 14:51:08.920 -05:00 [WRN] Subdomain already exists: authtest
+2025-12-30 14:51:08.925 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 14:51:08.927 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 400 null application/json; charset=utf-8 143.9585ms
+2025-12-30 14:51:08.931 -05:00 [ERR] Unexpected exception in TimingPipeFlusher.FlushAsync.
+System.IO.IOException: The encryption operation failed, see inner exception.
+ ---> System.ComponentModel.Win32Exception (14): Bad address
+   --- End of inner exception stack trace ---
+   at System.Net.Security.SslStream.WriteSingleChunk[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.ConcurrentPipeWriter.FlushAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.TimingPipeFlusher.FlushAsync(MinDataRate minRate, Int64 count, IHttpOutputAborter outputAborter, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2FrameWriter.WriteGoAwayAsync(Int32 lastStreamId, Http2ErrorCode errorCode)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2Connection.ProcessRequestsAsync[TContext](IHttpApplication`1 application)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecuteFromThreadPool(Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.ConcurrentPipeWriter.FlushAsyncAwaited(ValueTask`1 flushTask, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.TimingPipeFlusher.TimeFlushAsyncAwaited(ValueTask`1 pipeFlushTask, MinDataRate minRate, IHttpOutputAborter outputAborter, CancellationToken cancellationToken)
+2025-12-30 14:51:08.933 -05:00 [ERR] Unhandled exception while processing 0HNI7OI8UFBAM.
+System.IO.IOException: The encryption operation failed, see inner exception.
+ ---> System.ComponentModel.Win32Exception (14): Bad address
+   --- End of inner exception stack trace ---
+   at System.Net.Security.SslStream.WriteSingleChunk[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStreamAdapter`1.DisposeAsync()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStreamAdapter`1.DisposeAsync()
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.HttpConnection.ProcessRequestsAsync[TContext](IHttpApplication`1 httpApplication)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2Connection.ProcessRequestsAsync[TContext](IHttpApplication`1 application)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Threading.Tasks.UnwrapPromise`1.TrySetFromTask(Task task, Boolean lookForOce)
+   at System.Threading.Tasks.UnwrapPromise`1.Invoke(Task completingTask)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetExistingTaskResult(Task`1 task, TResult result)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2FrameWriter.WriteToOutputPipe()
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStreamAdapter`1.DisposeAsync()
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.KestrelConnection`1.ExecuteAsync()
+2025-12-30 15:24:23.006 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 142
+2025-12-30 15:24:23.010 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 15:24:23.014 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 15:24:23.014 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 15:24:23.014 -05:00 [INF] Validation passed for CreateTenantCommand
+2025-12-30 15:24:23.015 -05:00 [INF] Creating tenant: Company=Test Company, Subdomain=testco
+2025-12-30 15:24:23.063 -05:00 [INF] Executed DbCommand (7ms) [Parameters=[@subdomain='testco' (Size = 63)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [t].[Id], [t].[CompanyName], [t].[CreatedDate], [t].[IsActive], [t].[LastModifiedDate], [t].[MaxRequestsPerMonth], [t].[MaxStorageGB], [t].[MaxUsers], [t].[Region], [t].[SchemaName], [t].[Status], [t].[Subdomain], [t].[Tier], [t].[TrialEndsDate]
+FROM [shared].[Tenants] AS [t]
+WHERE [t].[Subdomain] = @subdomain
+2025-12-30 15:24:23.067 -05:00 [INF] DIAGNOSTIC: Tenant created in memory - Subdomain=testco, SchemaName=tenant_testco, SchemaNameIsNull=false
+2025-12-30 15:24:23.093 -05:00 [INF] 🎉 NEW TENANT CREATED! TenantId: "d3751e7e-dc77-435b-825c-4763b175dab4", Company: Test Company, Subdomain: testco, Schema: tenant_testco
+2025-12-30 15:24:23.125 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[@p0='d3751e7e-dc77-435b-825c-4763b175dab4', @p1='Test Company' (Nullable = false) (Size = 200), @p2='2025-12-30T20:24:23.0669220Z', @p3='True', @p4=NULL (DbType = DateTime2), @p5='50', @p6='1', @p7='5', @p8='USEast' (Nullable = false) (Size = 50), @p9='tenant_testco' (Nullable = false) (Size = 100), @p10='1', @p11='testco' (Nullable = false) (Size = 63), @p12='0', @p13='2026-01-13T20:24:23.0669380Z' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Tenants] ([Id], [CompanyName], [CreatedDate], [IsActive], [LastModifiedDate], [MaxRequestsPerMonth], [MaxStorageGB], [MaxUsers], [Region], [SchemaName], [Status], [Subdomain], [Tier], [TrialEndsDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13);
+2025-12-30 15:24:23.145 -05:00 [INF] Starting provisioning for tenant d3751e7e-dc77-435b-825c-4763b175dab4 with schema tenant_testco
+2025-12-30 15:24:23.170 -05:00 [INF] Created schema tenant_testco
+2025-12-30 15:24:23.170 -05:00 [INF] Successfully provisioned tenant d3751e7e-dc77-435b-825c-4763b175dab4
+2025-12-30 15:24:23.170 -05:00 [INF] Tenant created successfully: TenantId="d3751e7e-dc77-435b-825c-4763b175dab4", Subdomain=testco
+2025-12-30 15:24:23.177 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 15:24:23.178 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 201 null application/json; charset=utf-8 172.0617ms
+2025-12-30 15:24:49.547 -05:00 [INF] Request starting HTTP/2 POST https://testco.localhost:5000/api/users/register - application/json 163
+2025-12-30 15:24:49.548 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:24:49.555 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:24:49.555 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:24:49.557 -05:00 [INF] Validation passed for RegisterUserCommand
+2025-12-30 15:24:49.561 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 15:24:49.562 -05:00 [INF] Registering user: Email=john@testco.com, Tenant=00000000-0000-0000-0000-000000000000
+2025-12-30 15:24:49.580 -05:00 [INF] Executed DbCommand (6ms) [Parameters=[@normalizedEmail='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 15:24:49.635 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedUserName='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-30 15:24:49.638 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedEmail='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 15:24:49.668 -05:00 [INF] Executed DbCommand (6ms) [Parameters=[@p0='6516e446-563a-47a1-89ff-cb5abe0bc3ff', @p1='0', @p2='aefb077b-3366-4445-9037-7c54a0b381f9' (Size = 4000), @p3='2025-12-30T20:24:49.5818310Z', @p4='john@testco.com' (Size = 256), @p5='False', @p6='John' (Nullable = false) (Size = 100), @p7='True', @p8=NULL (DbType = DateTime2), @p9=NULL (DbType = DateTime2), @p10='Doe' (Nullable = false) (Size = 100), @p11='True', @p12=NULL (DbType = DateTimeOffset), @p13='JOHN@TESTCO.COM' (Size = 256), @p14='JOHN@TESTCO.COM' (Size = 256), @p15='AQAAAAIAAYagAAAAEJoObaDHTtKcocuW5IpT1PyEEkwBI+w0XXXJF6KHTH/RKEnqsT8/kGnCncxtHZCZGQ==' (Size = 4000), @p16='+12345678900' (Size = 4000), @p17='False', @p18=NULL (Size = 500), @p19='UK7RTOBX6JKUEOV7TMLZSFM6FE2VURJV' (Size = 4000), @p20='00000000-0000-0000-0000-000000000000', @p21='America/New_York' (Size = 50), @p22='False', @p23='john@testco.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Users] ([Id], [AccessFailedCount], [ConcurrencyStamp], [CreatedDate], [Email], [EmailConfirmed], [FirstName], [IsActive], [LastLoginDate], [LastModifiedDate], [LastName], [LockoutEnabled], [LockoutEnd], [NormalizedEmail], [NormalizedUserName], [PasswordHash], [PhoneNumber], [PhoneNumberConfirmed], [ProfileImageUrl], [SecurityStamp], [TenantId], [TimeZone], [TwoFactorEnabled], [UserName])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23);
+2025-12-30 15:24:49.675 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedRoleName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedRoleName
+2025-12-30 15:24:49.701 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@p='6516e446-563a-47a1-89ff-cb5abe0bc3ff' (Nullable = true), @p0='80fb5a4c-0a32-46af-a437-5a0cb88c1caf' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[UserId], [u].[RoleId]
+FROM [shared].[UserRoles] AS [u]
+WHERE [u].[UserId] = @p AND [u].[RoleId] = @p0
+2025-12-30 15:24:49.703 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedRoleName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedRoleName
+2025-12-30 15:24:49.708 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedUserName='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-30 15:24:49.709 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedEmail='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 15:24:49.725 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='80fb5a4c-0a32-46af-a437-5a0cb88c1caf', @p1='6516e446-563a-47a1-89ff-cb5abe0bc3ff', @p25='6516e446-563a-47a1-89ff-cb5abe0bc3ff', @p2='0', @p3='6fcc2998-c4a3-4967-86e8-ee3e7474da1c' (Size = 4000), @p26='aefb077b-3366-4445-9037-7c54a0b381f9' (Size = 4000), @p4='2025-12-30T20:24:49.5818310Z', @p5='john@testco.com' (Size = 256), @p6='False', @p7='John' (Nullable = false) (Size = 100), @p8='True', @p9=NULL (DbType = DateTime2), @p10=NULL (DbType = DateTime2), @p11='Doe' (Nullable = false) (Size = 100), @p12='True', @p13=NULL (DbType = DateTimeOffset), @p14='JOHN@TESTCO.COM' (Size = 256), @p15='JOHN@TESTCO.COM' (Size = 256), @p16='AQAAAAIAAYagAAAAEJoObaDHTtKcocuW5IpT1PyEEkwBI+w0XXXJF6KHTH/RKEnqsT8/kGnCncxtHZCZGQ==' (Size = 4000), @p17='+12345678900' (Size = 4000), @p18='False', @p19=NULL (Size = 500), @p20='UK7RTOBX6JKUEOV7TMLZSFM6FE2VURJV' (Size = 4000), @p21='00000000-0000-0000-0000-000000000000', @p22='America/New_York' (Size = 50), @p23='False', @p24='john@testco.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [shared].[UserRoles] ([RoleId], [UserId])
+VALUES (@p0, @p1);
+UPDATE [shared].[Users] SET [AccessFailedCount] = @p2, [ConcurrencyStamp] = @p3, [CreatedDate] = @p4, [Email] = @p5, [EmailConfirmed] = @p6, [FirstName] = @p7, [IsActive] = @p8, [LastLoginDate] = @p9, [LastModifiedDate] = @p10, [LastName] = @p11, [LockoutEnabled] = @p12, [LockoutEnd] = @p13, [NormalizedEmail] = @p14, [NormalizedUserName] = @p15, [PasswordHash] = @p16, [PhoneNumber] = @p17, [PhoneNumberConfirmed] = @p18, [ProfileImageUrl] = @p19, [SecurityStamp] = @p20, [TenantId] = @p21, [TimeZone] = @p22, [TwoFactorEnabled] = @p23, [UserName] = @p24
+OUTPUT 1
+WHERE [Id] = @p25 AND [ConcurrencyStamp] = @p26;
+2025-12-30 15:24:49.731 -05:00 [INF] User registered successfully: UserId="6516e446-563a-47a1-89ff-cb5abe0bc3ff", Email=john@testco.com
+2025-12-30 15:24:49.732 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:24:49.732 -05:00 [INF] Request finished HTTP/2 POST https://testco.localhost:5000/api/users/register - 201 null application/json; charset=utf-8 184.6627ms
+2025-12-30 15:25:28.543 -05:00 [INF] Request starting HTTP/2 POST https://testco.localhost:5000/api/users/login - application/json 60
+2025-12-30 15:25:28.544 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/login'
+2025-12-30 15:25:28.551 -05:00 [INF] Validating command LoginCommand
+2025-12-30 15:25:28.551 -05:00 [INF] Found 1 validator(s) for LoginCommand
+2025-12-30 15:25:28.551 -05:00 [INF] Validation passed for LoginCommand
+2025-12-30 15:25:28.555 -05:00 [INF] Login attempt: Email=john@testco.com
+2025-12-30 15:25:28.561 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@normalizedEmail='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 15:25:28.642 -05:00 [INF] Executed DbCommand (20ms) [Parameters=[@userId='6516e446-563a-47a1-89ff-cb5abe0bc3ff'], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [shared].[UserRoles] AS [u]
+INNER JOIN [shared].[Roles] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @userId
+2025-12-30 15:25:28.644 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedUserName='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-30 15:25:28.645 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedEmail='JOHN@TESTCO.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-30 15:25:28.655 -05:00 [INF] Executed DbCommand (9ms) [Parameters=[@p23='6516e446-563a-47a1-89ff-cb5abe0bc3ff', @p0='0', @p1='35eec3a6-70de-4962-a3ed-41e86690b374' (Size = 4000), @p24='6fcc2998-c4a3-4967-86e8-ee3e7474da1c' (Size = 4000), @p2='2025-12-30T20:24:49.5818310', @p3='john@testco.com' (Size = 256), @p4='False', @p5='John' (Nullable = false) (Size = 100), @p6='True', @p7='2025-12-30T20:25:28.6435240Z' (Nullable = true), @p8=NULL (DbType = DateTime2), @p9='Doe' (Nullable = false) (Size = 100), @p10='True', @p11=NULL (DbType = DateTimeOffset), @p12='JOHN@TESTCO.COM' (Size = 256), @p13='JOHN@TESTCO.COM' (Size = 256), @p14='AQAAAAIAAYagAAAAEJoObaDHTtKcocuW5IpT1PyEEkwBI+w0XXXJF6KHTH/RKEnqsT8/kGnCncxtHZCZGQ==' (Size = 4000), @p15='+12345678900' (Size = 4000), @p16='False', @p17=NULL (Size = 500), @p18='UK7RTOBX6JKUEOV7TMLZSFM6FE2VURJV' (Size = 4000), @p19='00000000-0000-0000-0000-000000000000', @p20='America/New_York' (Size = 50), @p21='False', @p22='john@testco.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [shared].[Users] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [CreatedDate] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [FirstName] = @p5, [IsActive] = @p6, [LastLoginDate] = @p7, [LastModifiedDate] = @p8, [LastName] = @p9, [LockoutEnabled] = @p10, [LockoutEnd] = @p11, [NormalizedEmail] = @p12, [NormalizedUserName] = @p13, [PasswordHash] = @p14, [PhoneNumber] = @p15, [PhoneNumberConfirmed] = @p16, [ProfileImageUrl] = @p17, [SecurityStamp] = @p18, [TenantId] = @p19, [TimeZone] = @p20, [TwoFactorEnabled] = @p21, [UserName] = @p22
+OUTPUT 1
+WHERE [Id] = @p23 AND [ConcurrencyStamp] = @p24;
+2025-12-30 15:25:28.665 -05:00 [INF] Login successful: UserId="6516e446-563a-47a1-89ff-cb5abe0bc3ff", Email=john@testco.com
+2025-12-30 15:25:28.667 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/login'
+2025-12-30 15:25:28.667 -05:00 [INF] Request finished HTTP/2 POST https://testco.localhost:5000/api/users/login - 200 null application/json; charset=utf-8 123.6619ms
+2025-12-30 15:28:26.578 -05:00 [INF] Request starting HTTP/2 GET https://testco.localhost:5000/api/protected - application/json null
+2025-12-30 15:28:26.579 -05:00 [INF] Request finished HTTP/2 GET https://testco.localhost:5000/api/protected - 404 0 null 0.7488ms
+2025-12-30 15:28:26.579 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://testco.localhost:5000/api/protected, Response status code: 404
+2025-12-30 15:30:50.655 -05:00 [INF] Request starting HTTP/2 GET https://testco.localhost:5000/api/protected - application/json null
+2025-12-30 15:30:50.678 -05:00 [INF] Request finished HTTP/2 GET https://testco.localhost:5000/api/protected - 404 0 null 23.8401ms
+2025-12-30 15:30:50.679 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://testco.localhost:5000/api/protected, Response status code: 404
+2025-12-30 15:42:29.765 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:42:29.767 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:42:29.768 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:42:29.768 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:42:29.771 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:42:29.772 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:42:29.777 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- password: Password must be at least 8 characters. Severity: Error
+ -- password: Password must contain at least one uppercase letter. Severity: Error
+ -- password: Password must contain at least one number. Severity: Error
+ -- password: Password must contain at least one special character. Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Users.RegisterEndpoint.HandleAsync(RegisterRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Users/RegisterEndpoint.cs:line 67
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 15:42:29.780 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 500 null text/plain; charset=utf-8 14.3873ms
+2025-12-30 15:47:40.873 -05:00 [INF] Application is shutting down...
+2025-12-30 15:49:44.921 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 15:49:44.978 -05:00 [INF] Starting database seeding...
+2025-12-30 15:49:45.185 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 15:49:45.509 -05:00 [INF] Executed DbCommand (24ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.546 -05:00 [INF] Role TenantAdmin already exists
+2025-12-30 15:49:45.550 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.550 -05:00 [INF] Role User already exists
+2025-12-30 15:49:45.551 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.551 -05:00 [INF] Role Manager already exists
+2025-12-30 15:49:45.552 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.552 -05:00 [INF] Role ReadOnly already exists
+2025-12-30 15:49:45.552 -05:00 [INF] Database seeding completed.
+2025-12-30 15:49:45.575 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 15:49:45.580 -05:00 [INF] Registered 5 endpoints in 717 milliseconds.
+2025-12-30 15:49:45.607 -05:00 [INF] No validators found in the system!
+2025-12-30 15:49:45.616 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-30 15:49:45.784 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 15:49:45.784 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 15:49:45.784 -05:00 [INF] Hosting environment: Development
+2025-12-30 15:49:45.784 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 15:49:58.342 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:49:58.367 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:49:58.397 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:49:58.397 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:49:58.402 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:49:58.406 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:49:58.407 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 65.0087ms
+2025-12-30 15:51:02.866 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:51:02.869 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:51:02.871 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:51:02.871 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:51:02.871 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:51:02.872 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:51:02.872 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 5.4016ms
+2025-12-30 15:57:29.318 -05:00 [INF] Application is shutting down...
+2025-12-30 15:58:42.542 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 15:58:42.598 -05:00 [INF] Starting database seeding...
+2025-12-30 15:58:42.803 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 15:58:43.118 -05:00 [INF] Executed DbCommand (22ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.154 -05:00 [INF] Role TenantAdmin already exists
+2025-12-30 15:58:43.159 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.160 -05:00 [INF] Role User already exists
+2025-12-30 15:58:43.161 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.162 -05:00 [INF] Role Manager already exists
+2025-12-30 15:58:43.163 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.163 -05:00 [INF] Role ReadOnly already exists
+2025-12-30 15:58:43.163 -05:00 [INF] Database seeding completed.
+2025-12-30 15:58:43.185 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 15:58:43.189 -05:00 [INF] Registered 5 endpoints in 708 milliseconds.
+2025-12-30 15:58:43.215 -05:00 [INF] No validators found in the system!
+2025-12-30 15:58:43.224 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-30 15:58:43.378 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 15:58:43.378 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 15:58:43.378 -05:00 [INF] Hosting environment: Development
+2025-12-30 15:58:43.378 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 15:59:43.165 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:59:43.191 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:59:43.221 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:59:43.221 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:59:43.228 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:59:43.233 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:59:43.234 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 69.5492ms
+2025-12-30 17:00:34.701 -05:00 [INF] Application is shutting down...

@@ -8,6 +8,7 @@ namespace Apex.API.Core.Interfaces;
 /// </summary>
 public interface ITenantContext
 {
+
     /// <summary>
     /// Gets the current tenant ID from the request context
     /// </summary>

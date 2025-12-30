@@ -1,9 +1,14 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using FluentValidation;
 using Traxs.SharedKernel;
 using Apex.API.Core.Interfaces;
+using Apex.API.Core.Aggregates.UserAggregate;
 using Apex.API.Infrastructure.Data;
 using Apex.API.Infrastructure.Identity;
 using Apex.API.Infrastructure.Services;
@@ -20,7 +25,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        // DbContext
+        // DbContext with Identity
         services.AddDbContext<ApexDbContext>(options =>
         {
             options.UseSqlServer(connectionString, sqlOptions =>
@@ -36,6 +41,63 @@ public static class DependencyInjection
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
             #endif
+        });
+
+        // ========================================================================
+        // IDENTITY: User management with ASP.NET Core Identity
+        // ========================================================================
+        services.AddIdentity<User, Role>(options =>
+        {
+            // Password settings
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequiredLength = 8;
+            options.Password.RequiredUniqueChars = 1;
+
+            // Lockout settings
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+
+            // User settings
+            options.User.RequireUniqueEmail = true;
+
+            // Sign in settings
+            options.SignIn.RequireConfirmedEmail = false; // Set to true in production
+            options.SignIn.RequireConfirmedPhoneNumber = false;
+        })
+        .AddEntityFrameworkStores<ApexDbContext>()
+        .AddDefaultTokenProviders();
+
+        // ========================================================================
+        // JWT AUTHENTICATION
+        // ========================================================================
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = false; // Set to true in production
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                ClockSkew = TimeSpan.Zero
+            };
         });
 
         // HTTP Context
@@ -57,6 +119,8 @@ public static class DependencyInjection
 
         // Services
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>(); // ✅ NEW
 
         // ========================================================================
         // MEDIATR: Auto-discovers all handlers! ✨

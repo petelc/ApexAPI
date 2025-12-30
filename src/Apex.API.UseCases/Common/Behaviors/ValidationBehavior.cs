@@ -1,6 +1,8 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Ardalis.Result;
+
 
 namespace Apex.API.UseCases.Common.Behaviors;
 
@@ -9,6 +11,7 @@ namespace Apex.API.UseCases.Common.Behaviors;
 /// </summary>
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
+    where TResponse : IResult
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
     private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
@@ -52,7 +55,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
             .Where(f => f != null)
             .ToList();
 
-        // If validation failed, throw exception (FastEndpoints will handle it)
+        // If validation failed, return Invalid result (not throw exception)
         if (failures.Any())
         {
             _logger.LogWarning(
@@ -61,7 +64,39 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
                 failures.Count,
                 string.Join("; ", failures.Select(f => $"{f.PropertyName}: {f.ErrorMessage}")));
 
-            throw new ValidationException(failures);
+            // Convert FluentValidation errors to Ardalis.Result ValidationErrors
+            var validationErrors = failures
+                .Select(f => new ValidationError
+                {
+                    Identifier = f.PropertyName,
+                    ErrorMessage = f.ErrorMessage,
+                    Severity = ValidationSeverity.Error
+                })
+                .ToArray();
+
+            // Create Invalid result using reflection (since we don't know the exact TResponse type)
+            var resultType = typeof(TResponse);
+
+            if (resultType.IsGenericType && resultType.GetGenericTypeDefinition() == typeof(Result<>))
+            {
+                // Result<T>
+                var valueType = resultType.GetGenericArguments()[0];
+                var invalidMethod = typeof(Result<>)
+                    .MakeGenericType(valueType)
+                    .GetMethod(nameof(Result<object>.Invalid), new[] { typeof(ValidationError[]) });
+
+                var result = invalidMethod?.Invoke(null, new object[] { validationErrors });
+                return (TResponse)result!;
+            }
+            else
+            {
+                // Result (non-generic)
+                var invalidMethod = typeof(Result)
+                    .GetMethod(nameof(Result.Invalid), new[] { typeof(ValidationError[]) });
+
+                var result = invalidMethod?.Invoke(null, new object[] { validationErrors });
+                return (TResponse)result!;
+            }
         }
 
         _logger.LogInformation("Validation passed for {CommandType}", typeName);
