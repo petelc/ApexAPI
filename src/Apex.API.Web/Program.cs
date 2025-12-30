@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Apex.API.Infrastructure;
+using Apex.API.Infrastructure.Data;
 using Apex.API.Web.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +16,11 @@ startupLogger.LogInformation("Starting web host");
 
 builder.Services.AddOptionConfigs(builder.Configuration, startupLogger, builder);
 
-// NO LONGER NEED TO REGISTER MEDIATOR HERE!
-// MediatR is registered in Infrastructure.AddInfrastructure()
-
-// Add Infrastructure (DbContext, Repositories, MediatR, etc.)
+// Add Infrastructure (DbContext, Repositories, MediatR, Identity, JWT, etc.)
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// Add Authorization services
+builder.Services.AddAuthorization();
 
 // Add FastEndpoints with Swagger configuration
 builder.Services.AddFastEndpoints()
@@ -27,41 +28,26 @@ builder.Services.AddFastEndpoints()
     {
         o.ShortSchemaNames = true;
         
-        // Configure document settings with post-processing
         o.DocumentSettings = settings =>
         {
             settings.Title = "APEX Multi-Tenant API";
             settings.Version = "v1";
-            settings.Description = "A production-ready multi-tenant SaaS platform built with Clean Architecture and DDD";
+            settings.Description = "A production-ready multi-tenant SaaS platform with authentication";
             
-            // PostProcess is called when the document is generated
             settings.PostProcess = document =>
             {
-                // Add server URLs for tenant switching in Swagger UI
                 document.Servers.Clear();
                 
                 document.Servers.Add(new NSwag.OpenApiServer
                 {
                     Url = "https://demo.localhost:5000",
-                    Description = "Demo Tenant (Professional Tier)"
-                });
-                
-                document.Servers.Add(new NSwag.OpenApiServer
-                {
-                    Url = "https://test.localhost:5000",
-                    Description = "Test Tenant (Starter Tier)"
-                });
-                
-                document.Servers.Add(new NSwag.OpenApiServer
-                {
-                    Url = "https://acmecorp.localhost:5000",
-                    Description = "Acme Corporation (Trial)"
+                    Description = "Demo Tenant"
                 });
                 
                 document.Servers.Add(new NSwag.OpenApiServer
                 {
                     Url = "https://localhost:5000",
-                    Description = "No Tenant (Will fail for /current endpoint)"
+                    Description = "No Tenant"
                 });
             };
         };
@@ -69,8 +55,12 @@ builder.Services.AddFastEndpoints()
 
 var app = builder.Build();
 
-// DON'T use HTTPS redirect in development (commented out)
-// app.UseHttpsRedirection();
+// ✅ SEED DATABASE (roles, etc.)
+await DatabaseSeeder.SeedAsync(app.Services);
+
+// Authentication & Authorization BEFORE endpoints
+app.UseAuthentication();
+app.UseAuthorization();
 
 // FastEndpoints middleware
 app.UseFastEndpoints(config =>
@@ -83,15 +73,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerGen(uiConfig: c =>
     {
-        // Customize Swagger UI
         c.ConfigureDefaults();
-        
-        // Optional: Persist authorization data
         c.PersistAuthorization = true;
     });
 }
 
-app.MapDefaultEndpoints(); // Aspire health checks
+app.MapDefaultEndpoints();
 
 app.Run();
 
