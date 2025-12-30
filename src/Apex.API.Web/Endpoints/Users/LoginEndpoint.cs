@@ -47,18 +47,35 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
 
         if (result.IsSuccess)
         {
-            // ✅ FIXED: Use correct FastEndpoints methods
             HttpContext.Response.StatusCode = StatusCodes.Status200OK;
             await HttpContext.Response.WriteAsJsonAsync(result.Value, ct);
         }
         else
         {
-            // ✅ FIXED: Use correct FastEndpoints methods
+            // ✅ FIXED: Check for validation errors OR general errors
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await HttpContext.Response.WriteAsJsonAsync(new
+
+            if (result.ValidationErrors.Any())
             {
-                Errors = result.Errors
-            }, ct);
+                // Return validation errors
+                await HttpContext.Response.WriteAsJsonAsync(new
+                {
+                    Errors = result.ValidationErrors.Select(e => new
+                    {
+                        Identifier = e.Identifier,
+                        ErrorMessage = e.ErrorMessage,
+                        Severity = e.Severity.ToString()
+                    })
+                }, ct);
+            }
+            else
+            {
+                // Return general errors
+                await HttpContext.Response.WriteAsJsonAsync(new
+                {
+                    Errors = result.Errors
+                }, ct);
+            }
         }
     }
 }

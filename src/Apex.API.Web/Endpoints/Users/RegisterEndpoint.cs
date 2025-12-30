@@ -76,19 +76,36 @@ public class RegisterEndpoint : Endpoint<RegisterRequest, RegisterResponse>
                 Message = "User registered successfully. Please check your email to verify your account."
             };
 
-            // ✅ FIXED: Use correct FastEndpoints methods
             HttpContext.Response.StatusCode = StatusCodes.Status201Created;
             HttpContext.Response.Headers.Location = $"/api/users/{result.Value.Value}";
             await HttpContext.Response.WriteAsJsonAsync(response, ct);
         }
         else
         {
-            // ✅ FIXED: Use correct FastEndpoints methods
+            // ✅ FIXED: Check for validation errors OR general errors
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await HttpContext.Response.WriteAsJsonAsync(new
+
+            if (result.ValidationErrors.Any())
             {
-                Errors = result.Errors
-            }, ct);
+                // Return validation errors
+                await HttpContext.Response.WriteAsJsonAsync(new
+                {
+                    Errors = result.ValidationErrors.Select(e => new
+                    {
+                        Identifier = e.Identifier,
+                        ErrorMessage = e.ErrorMessage,
+                        Severity = e.Severity.ToString()
+                    })
+                }, ct);
+            }
+            else
+            {
+                // Return general errors
+                await HttpContext.Response.WriteAsJsonAsync(new
+                {
+                    Errors = result.Errors
+                }, ct);
+            }
         }
     }
 }

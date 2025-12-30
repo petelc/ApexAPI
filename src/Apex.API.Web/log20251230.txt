@@ -972,3 +972,115 @@ WHERE [Id] = @p23 AND [ConcurrencyStamp] = @p24;
 2025-12-30 15:30:50.655 -05:00 [INF] Request starting HTTP/2 GET https://testco.localhost:5000/api/protected - application/json null
 2025-12-30 15:30:50.678 -05:00 [INF] Request finished HTTP/2 GET https://testco.localhost:5000/api/protected - 404 0 null 23.8401ms
 2025-12-30 15:30:50.679 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://testco.localhost:5000/api/protected, Response status code: 404
+2025-12-30 15:42:29.765 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:42:29.767 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:42:29.768 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:42:29.768 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:42:29.771 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:42:29.772 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:42:29.777 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- password: Password must be at least 8 characters. Severity: Error
+ -- password: Password must contain at least one uppercase letter. Severity: Error
+ -- password: Password must contain at least one number. Severity: Error
+ -- password: Password must contain at least one special character. Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Users.RegisterEndpoint.HandleAsync(RegisterRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Users/RegisterEndpoint.cs:line 67
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 15:42:29.780 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 500 null text/plain; charset=utf-8 14.3873ms
+2025-12-30 15:47:40.873 -05:00 [INF] Application is shutting down...
+2025-12-30 15:49:44.921 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 15:49:44.978 -05:00 [INF] Starting database seeding...
+2025-12-30 15:49:45.185 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 15:49:45.509 -05:00 [INF] Executed DbCommand (24ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.546 -05:00 [INF] Role TenantAdmin already exists
+2025-12-30 15:49:45.550 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.550 -05:00 [INF] Role User already exists
+2025-12-30 15:49:45.551 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.551 -05:00 [INF] Role Manager already exists
+2025-12-30 15:49:45.552 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:49:45.552 -05:00 [INF] Role ReadOnly already exists
+2025-12-30 15:49:45.552 -05:00 [INF] Database seeding completed.
+2025-12-30 15:49:45.575 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 15:49:45.580 -05:00 [INF] Registered 5 endpoints in 717 milliseconds.
+2025-12-30 15:49:45.607 -05:00 [INF] No validators found in the system!
+2025-12-30 15:49:45.616 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-30 15:49:45.784 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 15:49:45.784 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 15:49:45.784 -05:00 [INF] Hosting environment: Development
+2025-12-30 15:49:45.784 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 15:49:58.342 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:49:58.367 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:49:58.397 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:49:58.397 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:49:58.402 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:49:58.406 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:49:58.407 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 65.0087ms
+2025-12-30 15:51:02.866 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:51:02.869 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:51:02.871 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:51:02.871 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:51:02.871 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:51:02.872 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:51:02.872 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 5.4016ms
+2025-12-30 15:57:29.318 -05:00 [INF] Application is shutting down...
+2025-12-30 15:58:42.542 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 15:58:42.598 -05:00 [INF] Starting database seeding...
+2025-12-30 15:58:42.803 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 15:58:43.118 -05:00 [INF] Executed DbCommand (22ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.154 -05:00 [INF] Role TenantAdmin already exists
+2025-12-30 15:58:43.159 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.160 -05:00 [INF] Role User already exists
+2025-12-30 15:58:43.161 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.162 -05:00 [INF] Role Manager already exists
+2025-12-30 15:58:43.163 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-30 15:58:43.163 -05:00 [INF] Role ReadOnly already exists
+2025-12-30 15:58:43.163 -05:00 [INF] Database seeding completed.
+2025-12-30 15:58:43.185 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 15:58:43.189 -05:00 [INF] Registered 5 endpoints in 708 milliseconds.
+2025-12-30 15:58:43.215 -05:00 [INF] No validators found in the system!
+2025-12-30 15:58:43.224 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-30 15:58:43.378 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 15:58:43.378 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 15:58:43.378 -05:00 [INF] Hosting environment: Development
+2025-12-30 15:58:43.378 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 15:59:43.165 -05:00 [INF] Request starting HTTP/2 POST https://authtest.localhost:5000/api/users/register - application/json 84
+2025-12-30 15:59:43.191 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:59:43.221 -05:00 [INF] Validating command RegisterUserCommand
+2025-12-30 15:59:43.221 -05:00 [INF] Found 1 validator(s) for RegisterUserCommand
+2025-12-30 15:59:43.228 -05:00 [WRN] Validation failed for RegisterUserCommand. 4 error(s): password: Password must be at least 8 characters.; password: Password must contain at least one uppercase letter.; password: Password must contain at least one number.; password: Password must contain at least one special character.
+2025-12-30 15:59:43.233 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/register'
+2025-12-30 15:59:43.234 -05:00 [INF] Request finished HTTP/2 POST https://authtest.localhost:5000/api/users/register - 400 null application/json; charset=utf-8 69.5492ms
+2025-12-30 17:00:34.701 -05:00 [INF] Application is shutting down...
