@@ -32,7 +32,7 @@ public class GetCurrentTenantEndpoint : EndpointWithoutRequest<GetCurrentTenantR
 
     public override void Configure()
     {
-        Get("/api/tenants/current");
+        Get("/tenants/current");
         AllowAnonymous();
     }
 

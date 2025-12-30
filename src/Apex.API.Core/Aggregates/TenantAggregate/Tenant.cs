@@ -24,9 +24,9 @@ public class Tenant : EntityBase, IAggregateRoot
     public string Subdomain { get; private set; } = string.Empty;
 
     /// <summary>
-    /// Database schema name for this tenant (e.g., "tenant_acmecorp")
+    /// Database schema name for this tenant 
     /// </summary>
-    public string SchemaName => $"tenant_{Subdomain.ToLowerInvariant()}";
+    public string SchemaName { get; private set; } = string.Empty;  // ✅ Has setter
 
     // Subscription
     public SubscriptionTier Tier { get; private set; } = SubscriptionTier.Trial;
@@ -73,6 +73,7 @@ public class Tenant : EntityBase, IAggregateRoot
             Id = TenantId.CreateUnique(),
             CompanyName = companyName,
             Subdomain = subdomain.ToLowerInvariant(),
+            SchemaName = $"tenant_{subdomain.ToLowerInvariant()}",
             Tier = SubscriptionTier.Trial,
             Status = SubscriptionStatus.Trial,
             CreatedDate = DateTime.UtcNow,
@@ -86,10 +87,10 @@ public class Tenant : EntityBase, IAggregateRoot
 
         // Raise domain event
         tenant.RegisterDomainEvent(new TenantCreatedEvent(
-            tenant.Id.Value,              // ✅ Extract Guid
+            tenant.Id.Value,
             companyName,
             subdomain,
-            tenant.SchemaName));          // ✅ Use SchemaName (string)
+            tenant.SchemaName));  // ✅ Now this will have a value!
 
         return tenant;
     }

@@ -4,6 +4,8 @@
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="MediatR.Contracts" />
   </ItemGroup>
 
   <ItemGroup>

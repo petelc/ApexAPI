@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
     <PackageReference Include="NimblePros.Metronome" />
     <PackageReference Include="Vogen" />
+    <PackageReference Include="MediatR" />
   </ItemGroup>
   
   <ItemGroup>

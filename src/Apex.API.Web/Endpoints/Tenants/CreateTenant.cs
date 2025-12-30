@@ -1,7 +1,7 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mediator;
+using MediatR;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.UseCases.Tenants.Create;
@@ -9,7 +9,7 @@ using Apex.API.UseCases.Tenants.Create;
 namespace Apex.API.Web.Endpoints.Tenants;
 
 /// <summary>
-/// Endpoint for tenant signup using Mediator pattern
+/// Endpoint for tenant signup using MediatR pattern
 /// </summary>
 public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantResponse>
 {
@@ -18,7 +18,7 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
     private readonly IConfiguration _configuration;
 
     public CreateTenantEndpoint(
-        IMediator mediator,  // ✅ Using Mediator now!
+        IMediator mediator,
         IReadRepository<Tenant> tenantRepository,
         IConfiguration configuration)
     {
@@ -29,7 +29,7 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
 
     public override void Configure()
     {
-        Post("/api/tenants/signup");
+        Post("/tenants/signup");
         AllowAnonymous();
     }
 
@@ -44,12 +44,13 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
             req.AdminLastName,
             req.Region);
 
-        // Send command via Mediator ✅
+        // Send command via MediatR
         var result = await _mediator.Send(command, ct);
 
         if (result.IsSuccess)
         {
-            var tenant = await _tenantRepository.GetByIdAsync(result.Value.Value, ct);
+            // ✅ FIX: Use result.Value (TenantId) not result.Value.Value (Guid)
+            var tenant = await _tenantRepository.GetByIdAsync(result.Value, ct);
 
             if (tenant == null)
             {
@@ -62,7 +63,7 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
                     SubscriptionTier = "Trial",
                     Message = "Your account has been created successfully!"
                 };
-                
+
                 await HttpContext.Response.WriteAsJsonAsync(fallbackResponse, ct);
                 HttpContext.Response.StatusCode = StatusCodes.Status201Created;
                 return;

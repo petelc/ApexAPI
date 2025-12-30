@@ -41,7 +41,7 @@ public class GetTenantEndpoint : Endpoint<GetTenantRequest, GetTenantResponse>
 
     public override void Configure()
     {
-        Get("/api/tenants/{id}");
+        Get("/tenants/{id}");
         AllowAnonymous();
     }
 

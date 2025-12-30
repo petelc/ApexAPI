@@ -1,11 +1,11 @@
-using Apex.API.Core.Aggregates.TenantAggregate.Events;
-using Mediator;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using Apex.API.Core.Aggregates.TenantAggregate.Events;
 
 namespace Apex.API.UseCases.Tenants.Events;
 
 /// <summary>
-/// Handles the TenantCreatedEvent domain event
+/// Handles the TenantCreatedEvent domain event (using MediatR)
 /// This is called automatically when a tenant is created
 /// </summary>
 public class TenantCreatedEventHandler : INotificationHandler<TenantCreatedEvent>
@@ -17,7 +17,7 @@ public class TenantCreatedEventHandler : INotificationHandler<TenantCreatedEvent
         _logger = logger;
     }
 
-    public ValueTask Handle(TenantCreatedEvent notification, CancellationToken cancellationToken)
+    public Task Handle(TenantCreatedEvent notification, CancellationToken cancellationToken)
     {
         _logger.LogInformation(
             "🎉 NEW TENANT CREATED! TenantId: {TenantId}, Company: {CompanyName}, Subdomain: {Subdomain}, Schema: {SchemaName}",
@@ -53,6 +53,6 @@ public class TenantCreatedEventHandler : INotificationHandler<TenantCreatedEvent
         //    - Track referral source
         //    - Update conversion metrics
 
-        return ValueTask.CompletedTask;
+        return Task.CompletedTask;
     }
 }

@@ -7,12 +7,6 @@ using Apex.API.Infrastructure.Data;
 using Apex.API.Infrastructure.Identity;
 using Apex.API.Infrastructure.Services;
 using Apex.API.UseCases.Common.Interfaces;
-using Apex.API.UseCases.Tenants.Create;
-using Apex.API.UseCases.Tenants.Events;
-using Apex.API.Core.Aggregates.TenantAggregate.Events;
-using Apex.API.Core.ValueObjects;
-using Mediator;
-using Ardalis.Result;
 
 namespace Apex.API.Infrastructure;
 
@@ -24,7 +18,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        // Simple DbContext registration
+        // DbContext
         services.AddDbContext<ApexDbContext>(options =>
         {
             options.UseSqlServer(connectionString, sqlOptions =>
@@ -36,13 +30,13 @@ public static class DependencyInjection
                     errorNumbersToAdd: null);
             });
 
-            #if DEBUG
+#if DEBUG
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
-            #endif
+#endif
         });
 
-        // Required services
+        // HTTP Context
         services.AddHttpContextAccessor();
         services.AddMemoryCache();
 
@@ -57,28 +51,22 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Domain event dispatcher
-        services.AddScoped<IDomainEventDispatcher, MediatorDomainEventDispatcher>();
+        services.AddScoped<IDomainEventDispatcher, Apex.API.Infrastructure.Services.MediatorDomainEventDispatcher>();
 
         // Services
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
 
-        // ===================================================================
-        // MEDIATOR: Register Command Handlers
-        // ===================================================================
-        services.AddScoped<IRequestHandler<CreateTenantCommand, Result<TenantId>>, CreateTenantHandler>();
-        
-        // Add more command handlers here as you create them:
-        // services.AddScoped<IRequestHandler<UpdateTenantCommand, Result>, UpdateTenantHandler>();
-        // services.AddScoped<IRequestHandler<DeleteTenantCommand, Result>, DeleteTenantHandler>();
-
-        // ===================================================================
-        // MEDIATOR: Register Event Handlers (Domain Events)
-        // ===================================================================
-        services.AddScoped<INotificationHandler<TenantCreatedEvent>, TenantCreatedEventHandler>();
-        
-        // Add more event handlers here as you create them:
-        // services.AddScoped<INotificationHandler<TenantStatusChangedEvent>, TenantStatusChangedEventHandler>();
-        // services.AddScoped<INotificationHandler<TenantTierUpgradedEvent>, TenantTierUpgradedEventHandler>();
+        // ========================================================================
+        // MEDIATR: Auto-discovers all handlers! ✨
+        // ========================================================================
+        // This will find:
+        // - All IRequestHandler<TRequest, TResponse> implementations
+        // - All INotificationHandler<TNotification> implementations
+        // From the UseCases assembly
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(Apex.API.UseCases.Tenants.Create.CreateTenantHandler).Assembly);
+        });
 
         return services;
     }
