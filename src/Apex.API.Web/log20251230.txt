@@ -1,0 +1,268 @@
+2025-12-30 08:17:38.858 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 08:17:38.931 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 08:17:38.937 -05:00 [INF] Registered 3 endpoints in 130 milliseconds.
+2025-12-30 08:17:38.964 -05:00 [INF] No validators found in the system!
+2025-12-30 08:17:39.093 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 08:17:39.093 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 08:17:39.093 -05:00 [INF] Hosting environment: Development
+2025-12-30 08:17:39.093 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 08:17:58.655 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 165
+2025-12-30 08:17:58.674 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:17:58.723 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:17:58.724 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 400 null application/json; charset=utf-8 70.1969ms
+2025-12-30 08:23:51.303 -05:00 [INF] Application is shutting down...
+2025-12-30 08:24:13.133 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 08:24:13.211 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 08:24:13.218 -05:00 [INF] Registered 3 endpoints in 135 milliseconds.
+2025-12-30 08:24:13.244 -05:00 [INF] No validators found in the system!
+2025-12-30 08:24:13.418 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 08:24:13.418 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 08:24:13.418 -05:00 [INF] Hosting environment: Development
+2025-12-30 08:24:13.418 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 08:24:35.174 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 165
+2025-12-30 08:24:35.193 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:24:35.231 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 08:24:35.231 -05:00 [INF] Found 2 validator(s) for CreateTenantCommand
+2025-12-30 08:24:35.237 -05:00 [WRN] Validation failed for CreateTenantCommand. 2 error(s): region: Region must be a valid region code (e.g., 'us-east-1', 'eu-west-1').; region: Region must be a valid region code (e.g., 'us-east-1', 'eu-west-1').
+2025-12-30 08:24:35.238 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:24:35.242 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- region: Region must be a valid region code (e.g., 'us-east-1', 'eu-west-1'). Severity: Error
+ -- region: Region must be a valid region code (e.g., 'us-east-1', 'eu-west-1'). Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 08:24:35.245 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 71.7834ms
+2025-12-30 08:27:24.555 -05:00 [INF] Application is shutting down...
+2025-12-30 08:28:35.163 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-30 08:28:35.235 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-30 08:28:35.241 -05:00 [INF] Registered 3 endpoints in 128 milliseconds.
+2025-12-30 08:28:35.267 -05:00 [INF] No validators found in the system!
+2025-12-30 08:28:35.413 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-30 08:28:35.413 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-30 08:28:35.413 -05:00 [INF] Hosting environment: Development
+2025-12-30 08:28:35.413 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-30 08:29:04.039 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 168
+2025-12-30 08:29:04.057 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:29:04.090 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 08:29:04.091 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 08:29:04.095 -05:00 [INF] Validation passed for CreateTenantCommand
+2025-12-30 08:29:04.097 -05:00 [INF] Creating tenant: Company=Valid Company, Subdomain=validco123
+2025-12-30 08:29:04.268 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-30 08:29:04.561 -05:00 [INF] Executed DbCommand (20ms) [Parameters=[@subdomain='validco123' (Size = 63)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [t].[Id], [t].[CompanyName], [t].[CreatedDate], [t].[IsActive], [t].[LastModifiedDate], [t].[MaxRequestsPerMonth], [t].[MaxStorageGB], [t].[MaxUsers], [t].[Region], [t].[SchemaName], [t].[Status], [t].[Subdomain], [t].[Tier], [t].[TrialEndsDate]
+FROM [shared].[Tenants] AS [t]
+WHERE [t].[Subdomain] = @subdomain
+2025-12-30 08:29:04.574 -05:00 [INF] DIAGNOSTIC: Tenant created in memory - Subdomain=validco123, SchemaName=tenant_validco123, SchemaNameIsNull=false
+2025-12-30 08:29:04.638 -05:00 [INF] Executed DbCommand (8ms) [Parameters=[@p0='ec455e62-f2d4-4f91-8fa5-b6b501045ac8', @p1='Valid Company' (Nullable = false) (Size = 200), @p2='2025-12-30T13:29:04.5746720Z', @p3='True', @p4=NULL (DbType = DateTime2), @p5='50', @p6='1', @p7='5', @p8='USEast' (Nullable = false) (Size = 50), @p9='tenant_validco123' (Nullable = false) (Size = 100), @p10='1', @p11='validco123' (Nullable = false) (Size = 63), @p12='0', @p13='2026-01-13T13:29:04.5746830Z' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [shared].[Tenants] ([Id], [CompanyName], [CreatedDate], [IsActive], [LastModifiedDate], [MaxRequestsPerMonth], [MaxStorageGB], [MaxUsers], [Region], [SchemaName], [Status], [Subdomain], [Tier], [TrialEndsDate])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13);
+2025-12-30 08:29:04.642 -05:00 [INF] 🎉 NEW TENANT CREATED! TenantId: "ec455e62-f2d4-4f91-8fa5-b6b501045ac8", Company: Valid Company, Subdomain: validco123, Schema: tenant_validco123
+2025-12-30 08:29:04.660 -05:00 [INF] Starting provisioning for tenant ec455e62-f2d4-4f91-8fa5-b6b501045ac8 with schema tenant_validco123
+2025-12-30 08:29:04.686 -05:00 [INF] Created schema tenant_validco123
+2025-12-30 08:29:04.686 -05:00 [INF] Successfully provisioned tenant ec455e62-f2d4-4f91-8fa5-b6b501045ac8
+2025-12-30 08:29:04.686 -05:00 [INF] Tenant created successfully: TenantId="ec455e62-f2d4-4f91-8fa5-b6b501045ac8", Subdomain=validco123
+2025-12-30 08:29:04.694 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:29:04.697 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 201 null application/json; charset=utf-8 658.5987ms
+2025-12-30 08:29:37.046 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 183
+2025-12-30 08:29:37.047 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:29:37.053 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 08:29:37.053 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 08:29:37.056 -05:00 [WRN] Validation failed for CreateTenantCommand. 1 error(s): region: Region must be a valid region code (e.g., 'USEast', 'USWest', 'EUWest').
+2025-12-30 08:29:37.057 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:29:37.062 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- region: Region must be a valid region code (e.g., 'USEast', 'USWest', 'EUWest'). Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 08:29:37.065 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 18.7308ms
+2025-12-30 08:31:13.685 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 157
+2025-12-30 08:31:13.686 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:31:13.687 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 08:31:13.688 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 08:31:13.688 -05:00 [WRN] Validation failed for CreateTenantCommand. 1 error(s): subdomain: Subdomain must be at least 3 characters.
+2025-12-30 08:31:13.688 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:31:13.688 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- subdomain: Subdomain must be at least 3 characters. Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 08:31:13.689 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 3.6132ms
+2025-12-30 08:31:32.529 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 161
+2025-12-30 08:31:32.529 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:31:32.530 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 08:31:32.530 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 08:31:32.530 -05:00 [WRN] Validation failed for CreateTenantCommand. 1 error(s): subdomain: Subdomain cannot use reserved words like 'admin', 'api', 'www', etc.
+2025-12-30 08:31:32.531 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:31:32.531 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- subdomain: Subdomain cannot use reserved words like 'admin', 'api', 'www', etc. Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 08:31:32.532 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 2.4351ms
+2025-12-30 08:32:06.171 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 159
+2025-12-30 08:32:06.172 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:32:06.172 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 08:32:06.172 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 08:32:06.172 -05:00 [WRN] Validation failed for CreateTenantCommand. 1 error(s): adminEmail: Admin email must be a valid email address.
+2025-12-30 08:32:06.173 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:32:06.173 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- adminEmail: Admin email must be a valid email address. Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 08:32:06.173 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 2.2049ms
+2025-12-30 08:32:29.589 -05:00 [INF] Request starting HTTP/2 POST https://localhost:5000/api/tenants/signup - application/json 132
+2025-12-30 08:32:29.589 -05:00 [INF] Executing endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:32:29.589 -05:00 [INF] Validating command CreateTenantCommand
+2025-12-30 08:32:29.589 -05:00 [INF] Found 1 validator(s) for CreateTenantCommand
+2025-12-30 08:32:29.590 -05:00 [WRN] Validation failed for CreateTenantCommand. 7 error(s): companyName: Company name must be at least 2 characters.; subdomain: Subdomain must be at least 3 characters.; adminEmail: Admin email must be a valid email address.; adminFirstName: Admin first name is required.; adminFirstName: Admin first name must be at least 1 character.; adminLastName: Admin last name is required.; adminLastName: Admin last name must be at least 1 character.
+2025-12-30 08:32:29.590 -05:00 [INF] Executed endpoint 'HTTP: POST /api/tenants/signup'
+2025-12-30 08:32:29.590 -05:00 [ERR] An unhandled exception has occurred while executing the request.
+FluentValidation.ValidationException: Validation failed: 
+ -- companyName: Company name must be at least 2 characters. Severity: Error
+ -- subdomain: Subdomain must be at least 3 characters. Severity: Error
+ -- adminEmail: Admin email must be a valid email address. Severity: Error
+ -- adminFirstName: Admin first name is required. Severity: Error
+ -- adminFirstName: Admin first name must be at least 1 character. Severity: Error
+ -- adminLastName: Admin last name is required. Severity: Error
+ -- adminLastName: Admin last name must be at least 1 character. Severity: Error
+   at Apex.API.UseCases.Common.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.UseCases/Common/Behaviors/ValidationBehavior.cs:line 64
+   at Apex.API.Web.Endpoints.Tenants.CreateTenantEndpoint.HandleAsync(CreateTenantRequest req, CancellationToken ct) in /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web/Endpoints/Tenants/CreateTenant.cs:line 48
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-30 08:32:29.591 -05:00 [INF] Request finished HTTP/2 POST https://localhost:5000/api/tenants/signup - 500 null text/plain; charset=utf-8 2.1832ms
+2025-12-30 08:32:29.594 -05:00 [ERR] Unexpected exception in TimingPipeFlusher.FlushAsync.
+System.IO.IOException: The encryption operation failed, see inner exception.
+ ---> System.ComponentModel.Win32Exception (14): Bad address
+   --- End of inner exception stack trace ---
+   at System.Net.Security.SslStream.WriteSingleChunk[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.ConcurrentPipeWriter.FlushAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.TimingPipeFlusher.FlushAsync(MinDataRate minRate, Int64 count, IHttpOutputAborter outputAborter, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2FrameWriter.WriteGoAwayAsync(Int32 lastStreamId, Http2ErrorCode errorCode)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2Connection.ProcessRequestsAsync[TContext](IHttpApplication`1 application)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecuteFromThreadPool(Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.ConcurrentPipeWriter.FlushAsyncAwaited(ValueTask`1 flushTask, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.PipeWriterHelpers.TimingPipeFlusher.TimeFlushAsyncAwaited(ValueTask`1 pipeFlushTask, MinDataRate minRate, IHttpOutputAborter outputAborter, CancellationToken cancellationToken)
+2025-12-30 08:32:29.595 -05:00 [ERR] Unhandled exception while processing 0HNI7KTJ9KMPE.
+System.IO.IOException: The encryption operation failed, see inner exception.
+ ---> System.ComponentModel.Win32Exception (14): Bad address
+   --- End of inner exception stack trace ---
+   at System.Net.Security.SslStream.WriteSingleChunk[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStreamAdapter`1.DisposeAsync()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStreamAdapter`1.DisposeAsync()
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetResult()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.HttpConnection.ProcessRequestsAsync[TContext](IHttpApplication`1 httpApplication)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetResult()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2Connection.ProcessRequestsAsync[TContext](IHttpApplication`1 application)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(IAsyncStateMachineBox box, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Threading.Tasks.UnwrapPromise`1.TrySetFromTask(Task task, Boolean lookForOce)
+   at System.Threading.Tasks.UnwrapPromise`1.Invoke(Task completingTask)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetResult()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.Http2FrameWriter.WriteToOutputPipe()
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.ExecutionContextCallback(Object s)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext()
+   at System.Threading.ThreadPool.<>c.<.cctor>b__48_0(Object state)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Security.SslStream.WriteAsyncInternal[TIOAdapter](ReadOnlyMemory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeWriter.FlushAsyncInternal(Boolean writeToStream, ReadOnlyMemory`1 data, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at System.IO.Pipelines.StreamPipeWriter.CompleteAsync(Exception exception)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStreamAdapter`1.DisposeAsync()
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.KestrelConnection`1.ExecuteAsync()
