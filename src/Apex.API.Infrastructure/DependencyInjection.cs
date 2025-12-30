@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
 using Traxs.SharedKernel;
 using Apex.API.Core.Interfaces;
 using Apex.API.Infrastructure.Data;
 using Apex.API.Infrastructure.Identity;
 using Apex.API.Infrastructure.Services;
 using Apex.API.UseCases.Common.Interfaces;
+using Apex.API.UseCases.Common.Behaviors;
 
 namespace Apex.API.Infrastructure;
 
@@ -30,10 +32,10 @@ public static class DependencyInjection
                     errorNumbersToAdd: null);
             });
 
-#if DEBUG
+            #if DEBUG
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
-#endif
+            #endif
         });
 
         // HTTP Context
@@ -59,14 +61,19 @@ public static class DependencyInjection
         // ========================================================================
         // MEDIATR: Auto-discovers all handlers! ✨
         // ========================================================================
-        // This will find:
-        // - All IRequestHandler<TRequest, TResponse> implementations
-        // - All INotificationHandler<TNotification> implementations
-        // From the UseCases assembly
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(Apex.API.UseCases.Tenants.Create.CreateTenantHandler).Assembly);
+            
+            // Add validation pipeline behavior
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+
+        // ========================================================================
+        // FLUENTVALIDATION: Auto-discovers all validators! ✨
+        // ========================================================================
+        services.AddValidatorsFromAssembly(
+            typeof(Apex.API.UseCases.Tenants.Create.CreateTenantCommand).Assembly);
 
         return services;
     }

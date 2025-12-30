@@ -3,9 +3,11 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="MediatR.Contracts" />
+    <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
