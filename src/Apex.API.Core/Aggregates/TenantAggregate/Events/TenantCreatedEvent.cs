@@ -4,9 +4,9 @@ using Traxs.SharedKernel;
 namespace Apex.API.Core.Aggregates.TenantAggregate.Events;
 
 /// <summary>
-/// Domain event raised when a new tenant is created
+/// Domain event raised when a new tenant is created (using MediatR)
 /// Inherits from DomainEventBase (for domain event infrastructure)
-/// Implements INotification (for Mediator dispatching)
+/// Implements INotification (for MediatR dispatching)
 /// </summary>
 public class TenantCreatedEvent : DomainEventBase, INotification
 {

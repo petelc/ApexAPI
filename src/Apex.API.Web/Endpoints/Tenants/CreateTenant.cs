@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using MediatR;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.UseCases.Tenants.Create;
@@ -8,20 +9,20 @@ using Apex.API.UseCases.Tenants.Create;
 namespace Apex.API.Web.Endpoints.Tenants;
 
 /// <summary>
-/// Endpoint for tenant signup - DIRECT INJECTION (works reliably)
+/// Endpoint for tenant signup using MediatR pattern
 /// </summary>
 public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantResponse>
 {
-    private readonly CreateTenantHandler _handler;
+    private readonly IMediator _mediator;
     private readonly IReadRepository<Tenant> _tenantRepository;
     private readonly IConfiguration _configuration;
 
     public CreateTenantEndpoint(
-        CreateTenantHandler handler,  // Direct injection - works!
+        IMediator mediator,
         IReadRepository<Tenant> tenantRepository,
         IConfiguration configuration)
     {
-        _handler = handler;
+        _mediator = mediator;
         _tenantRepository = tenantRepository;
         _configuration = configuration;
     }
@@ -43,12 +44,13 @@ public class CreateTenantEndpoint : Endpoint<CreateTenantRequest, CreateTenantRe
             req.AdminLastName,
             req.Region);
 
-        // Call handler directly
-        var result = await _handler.Handle(command, ct);
+        // Send command via MediatR
+        var result = await _mediator.Send(command, ct);
 
         if (result.IsSuccess)
         {
-            var tenant = await _tenantRepository.GetByIdAsync(result.Value.Value, ct);
+            // ✅ FIX: Use result.Value (TenantId) not result.Value.Value (Guid)
+            var tenant = await _tenantRepository.GetByIdAsync(result.Value, ct);
 
             if (tenant == null)
             {

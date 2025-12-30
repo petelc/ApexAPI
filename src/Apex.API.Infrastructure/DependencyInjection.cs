@@ -7,10 +7,6 @@ using Apex.API.Infrastructure.Data;
 using Apex.API.Infrastructure.Identity;
 using Apex.API.Infrastructure.Services;
 using Apex.API.UseCases.Common.Interfaces;
-using Apex.API.UseCases.Tenants.Create;
-using Apex.API.UseCases.Tenants.Events;
-using Apex.API.Core.Aggregates.TenantAggregate.Events;
-using Mediator;
 
 namespace Apex.API.Infrastructure;
 
@@ -55,20 +51,22 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Domain event dispatcher
-        services.AddScoped<IDomainEventDispatcher, MediatorDomainEventDispatcher>();
+        services.AddScoped<IDomainEventDispatcher, Apex.API.Infrastructure.Services.MediatorDomainEventDispatcher>();
 
         // Services
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
 
         // ========================================================================
-        // HANDLERS - Direct registration (bypass Mediator for commands)
+        // MEDIATR: Auto-discovers all handlers! ✨
         // ========================================================================
-        services.AddScoped<CreateTenantHandler>();
-
-        // Event Handlers (these work with Mediator for domain events)
-        services.AddScoped<TenantCreatedEventHandler>();
-        services.AddScoped<INotificationHandler<TenantCreatedEvent>>(
-            provider => provider.GetRequiredService<TenantCreatedEventHandler>());
+        // This will find:
+        // - All IRequestHandler<TRequest, TResponse> implementations
+        // - All INotificationHandler<TNotification> implementations
+        // From the UseCases assembly
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(Apex.API.UseCases.Tenants.Create.CreateTenantHandler).Assembly);
+        });
 
         return services;
     }
