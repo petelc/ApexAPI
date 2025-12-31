@@ -120,7 +120,8 @@ public static class DependencyInjection
         // Services
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
-        services.AddScoped<IAuthenticationService, AuthenticationService>(); // ✅ NEW
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>(); // ✅ NEW
 
         // ========================================================================
         // MEDIATR: Auto-discovers all handlers! ✨
