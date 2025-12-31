@@ -6,13 +6,47 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Apex.API.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIdentityTables : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "shared");
+
+            migrationBuilder.CreateTable(
+                name: "Requests",
+                schema: "shared",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssignedToUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReviewedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ApprovedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CompletedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SubmittedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReviewStartedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeniedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CompletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReviewNotes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    ApprovalNotes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    DenialReason = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    CompletionNotes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
@@ -211,6 +245,25 @@ namespace Apex.API.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Requests_AssignedToUserId",
+                schema: "shared",
+                table: "Requests",
+                column: "AssignedToUserId",
+                filter: "[AssignedToUserId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_TenantId",
+                schema: "shared",
+                table: "Requests",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_TenantId_Status",
+                schema: "shared",
+                table: "Requests",
+                columns: new[] { "TenantId", "Status" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
                 schema: "shared",
                 table: "RoleClaims",
@@ -301,6 +354,10 @@ namespace Apex.API.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Requests",
+                schema: "shared");
+
             migrationBuilder.DropTable(
                 name: "RoleClaims",
                 schema: "shared");
