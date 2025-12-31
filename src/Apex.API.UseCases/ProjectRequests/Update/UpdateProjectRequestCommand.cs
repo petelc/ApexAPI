@@ -1,0 +1,16 @@
+using MediatR;
+using Ardalis.Result;
+using Apex.API.Core.ValueObjects;
+
+namespace Apex.API.UseCases.ProjectRequests.Update;
+
+/// <summary>
+/// Command to update a ProjectRequest (only allowed in Draft status)
+/// </summary>
+public record UpdateProjectRequestCommand(
+    ProjectRequestId ProjectRequestId,
+    string Title,
+    string Description,
+    string? Priority = null,
+    DateTime? DueDate = null
+) : IRequest<Result>;
