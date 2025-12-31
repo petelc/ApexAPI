@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.Core.Aggregates.UserAggregate;
-using Apex.API.Core.Aggregates.RequestAggregate;
+using Apex.API.Core.Aggregates.ProjectRequestAggregate;
 
 namespace Apex.API.Infrastructure.Data;
 
@@ -25,7 +25,7 @@ public class ApexDbContext : IdentityDbContext<User, Role, Guid>
 
     // Aggregates
     public DbSet<Tenant> Tenants => Set<Tenant>();
-    public DbSet<Request> Requests => Set<Request>(); // ✅ NEW
+    public DbSet<ProjectRequest> ProjectRequests => Set<ProjectRequest>(); // ✅ RENAMED
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
