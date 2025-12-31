@@ -1,6 +1,7 @@
 using FluentValidation;
+using Apex.API.UseCases.Requests.Create;
 
-namespace Apex.API.UseCases.Requests.Create;
+namespace Apex.API.UseCases.Requests.Validators;
 
 /// <summary>
 /// Validator for CreateRequestCommand
