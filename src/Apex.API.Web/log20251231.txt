@@ -1127,3 +1127,193 @@ FROM [shared].[ProjectRequests] AS [p]
 WHERE [p].[Id] = @p
 2025-12-31 18:07:42.071 -05:00 [INF] Executed endpoint 'HTTP: GET /api/project-requests/{id}'
 2025-12-31 18:07:42.071 -05:00 [INF] Request finished HTTP/2 GET https://acme.localhost:5000/api/project-requests/e535d31b-9aca-4cfb-97d5-50476e9858d5 - 200 null application/json; charset=utf-8 5.2274ms
+2025-12-31 22:03:00.456 -05:00 [INF] Application is shutting down...
+2025-12-31 22:34:47.593 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-31 22:34:47.854 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-31 22:35:09.850 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-31 22:35:10.121 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-31 22:35:10.349 -05:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-31 22:35:10.353 -05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-12-31 22:35:10.366 -05:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-12-31 22:35:10.395 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-12-31 22:35:10.400 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-31 22:35:10.401 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-12-31 22:35:10.411 -05:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-12-31 22:35:10.416 -05:00 [INF] Applying migration '20260101033448_AddProjectAggregate'.
+2025-12-31 22:35:10.432 -05:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[Projects] (
+    [Id] uniqueidentifier NOT NULL,
+    [TenantId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(200) NOT NULL,
+    [Description] nvarchar(2000) NOT NULL,
+    [Status] int NOT NULL,
+    [Priority] int NOT NULL,
+    [ProjectRequestId] uniqueidentifier NOT NULL,
+    [Budget] decimal(18,2) NULL,
+    [StartDate] datetime2 NULL,
+    [EndDate] datetime2 NULL,
+    [ActualStartDate] datetime2 NULL,
+    [ActualEndDate] datetime2 NULL,
+    [CreatedByUserId] uniqueidentifier NOT NULL,
+    [ProjectManagerUserId] uniqueidentifier NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [LastModifiedDate] datetime2 NULL,
+    CONSTRAINT [PK_Projects] PRIMARY KEY ([Id])
+);
+2025-12-31 22:35:10.434 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Projects_ProjectManagerUserId] ON [shared].[Projects] ([ProjectManagerUserId]) WHERE [ProjectManagerUserId] IS NOT NULL;
+2025-12-31 22:35:10.435 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Projects_ProjectRequestId] ON [shared].[Projects] ([ProjectRequestId]);
+2025-12-31 22:35:10.436 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Projects_TenantId] ON [shared].[Projects] ([TenantId]);
+2025-12-31 22:35:10.437 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Projects_TenantId_Status] ON [shared].[Projects] ([TenantId], [Status]);
+2025-12-31 22:35:10.439 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260101033448_AddProjectAggregate', N'10.0.0');
+2025-12-31 22:35:10.442 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2025-12-31 22:39:04.384 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2025-12-31 22:39:04.437 -05:00 [INF] Starting database seeding...
+2025-12-31 22:39:04.645 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-12-31 22:39:04.960 -05:00 [INF] Executed DbCommand (21ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-31 22:39:04.997 -05:00 [INF] Role TenantAdmin already exists
+2025-12-31 22:39:05.003 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-31 22:39:05.003 -05:00 [INF] Role User already exists
+2025-12-31 22:39:05.006 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-31 22:39:05.006 -05:00 [INF] Role Manager already exists
+2025-12-31 22:39:05.007 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2025-12-31 22:39:05.007 -05:00 [INF] Role ReadOnly already exists
+2025-12-31 22:39:05.007 -05:00 [INF] Database seeding completed.
+2025-12-31 22:39:05.029 -05:00 [INF] TenantContext initialized in SaaS mode
+2025-12-31 22:39:05.038 -05:00 [INF] Registered 19 endpoints in 711 milliseconds.
+2025-12-31 22:39:05.062 -05:00 [INF] No validators found in the system!
+2025-12-31 22:39:05.071 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-12-31 22:39:05.249 -05:00 [INF] Now listening on: https://localhost:5000
+2025-12-31 22:39:05.250 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-12-31 22:39:05.250 -05:00 [INF] Hosting environment: Development
+2025-12-31 22:39:05.250 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2025-12-31 22:41:22.512 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/users/login - application/json 58
+2025-12-31 22:41:22.554 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/login'
+2025-12-31 22:41:22.583 -05:00 [INF] Validating command LoginCommand
+2025-12-31 22:41:22.583 -05:00 [INF] Found 1 validator(s) for LoginCommand
+2025-12-31 22:41:22.587 -05:00 [INF] Validation passed for LoginCommand
+2025-12-31 22:41:22.590 -05:00 [INF] Login attempt: Email=developer@acme.com
+2025-12-31 22:41:22.625 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@normalizedEmail='DEVELOPER@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-31 22:41:22.704 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@userId='c8e2893d-c911-48bd-90ef-9d83322f4385'], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [shared].[UserRoles] AS [u]
+INNER JOIN [shared].[Roles] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @userId
+2025-12-31 22:41:22.716 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedUserName='DEVELOPER@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-31 22:41:22.720 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@normalizedEmail='DEVELOPER@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-31 22:41:22.765 -05:00 [INF] Executed DbCommand (7ms) [Parameters=[@p23='c8e2893d-c911-48bd-90ef-9d83322f4385', @p0='0', @p1='b946c6da-5da4-4e66-91df-503775f7ac4e' (Size = 4000), @p24='f8a4ac02-ac76-4926-a273-7391e5435fab' (Size = 4000), @p2='2025-12-31T20:37:00.8930930', @p3='developer@acme.com' (Size = 256), @p4='False', @p5='Jane' (Nullable = false) (Size = 100), @p6='True', @p7='2026-01-01T03:41:22.7055950Z' (Nullable = true), @p8=NULL (DbType = DateTime2), @p9='Developer' (Nullable = false) (Size = 100), @p10='True', @p11=NULL (DbType = DateTimeOffset), @p12='DEVELOPER@ACME.COM' (Size = 256), @p13='DEVELOPER@ACME.COM' (Size = 256), @p14='AQAAAAIAAYagAAAAEJ81g5llI+aEetO/HbtPa6teJWkcQ2UmG1YkZmnVZkpTBr1FqXbgxMVVbj4SSF4IFw==' (Size = 4000), @p15=NULL (Size = 4000), @p16='False', @p17=NULL (Size = 500), @p18='JRZ4ZOCJPI5JSQXYNSOAHPPE3NHLLTNS' (Size = 4000), @p19='52f5d627-a34e-4d24-a9a6-300a54392780', @p20=NULL (Size = 50), @p21='False', @p22='developer@acme.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [shared].[Users] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [CreatedDate] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [FirstName] = @p5, [IsActive] = @p6, [LastLoginDate] = @p7, [LastModifiedDate] = @p8, [LastName] = @p9, [LockoutEnabled] = @p10, [LockoutEnd] = @p11, [NormalizedEmail] = @p12, [NormalizedUserName] = @p13, [PasswordHash] = @p14, [PhoneNumber] = @p15, [PhoneNumberConfirmed] = @p16, [ProfileImageUrl] = @p17, [SecurityStamp] = @p18, [TenantId] = @p19, [TimeZone] = @p20, [TwoFactorEnabled] = @p21, [UserName] = @p22
+OUTPUT 1
+WHERE [Id] = @p23 AND [ConcurrencyStamp] = @p24;
+2025-12-31 22:41:22.776 -05:00 [INF] Login successful: UserId="c8e2893d-c911-48bd-90ef-9d83322f4385", Email=developer@acme.com
+2025-12-31 22:41:22.782 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/login'
+2025-12-31 22:41:22.784 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/users/login - 200 null application/json; charset=utf-8 274.5191ms
+2025-12-31 22:41:22.821 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/project-requests - application/json 233
+2025-12-31 22:41:22.824 -05:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-12-31 22:41:22.826 -05:00 [INF] AuthenticationScheme: Bearer was challenged.
+2025-12-31 22:41:22.826 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/project-requests - 401 0 null 4.9237ms
+2025-12-31 22:41:22.866 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/project-requests//submit - null null
+2025-12-31 22:41:22.868 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/project-requests//submit - 404 0 null 1.7899ms
+2025-12-31 22:41:22.868 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST https://acme.localhost:5000/api/project-requests//submit, Response status code: 404
+2025-12-31 22:41:22.900 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/users/login - application/json 60
+2025-12-31 22:41:22.901 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/login'
+2025-12-31 22:41:22.902 -05:00 [INF] Validating command LoginCommand
+2025-12-31 22:41:22.902 -05:00 [INF] Found 1 validator(s) for LoginCommand
+2025-12-31 22:41:22.903 -05:00 [INF] Validation passed for LoginCommand
+2025-12-31 22:41:22.904 -05:00 [INF] Login attempt: Email=admin2@acme.com
+2025-12-31 22:41:22.922 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@normalizedEmail='ADMIN2@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-31 22:41:22.968 -05:00 [INF] Executed DbCommand (3ms) [Parameters=[@userId='6de6eb0e-2ba0-4000-b01f-93eec3c69dae'], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [shared].[UserRoles] AS [u]
+INNER JOIN [shared].[Roles] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @userId
+2025-12-31 22:41:22.971 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedUserName='ADMIN2@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2025-12-31 22:41:22.974 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedEmail='ADMIN2@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2025-12-31 22:41:22.981 -05:00 [INF] Executed DbCommand (6ms) [Parameters=[@p23='6de6eb0e-2ba0-4000-b01f-93eec3c69dae', @p0='0', @p1='20269288-f363-419c-9727-366fa78dff55' (Size = 4000), @p24='28138d8f-10ac-4ea1-880c-4b2b94a9be39' (Size = 4000), @p2='2025-12-31T22:53:05.5335370', @p3='admin2@acme.com' (Size = 256), @p4='False', @p5='Admin' (Nullable = false) (Size = 100), @p6='True', @p7='2026-01-01T03:41:22.9688960Z' (Nullable = true), @p8=NULL (DbType = DateTime2), @p9='User' (Nullable = false) (Size = 100), @p10='True', @p11=NULL (DbType = DateTimeOffset), @p12='ADMIN2@ACME.COM' (Size = 256), @p13='ADMIN2@ACME.COM' (Size = 256), @p14='AQAAAAIAAYagAAAAEF+J2EHI6doiN14JhQ2VR3suoP3cI0o/bOFJxEI7vofeXdOzwBtSOyrToUrfiR/5HQ==' (Size = 4000), @p15=NULL (Size = 4000), @p16='False', @p17=NULL (Size = 500), @p18='JF5UNI6GR7EZ5Z6JCQ2YDVUMUI7OMSPM' (Size = 4000), @p19='52f5d627-a34e-4d24-a9a6-300a54392780', @p20=NULL (Size = 50), @p21='False', @p22='admin2@acme.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [shared].[Users] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [CreatedDate] = @p2, [Email] = @p3, [EmailConfirmed] = @p4, [FirstName] = @p5, [IsActive] = @p6, [LastLoginDate] = @p7, [LastModifiedDate] = @p8, [LastName] = @p9, [LockoutEnabled] = @p10, [LockoutEnd] = @p11, [NormalizedEmail] = @p12, [NormalizedUserName] = @p13, [PasswordHash] = @p14, [PhoneNumber] = @p15, [PhoneNumberConfirmed] = @p16, [ProfileImageUrl] = @p17, [SecurityStamp] = @p18, [TenantId] = @p19, [TimeZone] = @p20, [TwoFactorEnabled] = @p21, [UserName] = @p22
+OUTPUT 1
+WHERE [Id] = @p23 AND [ConcurrencyStamp] = @p24;
+2025-12-31 22:41:22.982 -05:00 [INF] Login successful: UserId="6de6eb0e-2ba0-4000-b01f-93eec3c69dae", Email=admin2@acme.com
+2025-12-31 22:41:22.982 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/login'
+2025-12-31 22:41:22.982 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/users/login - 200 null application/json; charset=utf-8 82.6445ms
+2025-12-31 22:41:23.014 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/project-requests//approve - application/json 52
+2025-12-31 22:41:23.015 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/project-requests//approve - 404 0 null 0.3636ms
+2025-12-31 22:41:23.015 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST https://acme.localhost:5000/api/project-requests//approve, Response status code: 404
+2025-12-31 22:41:23.051 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/project-requests//convert - application/json 103
+2025-12-31 22:41:23.052 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/project-requests//convert - 404 0 null 0.9372ms
+2025-12-31 22:41:23.053 -05:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST https://acme.localhost:5000/api/project-requests//convert, Response status code: 404
+2025-12-31 22:41:23.098 -05:00 [INF] Request starting HTTP/2 GET https://acme.localhost:5000/api/projects/ - null null
+2025-12-31 22:41:23.099 -05:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-12-31 22:41:23.100 -05:00 [INF] AuthenticationScheme: Bearer was challenged.
+2025-12-31 22:41:23.100 -05:00 [INF] Request finished HTTP/2 GET https://acme.localhost:5000/api/projects/ - 401 0 null 1.586ms
+2025-12-31 22:41:23.132 -05:00 [INF] Request starting HTTP/2 GET https://acme.localhost:5000/api/project-requests/ - null null
+2025-12-31 22:41:23.133 -05:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-12-31 22:41:23.134 -05:00 [INF] AuthenticationScheme: Bearer was challenged.
+2025-12-31 22:41:23.134 -05:00 [INF] Request finished HTTP/2 GET https://acme.localhost:5000/api/project-requests/ - 401 0 null 1.1887ms
+2025-12-31 22:41:23.162 -05:00 [INF] Request starting HTTP/2 GET https://acme.localhost:5000/api/projects - null null
+2025-12-31 22:41:23.163 -05:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-12-31 22:41:23.163 -05:00 [INF] AuthenticationScheme: Bearer was challenged.
+2025-12-31 22:41:23.163 -05:00 [INF] Request finished HTTP/2 GET https://acme.localhost:5000/api/projects - 401 0 null 0.5782ms
