@@ -1,38 +1,45 @@
 using Microsoft.AspNetCore.Identity;
-using Traxs.SharedKernel;
 using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.Core.Aggregates.UserAggregate;
 
 /// <summary>
-/// User entity with multi-tenant support
-/// Extends IdentityUser for ASP.NET Core Identity integration
+/// User aggregate - extends ASP.NET Core Identity
 /// </summary>
 public class User : IdentityUser<Guid>, IAggregateRoot
 {
-    // Multi-tenant isolation
+    // Multi-tenant
     private TenantId _tenantId;
     public TenantId TenantId
     {
         get => _tenantId;
-        private set => _tenantId = value;
+        set => _tenantId = value;
     }
 
-    // Personal Information
-    public string FirstName { get; private set; } = string.Empty;
-    public string LastName { get; private set; } = string.Empty;
-    
+    // Department - NEW! ✅
+    private DepartmentId? _departmentId;
+    public DepartmentId? DepartmentId
+    {
+        get => _departmentId;
+        set => _departmentId = value;
+    }
+
+    // User Details
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public string FullName => $"{FirstName} {LastName}";
 
-    // Status
-    public bool IsActive { get; private set; } = true;
-    public DateTime CreatedDate { get; private set; }
-    public DateTime? LastLoginDate { get; private set; }
-    public DateTime? LastModifiedDate { get; private set; }
+    // User Status
+    public bool IsActive { get; set; } = true;
 
-    // User preferences
-    public string? TimeZone { get; private set; }
-    public string? ProfileImageUrl { get; private set; }
+    // Profile
+    public string? ProfileImageUrl { get; set; }
+    public string? TimeZone { get; set; }
+
+    // Dates
+    public DateTime CreatedDate { get; set; }
+    public DateTime? LastModifiedDate { get; set; }
+    public DateTime? LastLoginDate { get; set; }
 
     // Domain events
     private readonly List<DomainEventBase> _domainEvents = new();

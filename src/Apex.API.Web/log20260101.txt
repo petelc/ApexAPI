@@ -1,0 +1,154 @@
+2026-01-01 08:43:52.333 -05:00 [INF] Application is shutting down...
+2026-01-01 10:08:30.604 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-01-01 10:14:58.748 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-01-01 10:18:01.078 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-01-01 10:18:01.334 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2026-01-01 10:18:59.252 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-01-01 10:18:59.522 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2026-01-01 10:18:59.749 -05:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-01-01 10:18:59.754 -05:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-01-01 10:18:59.768 -05:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2026-01-01 10:18:59.799 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2026-01-01 10:18:59.806 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-01-01 10:18:59.808 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-01-01 10:18:59.817 -05:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-01-01 10:18:59.822 -05:00 [INF] Applying migration '20260101151801_AddDepartmentAggregate'.
+2026-01-01 10:18:59.849 -05:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Users_Email] ON [shared].[Users];
+2026-01-01 10:18:59.851 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Users_TenantId_Email] ON [shared].[Users];
+2026-01-01 10:18:59.906 -05:00 [INF] Executed DbCommand (55ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var nvarchar(max);
+SELECT @var = QUOTENAME([d].[name])
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[shared].[Users]') AND [c].[name] = N'IsActive');
+IF @var IS NOT NULL EXEC(N'ALTER TABLE [shared].[Users] DROP CONSTRAINT ' + @var + ';');
+ALTER TABLE [shared].[Users] ADD DEFAULT CAST(1 AS bit) FOR [IsActive];
+2026-01-01 10:18:59.909 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [shared].[Users] ADD [DepartmentId] uniqueidentifier NULL;
+2026-01-01 10:18:59.911 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [shared].[Departments] (
+    [Id] uniqueidentifier NOT NULL,
+    [TenantId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [Description] nvarchar(500) NOT NULL,
+    [DepartmentManagerUserId] uniqueidentifier NULL,
+    [IsActive] bit NOT NULL DEFAULT CAST(1 AS bit),
+    [CreatedDate] datetime2 NOT NULL,
+    [LastModifiedDate] datetime2 NULL,
+    CONSTRAINT [PK_Departments] PRIMARY KEY ([Id])
+);
+2026-01-01 10:18:59.939 -05:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_DepartmentId] ON [shared].[Users] ([DepartmentId]) WHERE [DepartmentId] IS NOT NULL;
+2026-01-01 10:18:59.948 -05:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_IsActive] ON [shared].[Users] ([IsActive]);
+2026-01-01 10:18:59.952 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_TenantId_DepartmentId] ON [shared].[Users] ([TenantId], [DepartmentId]) WHERE [DepartmentId] IS NOT NULL;
+2026-01-01 10:18:59.953 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Departments_DepartmentManagerUserId] ON [shared].[Departments] ([DepartmentManagerUserId]) WHERE [DepartmentManagerUserId] IS NOT NULL;
+2026-01-01 10:18:59.954 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Departments_TenantId] ON [shared].[Departments] ([TenantId]);
+2026-01-01 10:18:59.955 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Departments_TenantId_IsActive] ON [shared].[Departments] ([TenantId], [IsActive]);
+2026-01-01 10:18:59.956 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Departments_TenantId_Name] ON [shared].[Departments] ([TenantId], [Name]);
+2026-01-01 10:18:59.957 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260101151801_AddDepartmentAggregate', N'10.0.0');
+2026-01-01 10:18:59.960 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2026-01-01 10:23:00.463 -05:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-01-01 10:23:00.518 -05:00 [INF] Starting database seeding...
+2026-01-01 10:23:00.731 -05:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2026-01-01 10:23:01.040 -05:00 [INF] Executed DbCommand (23ms) [Parameters=[@normalizedName='TENANTADMIN' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-01-01 10:23:01.075 -05:00 [INF] Role TenantAdmin already exists
+2026-01-01 10:23:01.081 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@normalizedName='USER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-01-01 10:23:01.081 -05:00 [INF] Role User already exists
+2026-01-01 10:23:01.083 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedName='MANAGER' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-01-01 10:23:01.083 -05:00 [INF] Role Manager already exists
+2026-01-01 10:23:01.085 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@normalizedName='READONLY' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[ConcurrencyStamp], [r].[CreatedDate], [r].[Description], [r].[IsSystemRole], [r].[Name], [r].[NormalizedName], [r].[TenantId]
+FROM [shared].[Roles] AS [r]
+WHERE [r].[NormalizedName] = @normalizedName
+2026-01-01 10:23:01.085 -05:00 [INF] Role ReadOnly already exists
+2026-01-01 10:23:01.085 -05:00 [INF] Database seeding completed.
+2026-01-01 10:23:01.109 -05:00 [INF] TenantContext initialized in SaaS mode
+2026-01-01 10:23:01.118 -05:00 [INF] Registered 22 endpoints in 710 milliseconds.
+2026-01-01 10:23:01.142 -05:00 [INF] No validators found in the system!
+2026-01-01 10:23:01.152 -05:00 [INF] User profile is available. Using '/Users/pete/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-01-01 10:23:01.311 -05:00 [INF] Now listening on: https://localhost:5000
+2026-01-01 10:23:01.311 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-01-01 10:23:01.311 -05:00 [INF] Hosting environment: Development
+2026-01-01 10:23:01.311 -05:00 [INF] Content root path: /Users/pete/Development/Projects/WorkMngtSys/ApexAPI/Apex.API/src/Apex.API.Web
+2026-01-01 10:23:57.349 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/users/login - application/json 60
+2026-01-01 10:23:57.395 -05:00 [INF] Executing endpoint 'HTTP: POST /api/users/login'
+2026-01-01 10:23:57.423 -05:00 [INF] Validating command LoginCommand
+2026-01-01 10:23:57.423 -05:00 [INF] Found 1 validator(s) for LoginCommand
+2026-01-01 10:23:57.427 -05:00 [INF] Validation passed for LoginCommand
+2026-01-01 10:23:57.430 -05:00 [INF] Login attempt: Email=admin2@acme.com
+2026-01-01 10:23:57.482 -05:00 [INF] Executed DbCommand (18ms) [Parameters=[@normalizedEmail='ADMIN2@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2026-01-01 10:23:57.569 -05:00 [INF] Executed DbCommand (2ms) [Parameters=[@userId='6de6eb0e-2ba0-4000-b01f-93eec3c69dae'], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Name]
+FROM [shared].[UserRoles] AS [u]
+INNER JOIN [shared].[Roles] AS [r] ON [u].[RoleId] = [r].[Id]
+WHERE [u].[UserId] = @userId
+2026-01-01 10:23:57.585 -05:00 [INF] Executed DbCommand (7ms) [Parameters=[@normalizedUserName='ADMIN2@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedUserName] = @normalizedUserName
+2026-01-01 10:23:57.588 -05:00 [INF] Executed DbCommand (1ms) [Parameters=[@normalizedEmail='ADMIN2@ACME.COM' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[ConcurrencyStamp], [u].[CreatedDate], [u].[DepartmentId], [u].[Email], [u].[EmailConfirmed], [u].[FirstName], [u].[IsActive], [u].[LastLoginDate], [u].[LastModifiedDate], [u].[LastName], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[ProfileImageUrl], [u].[SecurityStamp], [u].[TenantId], [u].[TimeZone], [u].[TwoFactorEnabled], [u].[UserName]
+FROM [shared].[Users] AS [u]
+WHERE [u].[NormalizedEmail] = @normalizedEmail
+2026-01-01 10:23:57.643 -05:00 [INF] Executed DbCommand (16ms) [Parameters=[@p24='6de6eb0e-2ba0-4000-b01f-93eec3c69dae', @p0='0', @p1='ff4e4c87-8cb9-42ac-b470-a2bbaf98d64b' (Size = 4000), @p25='20269288-f363-419c-9727-366fa78dff55' (Size = 4000), @p2='2025-12-31T22:53:05.5335370', @p3=NULL (DbType = Guid), @p4='admin2@acme.com' (Size = 256), @p5='False', @p6='Admin' (Nullable = false) (Size = 100), @p7='True', @p8='2026-01-01T15:23:57.5703880Z' (Nullable = true), @p9=NULL (DbType = DateTime2), @p10='User' (Nullable = false) (Size = 100), @p11='True', @p12=NULL (DbType = DateTimeOffset), @p13='ADMIN2@ACME.COM' (Size = 256), @p14='ADMIN2@ACME.COM' (Size = 256), @p15='AQAAAAIAAYagAAAAEF+J2EHI6doiN14JhQ2VR3suoP3cI0o/bOFJxEI7vofeXdOzwBtSOyrToUrfiR/5HQ==' (Size = 4000), @p16=NULL (Size = 4000), @p17='False', @p18=NULL (Size = 500), @p19='JF5UNI6GR7EZ5Z6JCQ2YDVUMUI7OMSPM' (Size = 4000), @p20='52f5d627-a34e-4d24-a9a6-300a54392780', @p21=NULL (Size = 50), @p22='False', @p23='admin2@acme.com' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [shared].[Users] SET [AccessFailedCount] = @p0, [ConcurrencyStamp] = @p1, [CreatedDate] = @p2, [DepartmentId] = @p3, [Email] = @p4, [EmailConfirmed] = @p5, [FirstName] = @p6, [IsActive] = @p7, [LastLoginDate] = @p8, [LastModifiedDate] = @p9, [LastName] = @p10, [LockoutEnabled] = @p11, [LockoutEnd] = @p12, [NormalizedEmail] = @p13, [NormalizedUserName] = @p14, [PasswordHash] = @p15, [PhoneNumber] = @p16, [PhoneNumberConfirmed] = @p17, [ProfileImageUrl] = @p18, [SecurityStamp] = @p19, [TenantId] = @p20, [TimeZone] = @p21, [TwoFactorEnabled] = @p22, [UserName] = @p23
+OUTPUT 1
+WHERE [Id] = @p24 AND [ConcurrencyStamp] = @p25;
+2026-01-01 10:23:57.655 -05:00 [INF] Login successful: UserId="6de6eb0e-2ba0-4000-b01f-93eec3c69dae", Email=admin2@acme.com
+2026-01-01 10:23:57.662 -05:00 [INF] Executed endpoint 'HTTP: POST /api/users/login'
+2026-01-01 10:23:57.664 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/users/login - 200 null application/json; charset=utf-8 317.104ms
+2026-01-01 10:23:57.695 -05:00 [INF] Request starting HTTP/2 GET https://acme.localhost:5000/api/departments - null null
+2026-01-01 10:23:57.699 -05:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-01-01 10:23:57.700 -05:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-01-01 10:23:57.701 -05:00 [INF] Request finished HTTP/2 GET https://acme.localhost:5000/api/departments - 401 0 null 5.5974ms
+2026-01-01 10:23:57.731 -05:00 [INF] Request starting HTTP/2 POST https://acme.localhost:5000/api/departments - application/json 116
+2026-01-01 10:23:57.733 -05:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (TenantAdmin)
+2026-01-01 10:23:57.733 -05:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-01-01 10:23:57.734 -05:00 [INF] Request finished HTTP/2 POST https://acme.localhost:5000/api/departments - 401 0 null 2.2592ms
