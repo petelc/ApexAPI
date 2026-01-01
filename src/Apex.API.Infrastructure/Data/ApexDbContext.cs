@@ -6,6 +6,7 @@ using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.Core.Aggregates.UserAggregate;
 using Apex.API.Core.Aggregates.ProjectRequestAggregate;
 using Apex.API.Core.Aggregates.ProjectAggregate;
+using Apex.API.Core.Aggregates.DepartmentAggregate;
 
 namespace Apex.API.Infrastructure.Data;
 
@@ -28,10 +29,15 @@ public class ApexDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<ProjectRequest> ProjectRequests => Set<ProjectRequest>(); // ✅ RENAMED
     public DbSet<Project> Projects => Set<Project>();  // ✅ NEW!
+    public DbSet<Department> Departments => Set<Department>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Important: Call base for Identity
+
+        // ✅ IGNORE BASE CLASSES THAT AREN'T ENTITIES
+        modelBuilder.Ignore<DomainEventBase>();
+        modelBuilder.Ignore<EntityBase>();
 
         // Apply entity configurations
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApexDbContext).Assembly);
