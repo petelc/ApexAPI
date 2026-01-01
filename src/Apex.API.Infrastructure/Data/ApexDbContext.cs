@@ -5,6 +5,7 @@ using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.TenantAggregate;
 using Apex.API.Core.Aggregates.UserAggregate;
 using Apex.API.Core.Aggregates.ProjectRequestAggregate;
+using Apex.API.Core.Aggregates.ProjectAggregate;
 
 namespace Apex.API.Infrastructure.Data;
 
@@ -26,6 +27,7 @@ public class ApexDbContext : IdentityDbContext<User, Role, Guid>
     // Aggregates
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<ProjectRequest> ProjectRequests => Set<ProjectRequest>(); // ✅ RENAMED
+    public DbSet<Project> Projects => Set<Project>();  // ✅ NEW!
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
