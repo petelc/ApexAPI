@@ -7,10 +7,7 @@ using Apex.API.Core.Interfaces;
 
 namespace Apex.API.UseCases.Users.Register;
 
-/// <summary>
-/// Handles user registration within a tenant
-/// </summary>
-public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<UserId>>
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<Guid>>
 {
     private readonly UserManager<User> _userManager;
     private readonly ITenantContext _tenantContext;
@@ -26,68 +23,61 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<U
         _logger = logger;
     }
 
-    public async Task<Result<UserId>> Handle(
-        RegisterUserCommand request,
+    public async Task<Result<Guid>> Handle(
+        RegisterUserCommand command,
         CancellationToken cancellationToken)
     {
         try
         {
             _logger.LogInformation(
                 "Registering user: Email={Email}, Tenant={TenantId}",
-                request.Email,
-                _tenantContext.CurrentTenantId); // ✅ FIXED
+                command.Email,
+                _tenantContext.CurrentTenantId);
 
             // Check if user already exists
-            var existingUser = await _userManager.FindByEmailAsync(request.Email);
+            var existingUser = await _userManager.FindByEmailAsync(command.Email);
             if (existingUser != null)
             {
-                _logger.LogWarning("User already exists: {Email}", request.Email);
-                return Result<UserId>.Error("A user with this email already exists.");
+                _logger.LogWarning("User already exists: Email={Email}", command.Email);
+                return Result<Guid>.Error("A user with this email already exists.");
             }
 
             // Create user entity
             var user = User.Create(
                 _tenantContext.CurrentTenantId, // ✅ FIXED
-                request.Email,
-                request.FirstName,
-                request.LastName,
-                request.PhoneNumber,
-                request.TimeZone);
-
-            // Create user with password
-            var createResult = await _userManager.CreateAsync(user, request.Password);
+                command.Email,
+                command.FirstName,
+                command.LastName,
+                command.PhoneNumber,
+                command.TimeZone);
+            var createResult = await _userManager.CreateAsync(user, command.Password);
 
             if (!createResult.Succeeded)
             {
                 var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
-                _logger.LogError("Failed to create user: {Errors}", errors);
-                return Result<UserId>.Error(errors);
+                _logger.LogWarning("Failed to create user: {Errors}", errors);
+                return Result<Guid>.Error(errors);
             }
 
-            // Assign default role
-            var roleResult = await _userManager.AddToRoleAsync(user, Role.SystemRoles.User);
+            // Assign default "User" role
+            var roleResult = await _userManager.AddToRoleAsync(user, "User");
 
             if (!roleResult.Succeeded)
             {
-                _logger.LogWarning("Failed to assign role to user: {Email}", request.Email);
-                // Continue anyway - user is created
+                _logger.LogWarning("Failed to assign User role to {Email}", command.Email);
             }
 
             _logger.LogInformation(
                 "User registered successfully: UserId={UserId}, Email={Email}",
                 user.Id,
-                user.Email);
+                command.Email);
 
-            return Result<UserId>.Success(UserId.From(user.Id));
+            return Result<Guid>.Success(user.Id);
         }
         catch (Exception ex)
         {
-            _logger.LogError(
-                ex,
-                "Unexpected error registering user: Email={Email}",
-                request.Email);
-
-            return Result<UserId>.Error("An unexpected error occurred while registering the user.");
+            _logger.LogError(ex, "Error registering user: Email={Email}", command.Email);
+            return Result<Guid>.Error("An error occurred while registering the user.");
         }
     }
 }

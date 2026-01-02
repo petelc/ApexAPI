@@ -70,19 +70,18 @@ public class RegisterEndpoint : Endpoint<RegisterRequest, RegisterResponse>
         {
             var response = new RegisterResponse
             {
-                UserId = result.Value.Value,
+                UserId = result.Value,  // ✅ FIXED: result.Value is already a Guid!
                 Email = req.Email,
                 FullName = $"{req.FirstName} {req.LastName}",
                 Message = "User registered successfully. Please check your email to verify your account."
             };
 
             HttpContext.Response.StatusCode = StatusCodes.Status201Created;
-            HttpContext.Response.Headers.Location = $"/api/users/{result.Value.Value}";
+            HttpContext.Response.Headers.Location = $"/api/users/{result.Value}";  // ✅ FIXED: Just use result.Value
             await HttpContext.Response.WriteAsJsonAsync(response, ct);
         }
         else
         {
-            // ✅ FIXED: Check for validation errors OR general errors
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 
             if (result.ValidationErrors.Any())

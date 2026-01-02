@@ -118,6 +118,7 @@ secrets.json
 *.sqlite3
 *.db-shm
 *.db-wal
+*.sql 
 
 # Docker secrets
 docker-compose.override.yml
