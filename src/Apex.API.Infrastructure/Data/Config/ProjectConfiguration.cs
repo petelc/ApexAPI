@@ -51,19 +51,21 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .IsRequired()
             .HasMaxLength(2000);
 
-        // Status (SmartEnum)
+        // Status (SmartEnum) - ✅ FIXED: Store as string
         builder.Property(p => p.Status)
             .HasConversion(
-                status => status.Value,
-                value => ProjectStatus.FromValue(value))
-            .IsRequired();
+                status => status.Name,  // ✅ Store name as string
+                name => ProjectStatus.FromName(name, ignoreCase: false))  // ✅ Load by name
+            .IsRequired()
+            .HasMaxLength(50);
 
-        // Priority (SmartEnum)
+        // Priority (SmartEnum) - ✅ FIXED: Store as string
         builder.Property(p => p.Priority)
             .HasConversion(
-                priority => priority.Value,
-                value => RequestPriority.FromValue(value))
-            .IsRequired();
+                priority => priority.Name,  // ✅ Store name as string
+                name => RequestPriority.FromName(name, ignoreCase: false))  // ✅ Load by name
+            .IsRequired()
+            .HasMaxLength(50);
 
         // Link to ProjectRequest
         builder.Property(p => p.ProjectRequestId)

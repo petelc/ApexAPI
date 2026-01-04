@@ -19,6 +19,10 @@ nupkg/
 *.userosscache
 *.sln.docstates
 
+Tenant-Setup-Command.rtf
+*.rtf
+*.txt
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -118,6 +122,7 @@ secrets.json
 *.sqlite3
 *.db-shm
 *.db-wal
+*.sql 
 
 # Docker secrets
 docker-compose.override.yml

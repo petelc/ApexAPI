@@ -40,7 +40,7 @@ public class Task : EntityBase, IAggregateRoot
     public string Description { get; private set; } = string.Empty;
 
     // Status & Priority
-    public TaskStatus Status { get; private set; } = TaskStatus.NotStarted;
+    public Apex.API.Core.ValueObjects.TaskStatus Status { get; private set; } = Apex.API.Core.ValueObjects.TaskStatus.NotStarted;
     public RequestPriority Priority { get; private set; } = RequestPriority.Medium;
 
     // Assignment - Two modes:
@@ -109,7 +109,7 @@ public class Task : EntityBase, IAggregateRoot
             Title = title,
             Description = description,
             Priority = priority,
-            Status = TaskStatus.NotStarted,
+            Status = Apex.API.Core.ValueObjects.TaskStatus.NotStarted,
             CreatedByUserId = createdByUserId,
             CreatedDate = DateTime.UtcNow,
             EstimatedHours = estimatedHours,
@@ -126,9 +126,9 @@ public class Task : EntityBase, IAggregateRoot
     /// Updates task details
     /// </summary>
     public void Update(
-        string title, 
-        string description, 
-        RequestPriority priority, 
+        string title,
+        string description,
+        RequestPriority priority,
         decimal? estimatedHours = null,
         DateTime? dueDate = null)
     {
@@ -213,7 +213,7 @@ public class Task : EntityBase, IAggregateRoot
         if (!AssignedToUserId.HasValue)
             throw new InvalidOperationException("Task must be assigned before it can be started");
 
-        Status = TaskStatus.InProgress;
+        Status = Apex.API.Core.ValueObjects.TaskStatus.InProgress;
         StartedDate = DateTime.UtcNow;
         LastModifiedDate = DateTime.UtcNow;
 
@@ -247,7 +247,7 @@ public class Task : EntityBase, IAggregateRoot
 
         Guard.Against.NullOrWhiteSpace(reason, nameof(reason));
 
-        Status = TaskStatus.Blocked;
+        Status = Apex.API.Core.ValueObjects.TaskStatus.Blocked;
         BlockedReason = reason;
         BlockedDate = DateTime.UtcNow;
         LastModifiedDate = DateTime.UtcNow;
@@ -263,7 +263,7 @@ public class Task : EntityBase, IAggregateRoot
         if (!Status.CanUnblock)
             throw new InvalidOperationException($"Cannot unblock task from {Status.Name} status");
 
-        Status = TaskStatus.InProgress;
+        Status = Apex.API.Core.ValueObjects.TaskStatus.InProgress;
         BlockedReason = null;
         BlockedDate = null;
         LastModifiedDate = DateTime.UtcNow;
@@ -279,7 +279,7 @@ public class Task : EntityBase, IAggregateRoot
         if (!Status.CanComplete)
             throw new InvalidOperationException($"Cannot complete task from {Status.Name} status");
 
-        Status = TaskStatus.Completed;
+        Status = Apex.API.Core.ValueObjects.TaskStatus.Completed;
         CompletedDate = DateTime.UtcNow;
         LastModifiedDate = DateTime.UtcNow;
 
@@ -296,7 +296,7 @@ public class Task : EntityBase, IAggregateRoot
 
         Guard.Against.NullOrWhiteSpace(reason, nameof(reason));
 
-        Status = TaskStatus.Cancelled;
+        Status = Apex.API.Core.ValueObjects.TaskStatus.Cancelled;
         LastModifiedDate = DateTime.UtcNow;
 
         RegisterDomainEvent(new TaskCancelledEvent(Id, cancelledByUserId, reason));
@@ -307,8 +307,8 @@ public class Task : EntityBase, IAggregateRoot
     /// </summary>
     public bool IsOverdue()
     {
-        return DueDate.HasValue && 
-               DateTime.UtcNow > DueDate.Value && 
+        return DueDate.HasValue &&
+               DateTime.UtcNow > DueDate.Value &&
                !Status.IsTerminal;
     }
 

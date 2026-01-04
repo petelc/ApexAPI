@@ -14,13 +14,4 @@ public record RegisterUserCommand(
     string LastName,
     string? PhoneNumber = null,
     string? TimeZone = null
-) : IRequest<Result<UserId>>;
-
-/// <summary>
-/// Strongly-typed identifier for User
-/// </summary>
-public readonly record struct UserId(Guid Value)
-{
-    public static UserId From(Guid value) => new(value);
-    public static UserId CreateUnique() => new(Guid.NewGuid());
-}
+) : IRequest<Result<Guid>>;

@@ -1,168 +1,126 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using Apex.API.Core.Interfaces;
 using Apex.API.Core.ValueObjects;
 using Apex.API.Core.Aggregates.TenantAggregate;
-using Apex.API.Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace Apex.API.Infrastructure.Identity;
 
 /// <summary>
-/// ULTRA-SIMPLIFIED: Uses ApexDbContext directly from DI
-/// This works because TenantContext is scoped and only created during requests
+/// Provides tenant context from the current HTTP request's authenticated user
 /// </summary>
 public class TenantContext : ITenantContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IConfiguration _configuration;
-    private readonly IMemoryCache _cache;
-    private readonly ILogger<TenantContext> _logger;
-    private readonly ApexDbContext _dbContext;
 
-    private const int CacheDurationMinutes = 10;
-
-    public DeploymentMode DeploymentMode { get; }
-    public bool IsMultiTenant => DeploymentMode == DeploymentMode.SaaS;
-    public string CurrentTenantSchema { get; private set; } = "dbo";
-    public TenantId CurrentTenantId { get; private set; } = TenantId.Empty;
-
-    public TenantContext(
-        IHttpContextAccessor httpContextAccessor,
-        IConfiguration configuration,
-        IMemoryCache cache,
-        ILogger<TenantContext> logger,
-        ApexDbContext dbContext)  // Just inject DbContext directly - it's scoped!
+    public TenantContext(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
     {
         _httpContextAccessor = httpContextAccessor;
         _configuration = configuration;
-        _cache = cache;
-        _logger = logger;
-        _dbContext = dbContext;
+    }
 
-        var mode = _configuration["Deployment:Mode"] ?? "SaaS";
-        DeploymentMode = DeploymentMode.FromName(mode);
+    public TenantId CurrentTenantId
+    {
+        get
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
 
-        _logger.LogInformation("TenantContext initialized in {Mode} mode", DeploymentMode.Name);
+            if (httpContext?.User?.Identity?.IsAuthenticated != true)
+            {
+                // Not authenticated - return empty TenantId
+                return TenantId.Empty;
+            }
+
+            // ✅ Try multiple claim types for tenantId (case variations)
+            var tenantIdClaim = httpContext.User.FindFirst("TenantId")    // ← Your JwtTokenService uses this
+                ?? httpContext.User.FindFirst("tenantId")
+                ?? httpContext.User.FindFirst(ClaimTypes.GroupSid)
+                ?? httpContext.User.FindFirst("tenant_id");
+
+            if (tenantIdClaim != null && Guid.TryParse(tenantIdClaim.Value, out var tenantId))
+            {
+                return TenantId.From(tenantId);
+            }
+
+            // ✅ LOG WARNING: TenantId not found in claims
+            Console.WriteLine("WARNING: TenantId claim not found in JWT token!");
+            Console.WriteLine($"Available claims: {string.Join(", ", httpContext.User.Claims.Select(c => $"{c.Type}={c.Value}"))}");
+
+            return TenantId.Empty;
+        }
+    }
+
+    public string CurrentTenantSchema
+    {
+        get
+        {
+            var tenantId = CurrentTenantId;
+            if (tenantId == TenantId.Empty)
+                return "shared"; // Default to shared schema
+
+            // Schema naming: tenant_<guid>
+            return $"tenant_{tenantId.Value.ToString().Replace("-", "").ToLowerInvariant()}";
+        }
+    }
+
+    public Guid CurrentUserId
+    {
+        get
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            if (httpContext?.User?.Identity?.IsAuthenticated != true)
+            {
+                return Guid.Empty;
+            }
+
+            // Try standard claim types
+            var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)
+                ?? httpContext.User.FindFirst("sub")
+                ?? httpContext.User.FindFirst("userId");
+
+            if (userIdClaim != null && Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return userId;
+            }
+
+            return Guid.Empty;
+        }
+    }
+
+    public DeploymentMode DeploymentMode
+    {
+        get
+        {
+            var mode = _configuration["Deployment:Mode"];
+            return mode?.ToLowerInvariant() switch
+            {
+                "selfhosted" => DeploymentMode.SelfHosted,
+                "saas" => DeploymentMode.SaaS,
+                _ => DeploymentMode.SaaS // Default to SaaS
+            };
+        }
+    }
+
+    public bool IsMultiTenant
+    {
+        get
+        {
+            var multiTenant = _configuration["Deployment:MultiTenant"];
+            if (bool.TryParse(multiTenant, out var result))
+                return result;
+
+            // Default: SaaS mode = multi-tenant
+            return DeploymentMode == DeploymentMode.SaaS;
+        }
     }
 
     public async Task<Tenant> GetCurrentTenantAsync(CancellationToken cancellationToken = default)
     {
-        if (IsMultiTenant)
-        {
-            return await GetTenantFromSubdomainAsync(cancellationToken);
-        }
-        else
-        {
-            return await GetTenantFromConfigurationAsync(cancellationToken);
-        }
-    }
-
-    private async Task<Tenant> GetTenantFromSubdomainAsync(CancellationToken cancellationToken)
-    {
-        var httpContext = _httpContextAccessor.HttpContext
-            ?? throw new InvalidOperationException("HTTP context is not available");
-
-        var host = httpContext.Request.Host.Host;
-        var subdomain = ExtractSubdomain(host);
-
-        if (string.IsNullOrEmpty(subdomain))
-        {
-            throw new InvalidOperationException($"Could not extract subdomain from host: {host}");
-        }
-
-        var cacheKey = $"tenant:subdomain:{subdomain}";
-        if (_cache.TryGetValue<Tenant>(cacheKey, out var cachedTenant) && cachedTenant != null)
-        {
-            CurrentTenantSchema = cachedTenant.SchemaName;
-            CurrentTenantId = cachedTenant.Id;
-            return cachedTenant;
-        }
-
-        // Use the injected DbContext
-        var tenant = await _dbContext.Tenants
-            .Where(t => t.Subdomain == subdomain)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (tenant == null)
-        {
-            throw new InvalidOperationException($"Tenant with subdomain '{subdomain}' not found");
-        }
-
-        _cache.Set(cacheKey, tenant, TimeSpan.FromMinutes(CacheDurationMinutes));
-
-        CurrentTenantSchema = tenant.SchemaName;
-        CurrentTenantId = tenant.Id;
-
-        _logger.LogDebug("Resolved tenant {TenantId} from subdomain {Subdomain}", 
-            tenant.Id, subdomain);
-
-        return tenant;
-    }
-
-    private async Task<Tenant> GetTenantFromConfigurationAsync(CancellationToken cancellationToken)
-    {
-        var tenantIdString = _configuration["Deployment:TenantId"]
-            ?? throw new InvalidOperationException("TenantId not configured for self-hosted mode");
-
-        if (!Guid.TryParse(tenantIdString, out var tenantGuid))
-        {
-            throw new InvalidOperationException($"Invalid TenantId in configuration: {tenantIdString}");
-        }
-
-        var tenantId = TenantId.From(tenantGuid);
-
-        var cacheKey = $"tenant:id:{tenantId.Value}";
-        if (_cache.TryGetValue<Tenant>(cacheKey, out var cachedTenant) && cachedTenant != null)
-        {
-            CurrentTenantSchema = "dbo";
-            CurrentTenantId = cachedTenant.Id;
-            return cachedTenant;
-        }
-
-        // Use the injected DbContext
-        var tenant = await _dbContext.Tenants
-            .Where(t => t.Id == tenantId)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (tenant == null)
-        {
-            throw new InvalidOperationException($"Tenant with ID '{tenantId}' not found");
-        }
-
-        _cache.Set(cacheKey, tenant, TimeSpan.FromMinutes(CacheDurationMinutes));
-
-        CurrentTenantSchema = "dbo";
-        CurrentTenantId = tenant.Id;
-
-        _logger.LogDebug("Resolved tenant {TenantId} from configuration", tenant.Id);
-
-        return tenant;
-    }
-
-    private string ExtractSubdomain(string host)
-    {
-        var baseDomain = _configuration["Deployment:BaseDomain"] ?? "localhost";
-
-        if (host.Contains(':'))
-        {
-            host = host.Split(':')[0];
-        }
-
-        if (host.Equals(baseDomain, StringComparison.OrdinalIgnoreCase))
-        {
-            throw new InvalidOperationException($"No subdomain found in host: {host}");
-        }
-
-        var subdomain = host.Replace($".{baseDomain}", "", StringComparison.OrdinalIgnoreCase);
-
-        if (!System.Text.RegularExpressions.Regex.IsMatch(subdomain, @"^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$"))
-        {
-            throw new InvalidOperationException($"Invalid subdomain format: {subdomain}");
-        }
-
-        return subdomain;
+        // This would typically query the tenant repository
+        // For now, throw NotImplementedException as this is optional
+        // You can implement this later when you have the Tenant repository injected
+        throw new NotImplementedException("GetCurrentTenantAsync not yet implemented. Inject ITenantRepository to enable this feature.");
     }
 }

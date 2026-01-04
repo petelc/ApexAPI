@@ -8,6 +8,7 @@ using Apex.API.Core.Aggregates.ProjectRequestAggregate;
 using Apex.API.Core.Aggregates.ProjectAggregate;
 using Apex.API.Core.Aggregates.DepartmentAggregate;
 
+
 namespace Apex.API.Infrastructure.Data;
 
 /// <summary>
@@ -30,6 +31,7 @@ public class ApexDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<ProjectRequest> ProjectRequests => Set<ProjectRequest>(); // ✅ RENAMED
     public DbSet<Project> Projects => Set<Project>();  // ✅ NEW!
     public DbSet<Department> Departments => Set<Department>();
+    public DbSet<Apex.API.Core.Aggregates.TaskAggregate.Task> Tasks => Set<Apex.API.Core.Aggregates.TaskAggregate.Task>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

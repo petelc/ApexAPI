@@ -9,6 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults()
        .AddLoggerConfigs();
 
+// ✅ CORS Configuration for React App
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactDevPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")  // React dev server
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 using var loggerFactory = LoggerFactory.Create(config => config.AddConsole());
 var startupLogger = loggerFactory.CreateLogger<Program>();
 
@@ -27,23 +39,23 @@ builder.Services.AddFastEndpoints()
     .SwaggerDocument(o =>
     {
         o.ShortSchemaNames = true;
-        
+
         o.DocumentSettings = settings =>
         {
             settings.Title = "APEX Multi-Tenant API";
             settings.Version = "v1";
             settings.Description = "A production-ready multi-tenant SaaS platform with authentication";
-            
+
             settings.PostProcess = document =>
             {
                 document.Servers.Clear();
-                
+
                 document.Servers.Add(new NSwag.OpenApiServer
                 {
                     Url = "https://demo.localhost:5000",
                     Description = "Demo Tenant"
                 });
-                
+
                 document.Servers.Add(new NSwag.OpenApiServer
                 {
                     Url = "https://localhost:5000",
@@ -57,6 +69,9 @@ var app = builder.Build();
 
 // ✅ SEED DATABASE (roles, etc.)
 await DatabaseSeeder.SeedAsync(app.Services);
+
+// ✅ IMPORTANT: Use CORS before Authentication/Authorization
+app.UseCors("ReactDevPolicy");
 
 // Authentication & Authorization BEFORE endpoints
 app.UseAuthentication();
