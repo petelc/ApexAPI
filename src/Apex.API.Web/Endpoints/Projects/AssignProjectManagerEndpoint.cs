@@ -1,0 +1,58 @@
+using FastEndpoints;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Apex.API.UseCases.Projects.AssignProjectManager;
+using Apex.API.Core.ValueObjects;
+
+namespace Apex.API.Web.Endpoints.Projects;
+
+/// <summary>
+/// Endpoint to assign a project manager to a project
+/// </summary>
+[HttpPost("/api/projects/{projectId}/assign-pm")]
+[Authorize]
+public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest, AssignProjectManagerResponse>
+{
+    private readonly IMediator _mediator;
+
+    public AssignProjectManagerEndpoint(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    public override async Task HandleAsync(AssignProjectManagerRequest req, CancellationToken ct)
+    {
+        var command = new AssignProjectManagerCommand(
+            ProjectId.From(req.ProjectId),
+            req.ProjectManagerUserId
+        );
+
+        var result = await _mediator.Send(command, ct);
+
+        if (result.IsSuccess)
+        {
+            await HttpContext.Response.WriteAsJsonAsync(new { Message = "Project manager assigned successfully." }, ct);
+        }
+        else
+        {
+            HttpContext.Response.StatusCode = result.Status switch
+            {
+                Ardalis.Result.ResultStatus.NotFound => StatusCodes.Status404NotFound,
+                Ardalis.Result.ResultStatus.Forbidden => StatusCodes.Status403Forbidden,
+                _ => StatusCodes.Status400BadRequest
+            };
+            await HttpContext.Response.WriteAsJsonAsync(new { Errors = result.Errors }, ct);
+        }
+    }
+}
+
+public class AssignProjectManagerRequest
+{
+    public Guid ProjectId { get; set; }
+    public Guid ProjectManagerUserId { get; set; }
+}
+
+public class AssignProjectManagerResponse
+{
+    public string Message { get; set; } = string.Empty;
+}

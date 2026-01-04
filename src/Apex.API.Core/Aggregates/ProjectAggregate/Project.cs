@@ -30,7 +30,7 @@ public class Project : EntityBase, IAggregateRoot
     // Core Information
     public string Name { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
-    
+
     // Status & Priority
     public ProjectStatus Status { get; private set; } = ProjectStatus.Planning;
     public RequestPriority Priority { get; private set; } = RequestPriority.Medium;
@@ -119,6 +119,88 @@ public class Project : EntityBase, IAggregateRoot
         Budget = budget;
         LastModifiedDate = DateTime.UtcNow;
     }
+
+    /// <summary>
+    /// Updates project name
+    /// </summary>
+    public void UpdateName(string name)
+    {
+        Guard.Against.NullOrWhiteSpace(name, nameof(name));
+
+        if (name.Length < 3)
+            throw new ArgumentException("Project name must be at least 3 characters", nameof(name));
+
+        if (name.Length > 200)
+            throw new ArgumentException("Project name cannot exceed 200 characters", nameof(name));
+
+        Name = name;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates project description
+    /// </summary>
+    public void UpdateDescription(string description)
+    {
+        Guard.Against.NullOrWhiteSpace(description, nameof(description));
+
+        if (description.Length < 10)
+            throw new ArgumentException("Description must be at least 10 characters", nameof(description));
+
+        if (description.Length > 2000)
+            throw new ArgumentException("Description cannot exceed 2000 characters", nameof(description));
+
+        Description = description;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates project budget
+    /// </summary>
+    public void UpdateBudget(decimal budget)
+    {
+        if (budget < 0)
+            throw new ArgumentException("Budget cannot be negative", nameof(budget));
+
+        Budget = budget;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates project priority
+    /// </summary>
+    public void UpdatePriority(RequestPriority priority)
+    {
+        Guard.Against.Null(priority, nameof(priority));
+        Priority = priority;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates project start date
+    /// </summary>
+    public void UpdateStartDate(DateTime? startDate)
+    {
+        if (startDate.HasValue && EndDate.HasValue && startDate.Value > EndDate.Value)
+            throw new ArgumentException("Start date cannot be after end date");
+
+        StartDate = startDate;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates project end date
+    /// </summary>
+    public void UpdateEndDate(DateTime? endDate)
+    {
+        if (StartDate.HasValue && endDate.HasValue && endDate.Value < StartDate.Value)
+            throw new ArgumentException("End date cannot be before start date");
+
+        EndDate = endDate;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+
 
     /// <summary>
     /// Updates project timeline
@@ -233,8 +315,8 @@ public class Project : EntityBase, IAggregateRoot
     /// </summary>
     public bool IsOverdue()
     {
-        return EndDate.HasValue && 
-               DateTime.UtcNow > EndDate.Value && 
+        return EndDate.HasValue &&
+               DateTime.UtcNow > EndDate.Value &&
                !Status.IsTerminal;
     }
 

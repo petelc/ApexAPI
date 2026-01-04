@@ -7,6 +7,7 @@ using Apex.API.Core.Aggregates.UserAggregate;
 using Apex.API.Core.Aggregates.ProjectRequestAggregate;
 using Apex.API.Core.Aggregates.ProjectAggregate;
 using Apex.API.Core.Aggregates.DepartmentAggregate;
+using Apex.API.Core.Aggregates.ChangeRequestAggregate;
 
 
 namespace Apex.API.Infrastructure.Data;
@@ -32,6 +33,7 @@ public class ApexDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<Project> Projects => Set<Project>();  // ✅ NEW!
     public DbSet<Department> Departments => Set<Department>();
     public DbSet<Apex.API.Core.Aggregates.TaskAggregate.Task> Tasks => Set<Apex.API.Core.Aggregates.TaskAggregate.Task>();
+    public DbSet<ChangeRequest> ChangeRequests => Set<ChangeRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
