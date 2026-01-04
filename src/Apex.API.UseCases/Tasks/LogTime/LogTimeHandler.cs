@@ -8,7 +8,7 @@ using Apex.API.UseCases.Common.Interfaces;
 
 namespace Apex.API.UseCases.Tasks.LogTime;
 
-public class LogTimeHandler : IRequestHandler<LogTimeCommand, Result>
+public class LogTimeHandler : IRequestHandler<LogTimeCommand, Result<decimal>>
 {
     private readonly IRepository<Core.Aggregates.TaskAggregate.Task> _taskRepository;
     private readonly ITenantContext _tenantContext;
@@ -27,7 +27,7 @@ public class LogTimeHandler : IRequestHandler<LogTimeCommand, Result>
         _logger = logger;
     }
 
-    public async Task<Result> Handle(LogTimeCommand command, CancellationToken cancellationToken)
+    public async Task<Result<decimal>> Handle(LogTimeCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -49,7 +49,7 @@ public class LogTimeHandler : IRequestHandler<LogTimeCommand, Result>
                 command.Hours,
                 task.ActualHours);
 
-            return Result.Success();
+            return Result.Success(task.ActualHours);
         }
         catch (InvalidOperationException ex)
         {

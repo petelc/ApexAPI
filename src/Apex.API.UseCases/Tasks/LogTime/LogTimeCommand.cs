@@ -7,4 +7,4 @@ namespace Apex.API.UseCases.Tasks.LogTime;
 public record LogTimeCommand(
     TaskId TaskId,
     decimal Hours
-) : IRequest<Result>;
+) : IRequest<Result<decimal>>;
