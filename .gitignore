@@ -19,6 +19,10 @@ nupkg/
 *.userosscache
 *.sln.docstates
 
+Tenant-Setup-Command.rtf
+*.rtf
+*.txt
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

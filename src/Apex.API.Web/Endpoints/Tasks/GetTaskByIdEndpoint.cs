@@ -1,41 +1,40 @@
 using FastEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Apex.API.UseCases.Tasks.Start;
+using Apex.API.UseCases.Tasks.GetById;
 using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.Web.Endpoints.Tasks;
 
-public class StartTaskEndpoint : EndpointWithoutRequest
+public class GetTaskByIdEndpoint : EndpointWithoutRequest
 {
     private readonly IMediator _mediator;
 
-    public StartTaskEndpoint(IMediator mediator)
+    public GetTaskByIdEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     public override void Configure()
     {
-        Post("/tasks/{id}/start");
-        Roles("TenantAdmin", "Manager", "ProjectManager");
+        Get("/tasks/{id}");
         Summary(s =>
         {
-            s.Summary = "Start a task";
-            s.Description = "Changes task status from Planning to Active";
+            s.Summary = "Get task by ID";
+            s.Description = "Retrieves a task with all details";
         });
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         var id = Route<Guid>("id");
-        var command = new StartTaskCommand(TaskId.From(id));
+        var query = new GetTaskByIdQuery(TaskId.From(id));
 
-        var result = await _mediator.Send(command, ct);
+        var result = await _mediator.Send(query, ct);
 
         if (result.IsSuccess)
         {
-            await HttpContext.Response.WriteAsJsonAsync(new { Message = "Task started successfully." }, ct);
+            await HttpContext.Response.WriteAsJsonAsync(result.Value, ct);
         }
         else
         {
