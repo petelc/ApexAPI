@@ -10,7 +10,7 @@ namespace Apex.API.Core.Aggregates.ChangeRequestAggregate;
 public class ChangeRequest : EntityBase<ChangeRequestId>, IAggregateRoot
 {
     // Identity
-    public Guid TenantId { get; private set; }
+    public TenantId TenantId { get; private set; }
 
     // Basic Information
     public string Title { get; private set; } = string.Empty;
@@ -64,7 +64,7 @@ public class ChangeRequest : EntityBase<ChangeRequestId>, IAggregateRoot
 
     // Factory method
     public static ChangeRequest Create(
-        Guid tenantId,
+        TenantId tenantId,
         string title,
         string description,
         Guid createdByUserId,
