@@ -7,23 +7,23 @@ using Apex.API.Core.Interfaces;
 using Apex.API.Core.ValueObjects;
 using Apex.API.UseCases.Common.Interfaces;
 
-namespace Apex.API.UseCases.ChangeRequests.Update;
+namespace Apex.API.UseCases.ChangeRequests.UpdateNotes;
 
 /// <summary>
 /// Handler for updating a ChangeRequest
 /// </summary>
-public class UpdateChangeRequestHandler : IRequestHandler<UpdateChangeRequestCommand, Result>
+public class UpdateNotesChangeRequestHandler : IRequestHandler<UpdateNotesChangeRequestCommand, Result>
 {
     private readonly IRepository<ChangeRequest> _repository;
     private readonly ITenantContext _tenantContext;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<UpdateChangeRequestHandler> _logger;
+    private readonly ILogger<UpdateNotesChangeRequestHandler> _logger;
 
-    public UpdateChangeRequestHandler(
+    public UpdateNotesChangeRequestHandler(
         IRepository<ChangeRequest> repository,
         ITenantContext tenantContext,
         ICurrentUserService currentUserService,
-        ILogger<UpdateChangeRequestHandler> logger)
+        ILogger<UpdateNotesChangeRequestHandler> logger)
     {
         _repository = repository;
         _tenantContext = tenantContext;
@@ -32,7 +32,7 @@ public class UpdateChangeRequestHandler : IRequestHandler<UpdateChangeRequestCom
     }
 
     public async Task<Result> Handle(
-        UpdateChangeRequestCommand command,
+        UpdateNotesChangeRequestCommand command,
         CancellationToken cancellationToken)
     {
         try
@@ -62,47 +62,7 @@ public class UpdateChangeRequestHandler : IRequestHandler<UpdateChangeRequestCom
                 return Result.Error("You can only update your own requests.");
             }
 
-            // Parse priority if provided
-            RequestPriority priority = changeRequest.Priority; // Keep current priority if not specified
-            if (!string.IsNullOrWhiteSpace(command.Priority))
-            {
-                if (!RequestPriority.TryFromName(command.Priority, out var parsedPriority))
-                {
-                    return Result.Error($"Invalid priority: {command.Priority}. Valid values: Low, Medium, High, Urgent");
-                }
-                priority = parsedPriority;
-            }
-
-            // Update the ChangeRequest (business logic in aggregate)
-            if (!string.IsNullOrWhiteSpace(command.Title) || !string.IsNullOrWhiteSpace(command.Description) || !string.IsNullOrWhiteSpace(command.Priority))
-            {
-                changeRequest.UpdateDetails(
-                    command.Title,
-                    command.Description,
-                    command.Priority);
-            }
-
-            if (!string.IsNullOrWhiteSpace(command.ImpactAssessment) || !string.IsNullOrWhiteSpace(command.RollbackPlan) || !string.IsNullOrWhiteSpace(command.AffectedSystems))
-            {
-                changeRequest.UpdateAssessment(command.ImpactAssessment, command.RollbackPlan, command.AffectedSystems);
-            }
-
-            if (!string.IsNullOrWhiteSpace(command.RiskLevel))
-            {
-                if (!RiskLevel.TryFromName(command.RiskLevel, out var riskLevel))
-                {
-                    return Result.Error($"Invalid risk level: {command.RiskLevel}. Valid values: Low, Medium, High, Critical");
-                }
-                changeRequest.UpdateRisk(riskLevel);
-            }
-
-            if (command.ScheduledStartDate.HasValue || command.ScheduledEndDate.HasValue || !string.IsNullOrWhiteSpace(command.ChangeWindow))
-            {
-                changeRequest.UpdateSchedule(
-                    command.ScheduledStartDate,
-                    command.ScheduledEndDate,
-                    command.ChangeWindow);
-            }
+            changeRequest.UpdateImplementationNotes(command.Notes);
 
             await _repository.UpdateAsync(changeRequest, cancellationToken);
 

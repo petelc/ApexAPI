@@ -134,7 +134,7 @@ public class ChangeRequest : EntityBase<ChangeRequestId>, IAggregateRoot
     }
 
     // Update methods
-    public void UpdateDetails(string title, string description)
+    public void UpdateDetails(string title, string description, string? priority)
     {
         if (Status != ChangeRequestStatus.Draft)
             throw new InvalidOperationException("Can only update details while in Draft status");
@@ -145,8 +145,18 @@ public class ChangeRequest : EntityBase<ChangeRequestId>, IAggregateRoot
         if (string.IsNullOrWhiteSpace(description))
             throw new ArgumentException("Description is required", nameof(description));
 
+        if (!string.IsNullOrWhiteSpace(priority))
+        {
+            if (!RequestPriority.TryFromName(priority, out var parsedPriority))
+            {
+                throw new ArgumentException($"Invalid priority: {priority}. Valid values: Low, Medium, High, Urgent", nameof(priority));
+            }
+            Priority = parsedPriority;
+        }
+
         Title = title;
         Description = description;
+        Priority = Priority;
     }
 
     public void UpdateAssessment(string impactAssessment, string rollbackPlan, string affectedSystems)

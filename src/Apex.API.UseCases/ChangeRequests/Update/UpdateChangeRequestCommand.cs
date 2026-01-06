@@ -15,5 +15,9 @@ public record UpdateChangeRequestCommand(
     string RollbackPlan,
     string AffectedSystems,
     string? Priority = null,
-    DateTime? DueDate = null
+    string? RiskLevel = null,
+    DateTime? ScheduledStartDate = null,
+    DateTime? ScheduledEndDate = null,
+    string? ChangeWindow = null
+
 ) : IRequest<Result>;
