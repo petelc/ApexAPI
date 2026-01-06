@@ -23,6 +23,13 @@ public class ChangeRequestConfiguration : IEntityTypeConfiguration<ChangeRequest
                 value => ChangeRequestId.From(value))
             .ValueGeneratedNever();
 
+        // ⭐ FIX: TenantId conversion
+        builder.Property(cr => cr.TenantId)
+            .HasConversion(
+                id => id.Value,
+                value => TenantId.From(value))
+            .IsRequired();
+
         // Required fields
         builder.Property(cr => cr.TenantId)
             .IsRequired();
