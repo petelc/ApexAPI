@@ -14,6 +14,10 @@ using Apex.API.Infrastructure.Identity;
 using Apex.API.Infrastructure.Services;
 using Apex.API.UseCases.Common.Interfaces;
 using Apex.API.UseCases.Common.Behaviors;
+using Hangfire;
+using Hangfire.SqlServer;
+using SendGrid.Extensions.DependencyInjection;
+using Apex.API.Infrastructure.Email;
 
 namespace Apex.API.Infrastructure;
 
@@ -37,10 +41,10 @@ public static class DependencyInjection
                     errorNumbersToAdd: null);
             });
 
-            #if DEBUG
+#if DEBUG
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
-            #endif
+#endif
         });
 
         // ========================================================================
@@ -129,7 +133,7 @@ public static class DependencyInjection
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(Apex.API.UseCases.Tenants.Create.CreateTenantHandler).Assembly);
-            
+
             // Add validation pipeline behavior
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
@@ -139,6 +143,54 @@ public static class DependencyInjection
         // ========================================================================
         services.AddValidatorsFromAssembly(
             typeof(Apex.API.UseCases.Tenants.Create.CreateTenantCommand).Assembly);
+
+        // ========================================================================
+        // SENDGRID: Email service configuration
+        // ========================================================================
+        services.Configure<EmailOptions>(configuration.GetSection(EmailOptions.SectionName));
+
+        var emailProvider = configuration.GetValue<string>("Email:Provider") ?? "Console";
+
+        if (emailProvider == "SendGrid")
+        {
+            var apiKey = configuration.GetValue<string>("Email:SendGridApiKey");
+            services.AddSendGrid(options => { options.ApiKey = apiKey; });
+            services.AddScoped<IEmailService, SendGridEmailService>();
+        }
+        else
+        {
+            services.AddScoped<IEmailService, ConsoleEmailService>();
+        }
+
+        // ========================================================================
+        // HANGFIRE: Background job processing
+        // ========================================================================
+        var hangfireEnabled = configuration.GetValue<bool>("Hangfire:Enabled");
+        if (hangfireEnabled)
+        {
+            services.AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    new SqlServerStorageOptions
+                    {
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.Zero,
+                        UseRecommendedIsolationLevel = true,
+                        DisableGlobalLocks = true
+                    }));
+
+            services.AddHangfireServer(options =>
+            {
+                options.WorkerCount = configuration.GetValue<int>("Hangfire:WorkerCount", 5);
+            });
+        }
+
+
+
 
         return services;
     }

@@ -3,6 +3,8 @@ using FastEndpoints.Swagger;
 using Apex.API.Infrastructure;
 using Apex.API.Infrastructure.Data;
 using Apex.API.Web.Configurations;
+using Hangfire;
+using Apex.API.Web.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,6 +92,18 @@ if (app.Environment.IsDevelopment())
     {
         c.ConfigureDefaults();
         c.PersistAuthorization = true;
+    });
+}
+
+// Hangfire Dashboard
+var hangfireEnabled = app.Configuration.GetValue<bool>("Hangfire:Enabled");
+if (hangfireEnabled)
+{
+    var dashboardPath = app.Configuration.GetValue<string>("Hangfire:DashboardPath") ?? "/hangfire";
+
+    app.UseHangfireDashboard(dashboardPath, new DashboardOptions
+    {
+        Authorization = new[] { new HangfireAuthorizationFilter() }
     });
 }
 
