@@ -3,6 +3,9 @@ using FastEndpoints.Swagger;
 using Apex.API.Infrastructure;
 using Apex.API.Infrastructure.Data;
 using Apex.API.Web.Configurations;
+using Hangfire;
+using Apex.API.Web.Infrastructure;
+using Apex.API.Infrastructure.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,19 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
+    });
+    options.AddPolicy("HangfirePolicy", policy =>
+    {
+        policy.SetIsOriginAllowed(origin =>
+        {
+            // Allow localhost on port 5000 with any subdomain
+            var uri = new Uri(origin);
+            return uri.Host.EndsWith(".localhost") && uri.Port == 5000 ||
+                   uri.Host == "localhost" && uri.Port == 5000;
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
@@ -72,6 +88,7 @@ await DatabaseSeeder.SeedAsync(app.Services);
 
 // ✅ IMPORTANT: Use CORS before Authentication/Authorization
 app.UseCors("ReactDevPolicy");
+app.UseCors("HangfirePolicy");
 
 // Authentication & Authorization BEFORE endpoints
 app.UseAuthentication();
@@ -91,6 +108,65 @@ if (app.Environment.IsDevelopment())
         c.ConfigureDefaults();
         c.PersistAuthorization = true;
     });
+}
+
+// Hangfire Dashboard
+var hangfireEnabled = app.Configuration.GetValue<bool>("Hangfire:Enabled");
+if (hangfireEnabled)
+{
+    var dashboardPath = app.Configuration.GetValue<string>("Hangfire:DashboardPath") ?? "/hangfire";
+
+    app.UseHangfireDashboard(dashboardPath, new DashboardOptions
+    {
+        Authorization = new[] { new HangfireAuthorizationFilter() }
+    });
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
+        // Auto-start changes - runs every 5 minutes
+        recurringJobManager.AddOrUpdate<AutoStartChangeJob>(
+            "auto-start-changes",
+            job => job.CheckAndStartScheduledChanges(),
+            "*/5 * * * *", // Every 5 minutes
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Utc
+            });
+
+        // 24-hour reminders - runs every 15 minutes
+        recurringJobManager.AddOrUpdate<ChangeReminderJob>(
+            "change-reminders-24h",
+            job => job.SendReminders24HoursBefore(),
+            "*/15 * * * *", // Every 15 minutes
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Utc
+            });
+
+        // 1-hour reminders - runs every 15 minutes
+        recurringJobManager.AddOrUpdate<ChangeReminderJob>(
+            "change-reminders-1h",
+            job => job.SendReminders1HourBefore(),
+            "*/15 * * * *", // Every 15 minutes
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Utc
+            });
+
+        // Check for overdue changes - runs every hour
+        recurringJobManager.AddOrUpdate<OverdueChangesJob>(
+            "check-overdue-changes",
+            job => job.CheckOverdueChanges(),
+            "0 * * * *", // Every hour at minute 0
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Utc
+            });
+
+        app.Logger.LogInformation("✅ Registered {Count} recurring background jobs", 4);
+    }
 }
 
 app.MapDefaultEndpoints();

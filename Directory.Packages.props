@@ -16,6 +16,9 @@
     <PackageVersion Include="FastEndpoints.Swagger" Version="7.1.1" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageVersion Include="Hangfire.Core" Version="1.8.22" />
+    <PackageVersion Include="Hangfire.SqlServer" Version="1.8.22" />
+    <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.22" />
     <PackageVersion Include="MailKit" Version="4.14.1" />
     <PackageVersion Include="MediatR" Version="14.0.0" />
     <PackageVersion Include="MediatR.Contracts" Version="2.0.1" />
@@ -41,6 +44,8 @@
     <PackageVersion Include="Scalar.AspNetCore" Version="2.10.3" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.2.0" />
+    <PackageVersion Include="SendGrid" Version="9.29.3" />
+    <PackageVersion Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
