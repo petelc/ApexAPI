@@ -1,15 +1,20 @@
 using FastEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Apex.API.UseCases.ChangeRequests.Reports;
 using Apex.API.UseCases.ChangeRequests.Reports.GetSuccessRate;
 using Apex.API.UseCases.ChangeRequests.Reports.GetMonthlyTrends;
 using Apex.API.UseCases.ChangeRequests.Reports.GetTopAffectedSystems;
 using Apex.API.Core.Interfaces;
+using Apex.API.Core.ValueObjects;
+using Apex.API.UseCases.Common.Interfaces;
 
 namespace Apex.API.Web.Endpoints.ChangeRequests.Reports;
 
 // ========== SUCCESS RATE ENDPOINT ==========
 
+[HttpGet("/reports/success-rate")]
+[Authorize]
 public class GetSuccessRateEndpoint : Endpoint<GetSuccessRateRequest, SuccessRateResponse>
 {
     private readonly IMediator _mediator;
@@ -21,15 +26,9 @@ public class GetSuccessRateEndpoint : Endpoint<GetSuccessRateRequest, SuccessRat
         _currentUserService = currentUserService;
     }
 
-    public override void Configure()
-    {
-        Get("/api/reports/success-rate");
-        Policies("AuthenticatedUser");
-    }
-
     public override async Task HandleAsync(GetSuccessRateRequest req, CancellationToken ct)
     {
-        var tenantId = _currentUserService.TenantId!;
+        var tenantId = TenantId.From(_currentUserService.TenantId);
 
         var query = new GetSuccessRateQuery(
             tenantId,
@@ -38,7 +37,7 @@ public class GetSuccessRateEndpoint : Endpoint<GetSuccessRateRequest, SuccessRat
 
         var result = await _mediator.Send(query, ct);
 
-        await SendAsync(result, cancellation: ct);
+        await HttpContext.Response.WriteAsJsonAsync(result, ct);
     }
 }
 
@@ -50,6 +49,8 @@ public class GetSuccessRateRequest
 
 // ========== MONTHLY TRENDS ENDPOINT ==========
 
+[HttpGet("/reports/monthly-trends")]
+[Authorize]
 public class GetMonthlyTrendsEndpoint : Endpoint<GetMonthlyTrendsRequest, MonthlyTrendsResponse>
 {
     private readonly IMediator _mediator;
@@ -61,15 +62,9 @@ public class GetMonthlyTrendsEndpoint : Endpoint<GetMonthlyTrendsRequest, Monthl
         _currentUserService = currentUserService;
     }
 
-    public override void Configure()
-    {
-        Get("/api/reports/monthly-trends");
-        Policies("AuthenticatedUser");
-    }
-
     public override async Task HandleAsync(GetMonthlyTrendsRequest req, CancellationToken ct)
     {
-        var tenantId = _currentUserService.TenantId!;
+        var tenantId = TenantId.From(_currentUserService.TenantId);
 
         var query = new GetMonthlyTrendsQuery(
             tenantId,
@@ -77,7 +72,7 @@ public class GetMonthlyTrendsEndpoint : Endpoint<GetMonthlyTrendsRequest, Monthl
 
         var result = await _mediator.Send(query, ct);
 
-        await SendAsync(result, cancellation: ct);
+        await HttpContext.Response.WriteAsJsonAsync(result, ct);
     }
 }
 
@@ -88,6 +83,8 @@ public class GetMonthlyTrendsRequest
 
 // ========== TOP AFFECTED SYSTEMS ENDPOINT ==========
 
+[HttpGet("/reports/top-affected-systems")]
+[Authorize]
 public class GetTopAffectedSystemsEndpoint : Endpoint<GetTopAffectedSystemsRequest, TopAffectedSystemsResponse>
 {
     private readonly IMediator _mediator;
@@ -99,15 +96,9 @@ public class GetTopAffectedSystemsEndpoint : Endpoint<GetTopAffectedSystemsReque
         _currentUserService = currentUserService;
     }
 
-    public override void Configure()
-    {
-        Get("/api/reports/top-affected-systems");
-        Policies("AuthenticatedUser");
-    }
-
     public override async Task HandleAsync(GetTopAffectedSystemsRequest req, CancellationToken ct)
     {
-        var tenantId = _currentUserService.TenantId!;
+        var tenantId = TenantId.From(_currentUserService.TenantId);
 
         var query = new GetTopAffectedSystemsQuery(
             tenantId,
@@ -117,7 +108,7 @@ public class GetTopAffectedSystemsEndpoint : Endpoint<GetTopAffectedSystemsReque
 
         var result = await _mediator.Send(query, ct);
 
-        await SendAsync(result, cancellation: ct);
+        await HttpContext.Response.WriteAsJsonAsync(result, ct);
     }
 }
 

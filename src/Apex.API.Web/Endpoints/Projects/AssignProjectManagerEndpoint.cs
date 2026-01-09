@@ -9,7 +9,7 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to assign a project manager to a project
 /// </summary>
-[HttpPost("/api/projects/{projectId}/assign-pm")]
+[HttpPost("/projects/{projectId}/assign-pm")]
 [Authorize]
 public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest, AssignProjectManagerResponse>
 {

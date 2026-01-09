@@ -9,7 +9,7 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to put a project on hold
 /// </summary>
-[HttpPost("/api/projects/{projectId}/hold")]
+[HttpPost("/projects/{projectId}/hold")]
 [Authorize]
 public class PutProjectOnHoldEndpoint : Endpoint<PutProjectOnHoldRequest, PutProjectOnHoldResponse>
 {

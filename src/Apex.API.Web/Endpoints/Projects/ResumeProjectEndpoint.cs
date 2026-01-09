@@ -9,7 +9,7 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to resume a project from on-hold status
 /// </summary>
-[HttpPost("/api/projects/{projectId}/resume")]
+[HttpPost("/projects/{projectId}/resume")]
 [Authorize]
 public class ResumeProjectEndpoint : Endpoint<ResumeProjectRequest, ResumeProjectResponse>
 {
