@@ -9,7 +9,7 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to update project details
 /// </summary>
-[HttpPut("/api/projects/{projectId}")]
+[HttpPut("/projects/{projectId}")]
 [Authorize]
 public class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, UpdateProjectResponse>
 {

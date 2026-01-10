@@ -1,11 +1,16 @@
 using FastEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Apex.API.UseCases.ChangeRequests.Reports;
 using Apex.API.UseCases.ChangeRequests.Reports.GetChangeMetrics;
 using Apex.API.Core.Interfaces;
+using Apex.API.Core.ValueObjects;
+using Apex.API.UseCases.Common.Interfaces;
 
 namespace Apex.API.Web.Endpoints.ChangeRequests.Reports;
 
+[HttpGet("/reports/change-metrics")]
+[Authorize]
 public class GetChangeMetricsEndpoint : Endpoint<GetChangeMetricsRequest, ChangeMetricsResponse>
 {
     private readonly IMediator _mediator;
@@ -17,15 +22,9 @@ public class GetChangeMetricsEndpoint : Endpoint<GetChangeMetricsRequest, Change
         _currentUserService = currentUserService;
     }
 
-    public override void Configure()
-    {
-        Get("/api/reports/change-metrics");
-        Policies("AuthenticatedUser");
-    }
-
     public override async Task HandleAsync(GetChangeMetricsRequest req, CancellationToken ct)
     {
-        var tenantId = _currentUserService.TenantId!;
+        var tenantId = TenantId.From(_currentUserService.TenantId);
 
         var query = new GetChangeMetricsQuery(
             tenantId,
@@ -34,7 +33,7 @@ public class GetChangeMetricsEndpoint : Endpoint<GetChangeMetricsRequest, Change
 
         var result = await _mediator.Send(query, ct);
 
-        await SendAsync(result, cancellation: ct);
+        await HttpContext.Response.WriteAsJsonAsync(result, ct);
     }
 }
 

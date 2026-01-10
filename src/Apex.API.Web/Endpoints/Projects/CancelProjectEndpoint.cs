@@ -9,7 +9,7 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to cancel a project
 /// </summary>
-[HttpPost("/api/projects/{projectId}/cancel")]
+[HttpPost("/projects/{projectId}/cancel")]
 [Authorize]
 public class CancelProjectEndpoint : Endpoint<CancelProjectRequest, CancelProjectResponse>
 {
