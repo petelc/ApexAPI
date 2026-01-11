@@ -21,6 +21,7 @@ public class GetChangeRequestEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/change-requests/{id}");
+        Roles("User", "Manager", "TenantAdmin", "Change Manager", "CAB Member", "Change Implementer"); // Any authenticated user 
         Summary(s =>
         {
             s.Summary = "Get a change request by ID";

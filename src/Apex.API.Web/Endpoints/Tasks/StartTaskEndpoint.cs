@@ -18,7 +18,7 @@ public class StartTaskEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Post("/tasks/{id}/start");
-        Roles("TenantAdmin", "Manager", "ProjectManager");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Start a task";

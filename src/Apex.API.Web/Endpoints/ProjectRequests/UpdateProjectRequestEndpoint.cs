@@ -32,6 +32,7 @@ public class UpdateProjectRequestEndpoint : Endpoint<UpdateProjectRequestRequest
     public override void Configure()
     {
         Put("/project-requests/{id}");
+        Roles("User");
         Summary(s =>
         {
             s.Summary = "Update a request";

@@ -26,7 +26,7 @@ public class ApproveChangeRequestEndpoint : Endpoint<ApproveChangeRequestRequest
     public override void Configure()
     {
         Post("/change-requests/{id}/approve");
-        Roles("TenantAdmin"); // Only TenantAdmin can approve
+        Roles("TenantAdmin", "Change Manager", "CAB Member"); // Only TenantAdmin can approve
         Summary(s =>
         {
             s.Summary = "Approve a change request";

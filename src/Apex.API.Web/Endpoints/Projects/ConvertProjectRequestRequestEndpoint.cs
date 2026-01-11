@@ -35,14 +35,14 @@ public class ConvertProjectRequestEndpoint : Endpoint<ConvertProjectRequestReque
     public override void Configure()
     {
         Post("/project-requests/{id}/convert");
-        Roles("TenantAdmin", "Manager");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Convert approved project request to project";
             s.Description = "Creates a new Project from an approved ProjectRequest";
             s.Response<ConvertProjectRequestResponse>(201, "Project created successfully");
             s.Response(400, "ProjectRequest not in approved status");
-            s.Response(403, "Forbidden - requires TenantAdmin or Manager role");
+            s.Response(403, "Forbidden - requires TenantAdmin, Manager, Project Manager, Change Manager, CAB Member, or CAB Manager role");
             s.Response(404, "ProjectRequest not found");
         });
     }

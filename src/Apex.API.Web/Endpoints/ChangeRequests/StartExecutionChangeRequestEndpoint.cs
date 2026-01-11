@@ -26,7 +26,7 @@ public class StartExecutionChangeRequestEndpoint : Endpoint<StartExecutionChange
     public override void Configure()
     {
         Post("/change-requests/{id}/start-execution");
-        Roles("TenantAdmin"); // Only TenantAdmin can start execution
+        Roles("TenantAdmin", "Change Manager", "CAB Member", "Manager"); // Only TenantAdmin can start execution
         Summary(s =>
         {
             s.Summary = "Start execution of a change request";

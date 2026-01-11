@@ -20,6 +20,7 @@ public class ListUsersEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/users");
+        Roles("Administrator", "TenantAdmin"); // All roles can list users
         Summary(s =>
         {
             s.Summary = "List all users in current tenant";

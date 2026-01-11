@@ -18,6 +18,7 @@ public class GetProjectEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/projects/{id}");
+        Roles("User");
         Summary(s =>
         {
             s.Summary = "Get project by ID";

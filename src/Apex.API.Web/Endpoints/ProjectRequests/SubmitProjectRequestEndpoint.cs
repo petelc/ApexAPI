@@ -21,6 +21,7 @@ public class SubmitProjectRequestEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Post("/project-requests/{id}/submit");
+        Roles("User");
         Summary(s =>
         {
             s.Summary = "Submit a request for review";
@@ -28,7 +29,7 @@ public class SubmitProjectRequestEndpoint : EndpointWithoutRequest
             s.Response(200, "Request submitted successfully");
             s.Response(400, "Cannot submit request in current status");
             s.Response(404, "Request not found");
-            s.Response(403, "Forbidden");
+            s.Response(403, "Forbidden - requires User role");
             s.Response(401, "Unauthorized");
         });
     }

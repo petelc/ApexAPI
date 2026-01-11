@@ -9,8 +9,6 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to update project details
 /// </summary>
-[HttpPut("/projects/{projectId}")]
-[Authorize]
 public class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, UpdateProjectResponse>
 {
     private readonly IMediator _mediator;
@@ -18,6 +16,17 @@ public class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, UpdateProjec
     public UpdateProjectEndpoint(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    public override void Configure()
+    {
+        Put("/projects/{projectId}");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
+        Summary(s =>
+        {
+            s.Summary = "Update project details";
+            s.Description = "Updates the details of an existing project.";
+        });
     }
 
     public override async Task HandleAsync(UpdateProjectRequest req, CancellationToken ct)

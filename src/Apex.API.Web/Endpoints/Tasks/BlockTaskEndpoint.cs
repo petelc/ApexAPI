@@ -29,7 +29,7 @@ public class BlockTaskEndpoint : Endpoint<BlockTaskRequest, BlockTaskResponse>
     public override void Configure()
     {
         Post("/tasks/{id}/block");
-        Roles("TenantAdmin", "Manager", "ProjectManager", "Developer");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Developer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Block a task";

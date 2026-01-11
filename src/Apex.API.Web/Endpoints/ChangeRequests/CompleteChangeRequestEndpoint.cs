@@ -27,7 +27,7 @@ public class CompleteChangeRequestEndpoint : Endpoint<CompleteChangeRequestReque
     public override void Configure()
     {
         Post("/change-requests/{id}/complete");
-        Roles("Manager", "TenantAdmin"); // Only managers and admins can complete
+        Roles("Manager", "TenantAdmin", "Change Manager", "Change Implementer"); // Only managers and admins can complete
         Summary(s =>
         {
             s.Summary = "Complete a change request";
@@ -35,7 +35,7 @@ public class CompleteChangeRequestEndpoint : Endpoint<CompleteChangeRequestReque
             s.Response(200, "Change request completed successfully");
             s.Response(400, "Cannot complete change request or validation failed");
             s.Response(404, "Change request not found");
-            s.Response(403, "Forbidden - requires Manager or TenantAdmin role");
+            s.Response(403, "Forbidden - requires Manager, TenantAdmin, Change Manager, or Change Implementer role");
             s.Response(401, "Unauthorized");
         });
     }

@@ -18,7 +18,7 @@ public class CompleteTaskEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Post("/tasks/{id}/complete");
-        Roles("TenantAdmin", "Manager", "ProjectManager", "Developer");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Complete a task";
@@ -35,7 +35,7 @@ public class CompleteTaskEndpoint : EndpointWithoutRequest
 
         if (result.IsSuccess)
         {
-            await HttpContext.Response.WriteAsJsonAsync(new { Message = "Project completed successfully." }, ct);
+            await HttpContext.Response.WriteAsJsonAsync(new { Message = "Task completed successfully." }, ct);
         }
         else
         {

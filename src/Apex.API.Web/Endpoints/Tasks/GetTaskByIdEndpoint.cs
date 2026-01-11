@@ -18,6 +18,7 @@ public class GetTaskByIdEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/tasks/{id}");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Developer", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Get task by ID";

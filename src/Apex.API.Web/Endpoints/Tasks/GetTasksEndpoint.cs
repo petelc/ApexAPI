@@ -18,6 +18,7 @@ public class GetTasksEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/projects/{id}/tasks");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Developer", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Get tasks";

@@ -30,7 +30,7 @@ public class LogTimeTaskEndpoint : Endpoint<LogTimeRequest, LogTimeResponse>
     public override void Configure()
     {
         Post("/tasks/{id}/log-time");
-        Roles("TenantAdmin", "Manager", "ProjectManager", "Developer");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Developer", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Log time for a task";

@@ -26,7 +26,7 @@ public class StartReviewChangeRequestEndpoint : Endpoint<StartReviewChangeReques
     public override void Configure()
     {
         Post("/change-requests/{id}/start-review");
-        Roles("TenantAdmin"); // Only TenantAdmin can start review
+        Roles("TenantAdmin", "Change Manager", "CAB Member", "Manager"); // Only TenantAdmin can start review
         Summary(s =>
         {
             s.Summary = "Start review of a change request";

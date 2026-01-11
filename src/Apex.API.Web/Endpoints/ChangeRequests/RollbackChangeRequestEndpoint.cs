@@ -27,7 +27,7 @@ public class RollbackChangeRequestEndpoint : Endpoint<RollbackChangeRequestReque
     public override void Configure()
     {
         Post("/change-requests/{id}/rollback");
-        Roles("Manager", "TenantAdmin"); // Only managers and admins can rollback
+        Roles("Manager", "TenantAdmin", "Change Manager", "CAB Member"); // Only managers and admins can rollback
         Summary(s =>
         {
             s.Summary = "Rollback a change request";
@@ -35,7 +35,7 @@ public class RollbackChangeRequestEndpoint : Endpoint<RollbackChangeRequestReque
             s.Response(200, "Change request rolled back successfully");
             s.Response(400, "Cannot rollback change request or validation failed");
             s.Response(404, "Change request not found");
-            s.Response(403, "Forbidden - requires Manager or TenantAdmin role");
+            s.Response(403, "Forbidden - requires Manager, TenantAdmin, Change Manager, or CAB Member role");
             s.Response(401, "Unauthorized");
         });
     }

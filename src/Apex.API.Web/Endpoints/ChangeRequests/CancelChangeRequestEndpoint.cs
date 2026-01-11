@@ -26,7 +26,7 @@ public class CancelChangeRequestEndpoint : Endpoint<CancelChangeRequestRequest>
     public override void Configure()
     {
         Post("/change-requests/{id}/cancel");
-        Roles("Manager", "TenantAdmin"); // Only managers and admins can cancel
+        Roles("Manager", "TenantAdmin", "Change Manager", "CAB Member"); // Only managers and admins can cancel
         Summary(s =>
         {
             s.Summary = "Cancel a change request";
@@ -34,7 +34,7 @@ public class CancelChangeRequestEndpoint : Endpoint<CancelChangeRequestRequest>
             s.Response(200, "Change request canceled successfully");
             s.Response(400, "Cannot cancel change request or validation failed");
             s.Response(404, "Change request not found");
-            s.Response(403, "Forbidden - requires Manager or TenantAdmin role");
+            s.Response(403, "Forbidden - requires Manager, TenantAdmin, Change Manager, or CAB Member role");
             s.Response(401, "Unauthorized");
         });
     }

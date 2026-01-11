@@ -20,6 +20,7 @@ public class ListChangeRequestsEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/change-requests");
+        Roles("User", "Manager", "TenantAdmin", "Change Manager", "CAB Member", "Change Implementer"); // Any authenticated user
         Summary(s =>
         {
             s.Summary = "List all change requests";

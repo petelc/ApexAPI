@@ -26,7 +26,7 @@ public class DenyChangeRequestEndpoint : Endpoint<DenyChangeRequestRequest>
     public override void Configure()
     {
         Post("/change-requests/{id}/deny");
-        Roles("Manager", "TenantAdmin"); // Only TenantAdmin and Manager can deny
+        Roles("Manager", "TenantAdmin", "Change Manager", "CAB Member"); // Only TenantAdmin and Manager can deny
         Summary(s =>
         {
             s.Summary = "Deny a change request";

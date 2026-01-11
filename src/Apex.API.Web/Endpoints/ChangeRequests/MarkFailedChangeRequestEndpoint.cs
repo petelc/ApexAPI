@@ -27,7 +27,7 @@ public class MarkFailedChangeRequestEndpoint : Endpoint<MarkFailedChangeRequestR
     public override void Configure()
     {
         Post("/change-requests/{id}/mark-failed");
-        Roles("Manager", "TenantAdmin"); // Only managers and admins can mark as failed
+        Roles("Manager", "TenantAdmin", "Change Manager", "CAB Member"); // Only managers and admins can mark as failed
         Summary(s =>
         {
             s.Summary = "Mark a change request as failed";
@@ -35,7 +35,7 @@ public class MarkFailedChangeRequestEndpoint : Endpoint<MarkFailedChangeRequestR
             s.Response(200, "Change request marked as failed successfully");
             s.Response(400, "Cannot mark change request as failed or validation failed");
             s.Response(404, "Change request not found");
-            s.Response(403, "Forbidden - requires Manager or TenantAdmin role");
+            s.Response(403, "Forbidden - requires Manager, TenantAdmin, Change Manager, or CAB Member role");
             s.Response(401, "Unauthorized");
         });
     }

@@ -9,8 +9,6 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to put a project on hold
 /// </summary>
-[HttpPost("/projects/{projectId}/hold")]
-[Authorize]
 public class PutProjectOnHoldEndpoint : Endpoint<PutProjectOnHoldRequest, PutProjectOnHoldResponse>
 {
     private readonly IMediator _mediator;
@@ -18,6 +16,17 @@ public class PutProjectOnHoldEndpoint : Endpoint<PutProjectOnHoldRequest, PutPro
     public PutProjectOnHoldEndpoint(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    public override void Configure()
+    {
+        Post("/projects/{projectId}/hold");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
+        Summary(s =>
+        {
+            s.Summary = "Put a project on hold";
+            s.Description = "Changes project status to On Hold with a specified reason.";
+        });
     }
 
     public override async Task HandleAsync(PutProjectOnHoldRequest req, CancellationToken ct)

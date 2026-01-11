@@ -18,7 +18,7 @@ public class StartProjectEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Post("/projects/{id}/start");
-        Roles("TenantAdmin", "Manager", "ProjectManager");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Start a project";
