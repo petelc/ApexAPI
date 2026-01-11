@@ -42,6 +42,7 @@ public class CreateProjectRequestEndpoint : Endpoint<CreateProjectRequestRequest
     public override void Configure()
     {
         Post("/project-requests");
+        Roles("User");
         Summary(s =>
         {
             s.Summary = "Create a new project request";

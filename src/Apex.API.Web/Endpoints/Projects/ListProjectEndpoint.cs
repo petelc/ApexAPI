@@ -17,6 +17,7 @@ public class ListProjectsEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/projects");
+        Roles("User");
         Summary(s =>
         {
             s.Summary = "List all projects";

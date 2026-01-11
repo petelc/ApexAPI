@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Apex.API.UseCases.Projects.AssignProjectManager;
 using Apex.API.Core.ValueObjects;
 
+
 namespace Apex.API.Web.Endpoints.Projects;
 
 /// <summary>
 /// Endpoint to assign a project manager to a project
 /// </summary>
-[HttpPost("/projects/{projectId}/assign-pm")]
-[Authorize]
 public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest, AssignProjectManagerResponse>
 {
     private readonly IMediator _mediator;
@@ -18,6 +17,17 @@ public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest
     public AssignProjectManagerEndpoint(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    public override void Configure()
+    {
+        Post("/projects/{projectId}/assign-pm");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
+        Summary(s =>
+        {
+            s.Summary = "Assign a project manager to a project";
+            s.Description = "Assigns a specified user as the project manager for the given project.";
+        });
     }
 
     public override async Task HandleAsync(AssignProjectManagerRequest req, CancellationToken ct)

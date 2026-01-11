@@ -39,6 +39,7 @@ public class UpdateChangeRequestEndpoint : Endpoint<UpdateChangeRequestRequest>
     public override void Configure()
     {
         Put("/change-requests/{id}");
+        Roles("TenantAdmin", "Change Manager", "CAB Member", "Manager", "Change Implementer");
         Summary(s =>
         {
             s.Summary = "Update a request";

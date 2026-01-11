@@ -26,7 +26,7 @@ public class CancelProjectRequestEndpoint : Endpoint<CancelProjectRequestRequest
     public override void Configure()
     {
         Post("/project-requests/{id}/cancel");
-        Roles("Manager", "TenantAdmin"); // Only managers and admins can cancel
+        Roles("Manager", "TenantAdmin", "Change Manager", "CAB Member"); // Only managers and admins can cancel
         Summary(s =>
         {
             s.Summary = "Cancel a request";
@@ -34,7 +34,7 @@ public class CancelProjectRequestEndpoint : Endpoint<CancelProjectRequestRequest
             s.Response(200, "Request canceled successfully");
             s.Response(400, "Cannot cancel request or validation failed");
             s.Response(404, "Request not found");
-            s.Response(403, "Forbidden - requires Manager or TenantAdmin role");
+            s.Response(403, "Forbidden - requires Manager, TenantAdmin, Change Manager, or CAB Member role");
             s.Response(401, "Unauthorized");
         });
     }

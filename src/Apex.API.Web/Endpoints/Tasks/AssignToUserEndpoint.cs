@@ -23,7 +23,7 @@ public class AssignTaskToUserEndpoint : Endpoint<AssignTaskToUserRequest>
     public override void Configure()
     {
         Post("/tasks/{id}/assign-to-user");
-        Roles("TenantAdmin", "Manager", "ProjectManager");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Assign task to user";

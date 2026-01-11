@@ -9,8 +9,6 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to resume a project from on-hold status
 /// </summary>
-[HttpPost("/projects/{projectId}/resume")]
-[Authorize]
 public class ResumeProjectEndpoint : Endpoint<ResumeProjectRequest, ResumeProjectResponse>
 {
     private readonly IMediator _mediator;
@@ -18,6 +16,17 @@ public class ResumeProjectEndpoint : Endpoint<ResumeProjectRequest, ResumeProjec
     public ResumeProjectEndpoint(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    public override void Configure()
+    {
+        Post("/projects/{projectId}/resume");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
+        Summary(s =>
+        {
+            s.Summary = "Resume a project from on-hold status";
+            s.Description = "Changes project status from On Hold back to Active.";
+        });
     }
 
     public override async Task HandleAsync(ResumeProjectRequest req, CancellationToken ct)

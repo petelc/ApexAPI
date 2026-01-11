@@ -19,7 +19,7 @@ public class CompleteProjectEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Post("/projects/{id}/complete");
-        Roles("TenantAdmin", "Manager", "ProjectManager");
+        Roles("TenantAdmin", "Manager", "Project Manager");
         Summary(s =>
         {
             s.Summary = "Complete a project";

@@ -21,6 +21,7 @@ public class SubmitChangeRequestEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Post("/change-requests/{id}/submit");
+        Roles("TenantAdmin", "Change Manager", "CAB Member", "Manager", "User");
         Summary(s =>
         {
             s.Summary = "Submit a request for review";

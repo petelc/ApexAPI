@@ -33,6 +33,7 @@ public class CreateTaskEndpoint : Endpoint<CreateTaskRequest, CreateTaskResponse
     public override void Configure()
     {
         Post("/projects/{projectId}/tasks");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Create a task for a project";

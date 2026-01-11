@@ -21,6 +21,7 @@ public class ClaimTaskEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Post("/tasks/{id}/claim");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Claim a department task";

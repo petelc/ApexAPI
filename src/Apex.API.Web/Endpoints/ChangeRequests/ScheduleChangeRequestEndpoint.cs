@@ -28,7 +28,7 @@ public class ScheduleChangeRequestEndpoint : Endpoint<ScheduleChangeRequestReque
     public override void Configure()
     {
         Post("/change-requests/{id}/schedule");
-        Roles("TenantAdmin"); // Only TenantAdmin can schedule
+        Roles("TenantAdmin", "Change Manager", "CAB Member", "Manager"); // Only TenantAdmin can schedule
         Summary(s =>
         {
             s.Summary = "Schedule a change request";

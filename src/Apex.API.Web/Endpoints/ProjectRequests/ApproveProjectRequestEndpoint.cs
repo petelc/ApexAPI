@@ -26,7 +26,7 @@ public class ApproveProjectRequestEndpoint : Endpoint<ApproveProjectRequestReque
     public override void Configure()
     {
         Post("/project-requests/{id}/approve");
-        Roles("TenantAdmin"); // Only TenantAdmin can approve
+        Roles("TenantAdmin", "User"); // Only TenantAdmin can approve
         Summary(s =>
         {
             s.Summary = "Approve a request";

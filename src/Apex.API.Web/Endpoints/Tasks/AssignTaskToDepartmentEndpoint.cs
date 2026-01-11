@@ -23,7 +23,7 @@ public class AssignTaskToDepartmentEndpoint : Endpoint<AssignTaskToDepartmentReq
     public override void Configure()
     {
         Post("/tasks/{id}/assign-to-department");
-        Roles("TenantAdmin", "Manager", "ProjectManager");
+        Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
             s.Summary = "Assign task to department";

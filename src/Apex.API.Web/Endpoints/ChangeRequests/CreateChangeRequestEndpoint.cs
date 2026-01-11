@@ -58,6 +58,7 @@ public class CreateChangeRequestEndpoint : Endpoint<CreateChangeRequestRequest, 
     public override void Configure()
     {
         Post("/change-requests");
+        Roles("User"); // Any authenticated user can create
         Summary(s =>
         {
             s.Summary = "Create a new change request";

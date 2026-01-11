@@ -21,6 +21,7 @@ public class GetProjectRequestEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("/project-requests/{id}");
+        Roles("User");
         Summary(s =>
         {
             s.Summary = "Get a request by ID";

@@ -9,8 +9,6 @@ namespace Apex.API.Web.Endpoints.Projects;
 /// <summary>
 /// Endpoint to cancel a project
 /// </summary>
-[HttpPost("/projects/{projectId}/cancel")]
-[Authorize]
 public class CancelProjectEndpoint : Endpoint<CancelProjectRequest, CancelProjectResponse>
 {
     private readonly IMediator _mediator;
@@ -18,6 +16,17 @@ public class CancelProjectEndpoint : Endpoint<CancelProjectRequest, CancelProjec
     public CancelProjectEndpoint(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    public override void Configure()
+    {
+        Post("/projects/{projectId}/cancel");
+        Roles("TenantAdmin", "Manager", "Project Manager");
+        Summary(s =>
+        {
+            s.Summary = "Cancel a project";
+            s.Description = "Changes project status to Cancelled with a specified reason.";
+        });
     }
 
     public override async Task HandleAsync(CancelProjectRequest req, CancellationToken ct)
