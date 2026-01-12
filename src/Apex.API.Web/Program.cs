@@ -6,6 +6,8 @@ using Apex.API.Web.Configurations;
 using Hangfire;
 using Apex.API.Web.Infrastructure;
 using Apex.API.Infrastructure.Jobs;
+using Apex.Infrastructure.Services;
+using Apex.API.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +17,17 @@ builder.AddServiceDefaults()
 // ✅ CORS Configuration for React App
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ReactDevPolicy", policy =>
+    options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000")  // React dev server
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy
+            .WithOrigins(
+                "http://localhost:3000",   // Your React app
+                "http://localhost:5173",   // Vite (if using)
+                "https://localhost:3000"
+            )
+            .AllowAnyMethod()              // POST, GET, PUT, DELETE
+            .AllowAnyHeader()              // All headers
+            .AllowCredentials();           // Auth/cookies
     });
     options.AddPolicy("HangfirePolicy", policy =>
     {
@@ -68,8 +75,8 @@ builder.Services.AddFastEndpoints()
 
                 document.Servers.Add(new NSwag.OpenApiServer
                 {
-                    Url = "https://demo.localhost:5000",
-                    Description = "Demo Tenant"
+                    Url = "https://acme.localhost:5000",
+                    Description = "Acme Tenant"
                 });
 
                 document.Servers.Add(new NSwag.OpenApiServer
@@ -81,13 +88,18 @@ builder.Services.AddFastEndpoints()
         };
     });
 
+// Register email service
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 var app = builder.Build();
 
 // ✅ SEED DATABASE (roles, etc.)
 await DatabaseSeeder.SeedAsync(app.Services);
 
 // ✅ IMPORTANT: Use CORS before Authentication/Authorization
-app.UseCors("ReactDevPolicy");
+app.UseCors();
 app.UseCors("HangfirePolicy");
 
 // Authentication & Authorization BEFORE endpoints
