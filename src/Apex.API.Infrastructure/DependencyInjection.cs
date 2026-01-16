@@ -71,9 +71,19 @@ public static class DependencyInjection
             // Sign in settings
             options.SignIn.RequireConfirmedEmail = false; // Set to true in production
             options.SignIn.RequireConfirmedPhoneNumber = false;
+
+            // Token settings
+            options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
+            options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultProvider;
         })
         .AddEntityFrameworkStores<ApexDbContext>()
         .AddDefaultTokenProviders();
+
+        // Configure token lifespan (default is 1 day)
+        services.Configure<DataProtectionTokenProviderOptions>(options =>
+        {
+            options.TokenLifespan = TimeSpan.FromHours(24);
+        });
 
         // ========================================================================
         // JWT AUTHENTICATION
