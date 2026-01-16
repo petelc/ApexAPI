@@ -1,136 +1,148 @@
-using MediatR;
-using Microsoft.Extensions.Logging;
+using Apex.API.Core.Aggregates.ProjectRequestAggregate;
+using Apex.API.UseCases.ProjectRequests.DTOs;
+using Apex.API.UseCases.ProjectRequests.Specifications;
 using Ardalis.Result;
 using Traxs.SharedKernel;
-using Apex.API.Core.Aggregates.ProjectRequestAggregate;
-using Apex.API.Core.Interfaces;
-using Apex.API.Core.ValueObjects;
-using Apex.API.UseCases.ProjectRequests.GetById;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Apex.API.UseCases.ProjectRequests.List;
 
 /// <summary>
-/// Handler for listing requests with filtering and pagination
+/// Query for listing project requests with filtering and pagination
 /// </summary>
-public class ListProjectRequestsHandler : IRequestHandler<ListRequestsQuery, Result<PagedRequestList>>
+public record ListProjectRequestsQuery(
+    string? Status,
+    string? Priority,
+    Guid? AssignedToUserId,
+    Guid? CreatedByUserId,
+    bool? IsOverdue,
+    int PageNumber,
+    int PageSize
+) : IRequest<Result<ListProjectRequestsResponse>>;
+
+/// <summary>
+/// Response with paginated project requests (WITHOUT user information - added in Web layer)
+/// </summary>
+public record ListProjectRequestsResponse(
+    List<ProjectRequestDto> ProjectRequests,
+    int TotalCount,
+    int PageNumber,
+    int PageSize,
+    int TotalPages
+);
+
+/// <summary>
+/// Handler for listing project requests
+/// Uses EfRepository from Traxs.SharedKernel with Ardalis.Specification
+/// NO Infrastructure dependency - uses repository abstraction!
+/// </summary>
+public class ListProjectRequestsHandler : IRequestHandler<ListProjectRequestsQuery, Result<ListProjectRequestsResponse>>
 {
     private readonly IReadRepository<ProjectRequest> _repository;
-    private readonly ITenantContext _tenantContext;
     private readonly ILogger<ListProjectRequestsHandler> _logger;
+
     public ListProjectRequestsHandler(
         IReadRepository<ProjectRequest> repository,
-        ITenantContext tenantContext,
         ILogger<ListProjectRequestsHandler> logger)
     {
         _repository = repository;
-        _tenantContext = tenantContext;
         _logger = logger;
     }
 
-    public async Task<Result<PagedRequestList>> Handle(
-        ListRequestsQuery query,
+    public async Task<Result<ListProjectRequestsResponse>> Handle(
+        ListProjectRequestsQuery request,
         CancellationToken cancellationToken)
     {
         try
         {
-            // Get all requests for current tenant
-            var allRequests = await _repository.ListAsync(cancellationToken);
+            // Create specification for filtering and pagination
+            var listSpec = new ListProjectRequestsSpec(
+                request.Status,
+                request.Priority,
+                request.AssignedToUserId,
+                request.CreatedByUserId,
+                request.IsOverdue,
+                request.PageNumber,
+                request.PageSize);
 
-            // Filter by tenant (security)
-            var requests = allRequests
-                .Where(r => r.TenantId == _tenantContext.CurrentTenantId)
-                .AsQueryable();
+            // Create specification for counting (same filters, no pagination)
+            var countSpec = new CountProjectRequestsSpec(
+                request.Status,
+                request.Priority,
+                request.AssignedToUserId,
+                request.CreatedByUserId,
+                request.IsOverdue);
 
-            // Apply filters
-            if (!string.IsNullOrWhiteSpace(query.Status))
+            // Execute queries using EfRepository
+            var projectRequests = await _repository.ListAsync(listSpec, cancellationToken);
+            var totalCount = await _repository.CountAsync(countSpec, cancellationToken);
+
+            // Calculate total pages
+            var totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize);
+
+            // Map domain entities to DTOs (NO user information yet - that's in Web layer)
+            var dtos = projectRequests.Select(pr => new ProjectRequestDto
             {
-                if (ProjectRequestStatus.TryFromName(query.Status, out var status))
-                {
-                    requests = requests.Where(r => r.Status == status);
-                }
-            }
+                Id = pr.Id.Value,
+                Title = pr.Title,
+                Description = pr.Description,
+                BusinessJustification = string.Empty,
+                Status = pr.Status.Name,
+                Priority = pr.Priority.Name,
 
-            if (!string.IsNullOrWhiteSpace(query.Priority))
-            {
-                if (RequestPriority.TryFromName(query.Priority, out var priority))
-                {
-                    requests = requests.Where(r => r.Priority == priority);
-                }
-            }
+                // User IDs only - no user objects yet
+                RequestingUserId = pr.CreatedByUserId,
+                RequestingUser = null, // Populated in Web layer
 
-            if (query.AssignedToUserId.HasValue)
-            {
-                requests = requests.Where(r => r.AssignedToUserId == query.AssignedToUserId.Value);
-            }
+                AssignedToUserId = pr.AssignedToUserId,
+                AssignedToUser = null, // Populated in Web layer
 
-            if (query.CreatedByUserId.HasValue)
-            {
-                requests = requests.Where(r => r.CreatedByUserId == query.CreatedByUserId.Value);
-            }
+                ReviewedByUserId = pr.ReviewedByUserId,
+                ReviewedByUser = null, // Populated in Web layer
+                ReviewComments = pr.ReviewNotes,
 
-            if (query.IsOverdue.HasValue && query.IsOverdue.Value)
-            {
-                requests = requests.Where(r => r.IsOverdue());
-            }
+                ApprovedByUserId = pr.ApprovedByUserId,
+                ApprovedByUser = null, // Populated in Web layer
+                ApprovalNotes = pr.ApprovalNotes,
 
-            // Get total count
-            var totalCount = requests.Count();
+                DeniedByUserId = null,
+                DeniedByUser = null,
+                DenialReason = pr.DenialReason,
 
-            // Apply pagination
-            var skip = (query.PageNumber - 1) * query.PageSize;
-            var pagedRequests = requests
-                .OrderByDescending(r => r.CreatedDate)
-                .Skip(skip)
-                .Take(query.PageSize)
-                .ToList();
+                ConvertedByUserId = pr.ConvertedByUserId,
+                ConvertedByUser = null, // Populated in Web layer
 
-            // Map to DTOs
-            var dtos = pagedRequests.Select(r => new ProjectRequestDto(
-                r.Id.Value,
-                r.Title,
-                r.Description,
-                r.Status.Name,
-                r.Priority.Name,
-                r.CreatedByUserId,
-                r.ReviewedByUserId,
-                r.ApprovedByUserId,
-                r.ConvertedByUserId,
-                r.CreatedDate,
-                r.SubmittedDate,
-                r.ReviewStartedDate,
-                r.ApprovedDate,
-                r.DeniedDate,
-                r.ConvertedDate,      // ✅ This exists
-                r.DueDate,
-                r.ReviewNotes,
-                r.ApprovalNotes,
-                r.DenialReason,
-                r.ProjectId,
-                r.IsOverdue(),
-                r.GetDaysUntilDue()
-            )).ToList();
+                ProjectId = pr.ProjectId,
 
-            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
+                EstimatedBudget = null,
+                ProposedStartDate = null,
+                ProposedEndDate = null,
+                DueDate = pr.DueDate,
 
-            var result = new PagedRequestList(
+                CreatedDate = pr.CreatedDate,
+                SubmittedDate = pr.SubmittedDate,
+                ReviewedDate = pr.ReviewStartedDate,
+                ApprovedDate = pr.ApprovedDate,
+                DeniedDate = pr.DeniedDate,
+                ConvertedDate = pr.ConvertedDate,
+                LastModifiedDate = pr.LastModifiedDate
+            }).ToList();
+
+            var response = new ListProjectRequestsResponse(
                 dtos,
                 totalCount,
-                query.PageNumber,
-                query.PageSize,
-                totalPages);
+                request.PageNumber,
+                request.PageSize,
+                totalPages
+            );
 
-            _logger.LogInformation(
-                "Listed requests: Count={Count}, Page={PageNumber}, TenantId={TenantId}",
-                totalCount,
-                query.PageNumber,
-                _tenantContext.CurrentTenantId);
-
-            return Result<PagedRequestList>.Success(result);
+            return Result.Success(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error listing requests");
-            return Result<PagedRequestList>.Error("An error occurred while listing requests.");
+            _logger.LogError(ex, "Error listing project requests");
+            return Result.Error("An error occurred while retrieving project requests");
         }
     }
 }

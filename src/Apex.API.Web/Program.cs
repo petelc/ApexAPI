@@ -8,6 +8,8 @@ using Apex.API.Web.Infrastructure;
 using Apex.API.Infrastructure.Jobs;
 using Apex.Infrastructure.Services;
 using Apex.API.Core.Interfaces;
+using Apex.API.UseCases.Users.Interfaces;
+using Apex.API.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +94,12 @@ builder.Services.AddFastEndpoints()
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Add Memory Cache (if not already added)
+builder.Services.AddMemoryCache();
+
+// Register User Lookup Service
+builder.Services.AddScoped<IUserLookupService, UserLookupService>();
 
 var app = builder.Build();
 
