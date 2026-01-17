@@ -10,6 +10,7 @@ using Apex.Infrastructure.Services;
 using Apex.API.Core.Interfaces;
 using Apex.API.UseCases.Users.Interfaces;
 using Apex.API.Infrastructure.Services;
+using Apex.API.UseCases.Common.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,6 +101,9 @@ builder.Services.AddMemoryCache();
 
 // Register User Lookup Service
 builder.Services.AddScoped<IUserLookupService, UserLookupService>();
+
+// register Dashboard Service
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 var app = builder.Build();
 

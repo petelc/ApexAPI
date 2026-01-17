@@ -9,6 +9,8 @@ namespace Apex.API.Infrastructure.Services;
 
 /// <summary>
 /// Dashboard service implementation with caching
+/// FIXED: Sequential queries to avoid DbContext concurrency issues
+/// FIXED: Smart Enum handling for EF Core translation
 /// </summary>
 public class DashboardService : IDashboardService
 {
@@ -38,20 +40,18 @@ public class DashboardService : IDashboardService
             return cachedStats;
         }
 
-        // Fetch all stats in parallel
-        var changeStatsTask = GetChangeManagementStatsAsync(cancellationToken);
-        var projectStatsTask = GetProjectManagementStatsAsync(cancellationToken);
-        var taskStatsTask = GetTaskManagementStatsAsync(userId, cancellationToken);
-        var recentActivityTask = GetRecentActivityAsync(cancellationToken);
-
-        await Task.WhenAll(changeStatsTask, projectStatsTask, taskStatsTask, recentActivityTask);
+        // ✅ FIXED: Execute queries SEQUENTIALLY to avoid DbContext concurrency issues
+        var changeStats = await GetChangeManagementStatsAsync(cancellationToken);
+        var projectStats = await GetProjectManagementStatsAsync(cancellationToken);
+        var taskStats = await GetTaskManagementStatsAsync(userId, cancellationToken);
+        var recentActivity = await GetRecentActivityAsync(cancellationToken);
 
         var stats = new DashboardStatsDto
         {
-            ChangeManagement = await changeStatsTask,
-            ProjectManagement = await projectStatsTask,
-            TaskManagement = await taskStatsTask,
-            RecentActivity = await recentActivityTask
+            ChangeManagement = changeStats,
+            ProjectManagement = projectStats,
+            TaskManagement = taskStats,
+            RecentActivity = recentActivity
         };
 
         _cache.Set(cacheKey, stats, CacheDuration);
@@ -111,13 +111,15 @@ public class DashboardService : IDashboardService
     {
         var now = DateTime.UtcNow;
 
-        // Get project request stats
-        var pendingRequests = await _context.ProjectRequests
+        // ✅ FIXED: Get project request stats - load to memory first to avoid Smart Enum translation issues
+        var allProjectRequests = await _context.ProjectRequests
             .AsNoTracking()
-            .Where(pr => pr.Status.Value == 0 || pr.Status.Value == 1) // Draft or Pending
-            .CountAsync(cancellationToken);
+            .Select(pr => new { pr.Status })
+            .ToListAsync(cancellationToken);
 
-        // Get project stats
+        var pendingRequests = allProjectRequests.Count(pr => pr.Status.Value == 0 || pr.Status.Value == 1); // Draft or Pending
+
+        // Get project stats - load to memory first
         var projects = await _context.Projects
             .AsNoTracking()
             .Select(p => new
@@ -163,7 +165,7 @@ public class DashboardService : IDashboardService
         var now = DateTime.UtcNow;
         var today = now.Date;
 
-        // Get all tasks for calculations
+        // Get all tasks for calculations - load to memory first
         var tasks = await _context.Tasks
             .AsNoTracking()
             .Select(t => new

@@ -23,6 +23,10 @@ public class GetProjectEndpoint : EndpointWithoutRequest
         {
             s.Summary = "Get project by ID";
             s.Description = "Retrieves a project with all details";
+            s.Response<ProjectDto>(200, "Request found");
+            s.Response(404, "Request not found");
+            s.Response(403, "Forbidden - request belongs to another tenant");
+            s.Response(401, "Unauthorized - JWT token required");
         });
     }
 
