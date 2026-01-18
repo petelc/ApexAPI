@@ -4,6 +4,7 @@ using Ardalis.Result;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.TaskAggregate;
 using Apex.API.Core.Interfaces;
+using Apex.API.UseCases.Tasks.DTOs;
 
 namespace Apex.API.UseCases.Tasks.GetById;
 

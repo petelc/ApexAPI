@@ -1,5 +1,6 @@
 using MediatR;
 using Ardalis.Result;
+using Apex.API.UseCases.Tasks.DTOs;
 
 namespace Apex.API.UseCases.Tasks.List;
 
@@ -10,27 +11,14 @@ public record ListTasksQuery(
     Guid ProjectId,
     int PageNumber = 1,
     int PageSize = 100
-) : IRequest<Result<PagedResult<TaskDto>>>;
+) : IRequest<Result<ListTasksResponse>>;
 
-/// <summary>
-/// Task DTO for list response
-/// </summary>
-public record TaskDto(
-    Guid Id,
-    string Title,
-    string Description,
-    string Status,
-    string Priority,
-    Guid? AssignedToUserId,
-    string? AssignedToUserName,
-    Guid? AssignedToDepartmentId,
-    string? AssignedToDepartmentName,
-    decimal? EstimatedHours,  // ✅ Made nullable to match Task entity
-    decimal ActualHours,
-    DateTime CreatedDate,
-    DateTime? StartedDate,
-    DateTime? CompletedDate,
-    string? BlockedReason
+public record ListTasksResponse(
+    List<TaskDto> Tasks,
+    int TotalCount,
+    int PageNumber,
+    int PageSize,
+    int TotalPages
 );
 
 /// <summary>

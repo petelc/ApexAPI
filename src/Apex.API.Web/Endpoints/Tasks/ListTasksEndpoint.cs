@@ -6,11 +6,11 @@ using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.Web.Endpoints.Tasks;
 
-public class GetTasksEndpoint : EndpointWithoutRequest
+public class ListTasksEndpoint : EndpointWithoutRequest
 {
     private readonly IMediator _mediator;
 
-    public GetTasksEndpoint(IMediator mediator)
+    public ListTasksEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -21,11 +21,11 @@ public class GetTasksEndpoint : EndpointWithoutRequest
         Roles("TenantAdmin", "Manager", "Project Manager", "Developer", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         Summary(s =>
         {
-            s.Summary = "Get tasks";
+            s.Summary = "List tasks";
             s.Description = "Retrieves tasks";
         });
     }
-
+    Working on adding user lookup
     public override async Task HandleAsync(CancellationToken ct)
     {
         var id = Route<Guid>("id");
