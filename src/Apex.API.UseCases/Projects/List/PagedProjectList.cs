@@ -1,4 +1,4 @@
-using Apex.API.UseCases.Projects.GetById;
+using Apex.API.UseCases.Projects.DTOs;
 
 namespace Apex.API.UseCases.Projects.List;
 

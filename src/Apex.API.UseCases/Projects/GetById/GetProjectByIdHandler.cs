@@ -4,6 +4,8 @@ using Ardalis.Result;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.ProjectAggregate;
 using Apex.API.Core.Interfaces;
+using Apex.API.UseCases.Projects.DTOs;
+using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.UseCases.Projects.GetById;
 

@@ -3,10 +3,11 @@ using Microsoft.Extensions.Logging;
 using Ardalis.Result;
 using Apex.API.Core.Interfaces;
 using Apex.API.Core.Aggregates.TaskAggregate;
+using Apex.API.UseCases.Tasks.DTOs;
 
 namespace Apex.API.UseCases.Tasks.List;
 
-public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<PagedResult<TaskDto>>>
+public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<ListTasksResponse>>
 {
     private readonly IRepository<Core.Aggregates.TaskAggregate.Task> _taskRepository;
     private readonly ITenantContext _tenantContext;
@@ -22,7 +23,7 @@ public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<PagedResu
         _logger = logger;
     }
 
-    public async Task<Result<PagedResult<TaskDto>>> Handle(
+    public async Task<Result<ListTasksResponse>> Handle(
         ListTasksQuery query,
         CancellationToken cancellationToken)
     {
@@ -44,6 +45,9 @@ public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<PagedResu
 
             var totalCount = projectTasks.Count;
 
+            // Calculate total pages
+            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
+
             // Apply pagination and map to DTO
             var pagedTasks = projectTasks
                 .Skip((query.PageNumber - 1) * query.PageSize)
@@ -54,24 +58,30 @@ public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<PagedResu
                     Description: t.Description,
                     Status: t.Status.ToString(),
                     Priority: t.Priority.ToString(),
+                    ProjectId: t.ProjectId.Value,  // Already Guid?
                     AssignedToUserId: t.AssignedToUserId,  // Already Guid?
-                    AssignedToUserName: null,  // Not stored - would need lookup
-                    AssignedToDepartmentId: t.AssignedToDepartmentId?.Value,  // DepartmentId? → Guid?
-                    AssignedToDepartmentName: null,  // Not stored - would need lookup
+                    AssignedToUser: null,  // Not stored - would need lookup
                     EstimatedHours: t.EstimatedHours,  // decimal? - keep nullable
                     ActualHours: t.ActualHours,
+                    DueDate: t.DueDate,
                     CreatedDate: t.CreatedDate,
                     StartedDate: t.StartedDate,
                     CompletedDate: t.CompletedDate,
-                    BlockedReason: t.BlockedReason
+                    LastModifiedDate: t.LastModifiedDate,
+                    BlockedReason: t.BlockedReason,
+                    BlockedDate: t.BlockedDate,
+                    CreatedByUserId: t.CreatedByUserId,  // DepartmentId? → Guid?
+                    CreatedByUser: null  // Not stored - would need lookup
                 ))
                 .ToList();
 
-            var result = new PagedResult<TaskDto>(
+            var result = new ListTasksResponse(
                 pagedTasks,
                 totalCount,
                 query.PageNumber,
-                query.PageSize
+                query.PageSize,
+
+                totalPages
             );
 
             _logger.LogInformation(

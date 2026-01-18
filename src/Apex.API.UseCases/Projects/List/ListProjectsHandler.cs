@@ -1,115 +1,103 @@
-using MediatR;
-using Microsoft.Extensions.Logging;
+using Apex.API.Core.Aggregates.ProjectAggregate;
+using Apex.API.UseCases.Projects.DTOs;
+using Apex.API.UseCases.Projects.Specifications;
 using Ardalis.Result;
 using Traxs.SharedKernel;
-using Apex.API.Core.Aggregates.ProjectAggregate;
-using Apex.API.Core.Interfaces;
-using Apex.API.Core.ValueObjects;
-using Apex.API.UseCases.Projects.GetById;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Apex.API.UseCases.Projects.List;
 
-public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, Result<PagedProjectList>>
+/// <summary>
+/// Handler for listing projects
+/// MATCHES your actual ListProjectsQuery parameters
+/// Works with positional ProjectDto record
+/// </summary>
+public class ListProjectsHandler : IRequestHandler<ListProjectsQuery, Result<ListProjectsResponse>>
 {
     private readonly IReadRepository<Project> _repository;
-    private readonly ITenantContext _tenantContext;
     private readonly ILogger<ListProjectsHandler> _logger;
 
     public ListProjectsHandler(
         IReadRepository<Project> repository,
-        ITenantContext tenantContext,
         ILogger<ListProjectsHandler> logger)
     {
         _repository = repository;
-        _tenantContext = tenantContext;
         _logger = logger;
     }
 
-    public async Task<Result<PagedProjectList>> Handle(
-        ListProjectsQuery query,
+    public async Task<Result<ListProjectsResponse>> Handle(
+        ListProjectsQuery request,
         CancellationToken cancellationToken)
     {
         try
         {
-            var allProjects = await _repository.ListAsync(cancellationToken);
+            // Create specification for filtering and pagination
+            var listSpec = new ListProjectsSpec(
+                request.Status,
+                request.Priority,
+                request.ProjectManagerUserId,
+                request.CreatedByUserId,
+                request.StartDate,
+                request.EndDate,
+                request.PageNumber,
+                request.PageSize);
 
-            var projects = allProjects
-                .Where(p => p.TenantId == _tenantContext.CurrentTenantId)
-                .AsQueryable();
+            // Create specification for counting (same filters, no pagination)
+            var countSpec = new CountProjectsSpec(
+                request.Status,
+                request.Priority,
+                request.ProjectManagerUserId,
+                request.CreatedByUserId,
+                request.StartDate,
+                request.EndDate);
 
-            // Apply filters
-            if (!string.IsNullOrWhiteSpace(query.Status))
-            {
-                if (ProjectStatus.TryFromName(query.Status, out var status))
-                {
-                    projects = projects.Where(p => p.Status == status);
-                }
-            }
+            // Execute queries using EfRepository
+            var projects = await _repository.ListAsync(listSpec, cancellationToken);
+            var totalCount = await _repository.CountAsync(countSpec, cancellationToken);
 
-            if (!string.IsNullOrWhiteSpace(query.Priority))
-            {
-                if (RequestPriority.TryFromName(query.Priority, out var priority))
-                {
-                    projects = projects.Where(p => p.Priority == priority);
-                }
-            }
+            // Calculate total pages
+            var totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize);
 
-            if (query.ProjectManagerUserId.HasValue)
-            {
-                projects = projects.Where(p => p.ProjectManagerUserId == query.ProjectManagerUserId.Value);
-            }
-
-            if (query.IsOverdue.HasValue && query.IsOverdue.Value)
-            {
-                projects = projects.Where(p => p.IsOverdue());
-            }
-
-            var totalCount = projects.Count();
-
-            var skip = (query.PageNumber - 1) * query.PageSize;
-            var pagedProjects = projects
-                .OrderByDescending(p => p.CreatedDate)
-                .Skip(skip)
-                .Take(query.PageSize)
-                .ToList();
-
-            var dtos = pagedProjects.Select(p => new ProjectDto(
-                p.Id.Value,
-                p.Name,
-                p.Description,
-                p.Status.Name,
-                p.Priority.Name,
-                p.ProjectRequestId,
-                p.Budget,
-                p.StartDate,
-                p.EndDate,
-                p.ActualStartDate,
-                p.ActualEndDate,
-                p.CreatedByUserId,
-                p.ProjectManagerUserId,
-                p.CreatedDate,
-                p.LastModifiedDate,
-                p.IsOverdue(),
-                p.GetDaysUntilDeadline(),
-                p.GetDurationDays()
+            // Map domain entities to DTOs using positional record constructor
+            var dtos = projects.Select(p => new ProjectDto(
+                // Positional parameters in order:
+                Id: p.Id.Value,
+                Name: p.Name,
+                Description: p.Description,
+                Status: p.Status.Name,
+                Priority: p.Priority.Name,
+                ProjectRequestId: p.ProjectRequestId,
+                Budget: p.Budget,
+                StartDate: p.StartDate,
+                EndDate: p.EndDate,
+                ActualStartDate: p.ActualStartDate,
+                ActualEndDate: p.ActualEndDate,
+                CreatedByUserId: p.CreatedByUserId,
+                ProjectManagerUserId: p.ProjectManagerUserId,
+                CreatedDate: p.CreatedDate,
+                LastModifiedDate: p.LastModifiedDate,
+                IsOverdue: p.IsOverdue(),
+                DaysUntilDeadline: p.GetDaysUntilDeadline(),
+                DurationDays: p.GetDurationDays(),
+                CreatedByUser: null,  // Populated in Web layer
+                ProjectManagerUser: null  // Populated in Web layer
             )).ToList();
 
-            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
-
-            var result = new PagedProjectList(dtos, totalCount, query.PageNumber, query.PageSize, totalPages);
-
-            _logger.LogInformation(
-                "Listed projects: Count={Count}, Page={PageNumber}, TenantId={TenantId}",
+            var response = new ListProjectsResponse(
+                dtos,
                 totalCount,
-                query.PageNumber,
-                _tenantContext.CurrentTenantId);
+                request.PageNumber,
+                request.PageSize,
+                totalPages
+            );
 
-            return Result<PagedProjectList>.Success(result);
+            return Result.Success(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error listing projects");
-            return Result<PagedProjectList>.Error("An error occurred while listing projects.");
+            return Result.Error("An error occurred while retrieving projects");
         }
     }
 }

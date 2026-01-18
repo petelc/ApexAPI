@@ -1,4 +1,6 @@
-namespace Apex.API.UseCases.Projects.GetById;
+using Apex.API.UseCases.Users.DTOs;
+
+namespace Apex.API.UseCases.Projects.DTOs;
 
 public record ProjectDto(
     Guid Id,
@@ -18,4 +20,9 @@ public record ProjectDto(
     DateTime? LastModifiedDate,
     bool IsOverdue,
     int? DaysUntilDeadline,
-    int? DurationDays);
+    int? DurationDays,
+
+    // User lookup fields
+    UserSummaryDto? CreatedByUser = null,
+    UserSummaryDto? ProjectManagerUser = null
+);
