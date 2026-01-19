@@ -1,6 +1,6 @@
 using MediatR;
 using Ardalis.Result;
-using Apex.API.UseCases.ProjectRequests.GetById;
+using Apex.API.UseCases.ProjectRequests.DTOs;
 
 namespace Apex.API.UseCases.ProjectRequests.List;
 

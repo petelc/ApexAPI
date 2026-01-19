@@ -1,93 +1,89 @@
-using MediatR;
-using Microsoft.Extensions.Logging;
+using Apex.API.Core.Aggregates.ProjectRequestAggregate;
+using Apex.API.UseCases.ProjectRequests.DTOs;
 using Ardalis.Result;
 using Traxs.SharedKernel;
-using Apex.API.Core.Aggregates.ProjectRequestAggregate;
-using Apex.API.Core.Interfaces;
+using MediatR;
 
 namespace Apex.API.UseCases.ProjectRequests.GetById;
 
 /// <summary>
-/// Handler for getting a ProjectRequest by ID
+/// Handler for GetProjectRequestByIdQuery
+/// Returns DTO with user IDs only (no user objects)
+/// User enrichment happens at Web layer
 /// </summary>
 public class GetProjectRequestByIdHandler : IRequestHandler<GetProjectRequestByIdQuery, Result<ProjectRequestDto>>
 {
     private readonly IReadRepository<ProjectRequest> _repository;
-    private readonly ITenantContext _tenantContext;
-    private readonly ILogger<GetProjectRequestByIdHandler> _logger;
 
-    public GetProjectRequestByIdHandler(
-        IReadRepository<ProjectRequest> repository,
-        ITenantContext tenantContext,
-        ILogger<GetProjectRequestByIdHandler> logger)
+    public GetProjectRequestByIdHandler(IReadRepository<ProjectRequest> repository)
     {
         _repository = repository;
-        _tenantContext = tenantContext;
-        _logger = logger;
     }
 
     public async Task<Result<ProjectRequestDto>> Handle(
-        GetProjectRequestByIdQuery query,
+        GetProjectRequestByIdQuery request,
         CancellationToken cancellationToken)
     {
-        try
+        // Fetch project request by ID
+        var projectRequest = await _repository.GetByIdAsync(request.ProjectRequestId, cancellationToken);
+
+        if (projectRequest == null)
+            return Result.NotFound("Project request not found");
+
+        // Map to DTO (user objects are null - enriched at Web layer)
+        // ✅ Using object initializer syntax (not positional)
+        var dto = new ProjectRequestDto
         {
-            var projectRequest = await _repository.GetByIdAsync(query.ProjectRequestId, cancellationToken);
+            Id = projectRequest.Id.Value,
+            Title = projectRequest.Title,
+            Description = projectRequest.Description,
+            BusinessJustification = string.Empty, // Not in aggregate
+            Status = projectRequest.Status.Name,
+            Priority = projectRequest.Priority.Name,
 
-            if (projectRequest == null)
-            {
-                _logger.LogWarning(
-                    "ProjectRequest not found: ProjectRequestId={ProjectRequestId}",
-                    query.ProjectRequestId);
+            // User IDs (objects populated at Web layer)
+            RequestingUserId = projectRequest.CreatedByUserId,
+            RequestingUser = null,
 
-                return Result<ProjectRequestDto>.NotFound("ProjectRequest not found.");
-            }
+            AssignedToUserId = projectRequest.AssignedToUserId,
+            AssignedToUser = null,
 
-            // Verify tenant ownership (multi-tenant security)
-            if (projectRequest.TenantId != _tenantContext.CurrentTenantId)
-            {
-                _logger.LogWarning(
-                    "Unauthorized access attempt: ProjectRequestId={ProjectRequestId}, TenantId={TenantId}",
-                    query.ProjectRequestId,
-                    _tenantContext.CurrentTenantId);
+            ReviewedByUserId = projectRequest.ReviewedByUserId,
+            ReviewedByUser = null,
 
-                return Result<ProjectRequestDto>.Forbidden();
-            }
+            ApprovedByUserId = projectRequest.ApprovedByUserId,
+            ApprovedByUser = null,
 
-            var dto = new ProjectRequestDto(
-                projectRequest.Id.Value,
-                projectRequest.Title,
-                projectRequest.Description,
-                projectRequest.Status.Name,
-                projectRequest.Priority.Name,
-                projectRequest.CreatedByUserId,
-                projectRequest.ReviewedByUserId,
-                projectRequest.ApprovedByUserId,
-                projectRequest.ConvertedByUserId,
-                projectRequest.CreatedDate,
-                projectRequest.SubmittedDate,
-                projectRequest.ReviewStartedDate,
-                projectRequest.ApprovedDate,
-                projectRequest.DeniedDate,
-                projectRequest.ConvertedDate,      // ✅ This exists
-                projectRequest.DueDate,
-                projectRequest.ReviewNotes,
-                projectRequest.ApprovalNotes,
-                projectRequest.DenialReason,
-                projectRequest.ProjectId,
-                projectRequest.IsOverdue(),
-                projectRequest.GetDaysUntilDue());
+            DeniedByUserId = null, // Not tracked in aggregate
+            DeniedByUser = null,
 
-            return Result<ProjectRequestDto>.Success(dto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(
-                ex,
-                "Error retrieving ProjectRequest: ProjectRequestId={ProjectRequestId}",
-                query.ProjectRequestId);
+            ConvertedByUserId = projectRequest.ConvertedByUserId,
+            ConvertedByUser = null,
 
-            return Result<ProjectRequestDto>.Error("An error occurred while retrieving the ProjectRequest.");
-        }
+            // Project link
+            ProjectId = projectRequest.ProjectId,
+
+            // Budget & Timeline
+            EstimatedBudget = null, // Not in aggregate
+            ProposedStartDate = null, // Not in aggregate
+            ProposedEndDate = null, // Not in aggregate
+            DueDate = projectRequest.DueDate,
+
+            // Dates
+            CreatedDate = projectRequest.CreatedDate,
+            SubmittedDate = projectRequest.SubmittedDate,
+            ReviewedDate = projectRequest.ReviewStartedDate,
+            ApprovedDate = projectRequest.ApprovedDate,
+            DeniedDate = projectRequest.DeniedDate,
+            ConvertedDate = projectRequest.ConvertedDate,
+            LastModifiedDate = projectRequest.LastModifiedDate,
+
+            // Notes
+            ReviewComments = projectRequest.ReviewNotes,
+            ApprovalNotes = projectRequest.ApprovalNotes,
+            DenialReason = projectRequest.DenialReason
+        };
+
+        return Result.Success(dto);
     }
 }

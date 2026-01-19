@@ -11,6 +11,7 @@ using Apex.API.Core.Interfaces;
 using Apex.API.UseCases.Users.Interfaces;
 using Apex.API.Infrastructure.Services;
 using Apex.API.UseCases.Common.Interfaces;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -122,6 +123,7 @@ app.UseAuthorization();
 app.UseFastEndpoints(config =>
 {
     config.Endpoints.RoutePrefix = "api";
+    config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
 
 // Swagger UI (only in development)

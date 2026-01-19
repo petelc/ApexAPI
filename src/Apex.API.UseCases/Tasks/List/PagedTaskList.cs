@@ -1,4 +1,4 @@
-using Apex.API.UseCases.Tasks.List;
+using Apex.API.UseCases.Tasks.DTOs;
 
 namespace Apex.API.UseCases.Tasks.List;
 
