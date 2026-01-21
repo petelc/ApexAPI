@@ -13,6 +13,7 @@ public class UpdateProjectRequestRequest
 {
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public string BusinessJustification { get; set; } = string.Empty;
     public string? Priority { get; set; }
     public DateTime? DueDate { get; set; }
 }
@@ -52,6 +53,7 @@ public class UpdateProjectRequestEndpoint : Endpoint<UpdateProjectRequestRequest
             ProjectRequestId.From(id),
             req.Title,
             req.Description,
+            req.BusinessJustification,
             req.Priority,
             req.DueDate);
 

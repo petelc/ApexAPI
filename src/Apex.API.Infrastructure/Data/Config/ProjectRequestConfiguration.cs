@@ -52,6 +52,10 @@ public class ProjectRequestConfiguration : IEntityTypeConfiguration<ProjectReque
             .IsRequired()
             .HasMaxLength(2000);
 
+        builder.Property(r => r.BusinessJustification)
+            .IsRequired()
+            .HasMaxLength(2000);
+
         // Status (SmartEnum) - ✅ FIXED: Store as string
         builder.Property(p => p.Status)
             .HasConversion(

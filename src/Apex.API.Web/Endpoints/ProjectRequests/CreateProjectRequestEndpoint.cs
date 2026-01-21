@@ -14,6 +14,7 @@ public class CreateProjectRequestRequest
     public string Description { get; set; } = string.Empty;
     public string? Priority { get; set; }
     public DateTime? DueDate { get; set; }
+    public string BusinessJustification { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -58,6 +59,7 @@ public class CreateProjectRequestEndpoint : Endpoint<CreateProjectRequestRequest
         var command = new CreateProjectRequestCommand(
             req.Title,
             req.Description,
+            req.BusinessJustification,
             req.Priority,
             req.DueDate);
 

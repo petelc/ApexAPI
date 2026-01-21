@@ -11,6 +11,7 @@ public record UpdateProjectRequestCommand(
     ProjectRequestId ProjectRequestId,
     string Title,
     string Description,
+    string BusinessJustification,
     string? Priority = null,
     DateTime? DueDate = null
 ) : IRequest<Result>;

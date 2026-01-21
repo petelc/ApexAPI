@@ -77,6 +77,7 @@ public class UpdateProjectRequestHandler : IRequestHandler<UpdateProjectRequestC
             projectRequest.Update(
                 command.Title,
                 command.Description,
+                command.BusinessJustification,
                 priority,
                 command.DueDate);
 

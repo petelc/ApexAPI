@@ -59,6 +59,7 @@ public class CreateProjectRequestHandler : IRequestHandler<CreateProjectRequestC
                 _tenantContext.CurrentTenantId,
                 command.Title,
                 command.Description,
+                command.BusinessJustification,
                 _currentUserService.UserId,
                 priority,
                 command.DueDate);
