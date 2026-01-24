@@ -52,6 +52,10 @@ public class ProjectRequestConfiguration : IEntityTypeConfiguration<ProjectReque
             .IsRequired()
             .HasMaxLength(2000);
 
+        builder.Property(r => r.BusinessJustification)
+            .IsRequired()
+            .HasMaxLength(2000);
+
         // Status (SmartEnum) - ✅ FIXED: Store as string
         builder.Property(p => p.Status)
             .HasConversion(
@@ -107,6 +111,17 @@ public class ProjectRequestConfiguration : IEntityTypeConfiguration<ProjectReque
             .IsRequired(false);
 
         builder.Property(r => r.LastModifiedDate)
+            .IsRequired(false);
+
+        // Budget & Timeline
+        builder.Property(r => r.EstimatedBudget)
+            .IsRequired(false)
+            .HasColumnType("decimal(18,2)");
+
+        builder.Property(r => r.ProposedStartDate)
+            .IsRequired(false);
+
+        builder.Property(r => r.ProposedEndDate)
             .IsRequired(false);
 
         // Notes

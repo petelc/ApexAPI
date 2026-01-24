@@ -27,6 +27,7 @@ public class DenyProjectRequestEndpoint : Endpoint<DenyProjectRequestRequest>
     {
         Post("/project-requests/{id}/deny");
         Roles("Manager", "TenantAdmin", "Change Manager", "CAB Member"); // Only TenantAdmin and Manager can deny
+        Tags("Project-Requests");
         Summary(s =>
         {
             s.Summary = "Deny a request";

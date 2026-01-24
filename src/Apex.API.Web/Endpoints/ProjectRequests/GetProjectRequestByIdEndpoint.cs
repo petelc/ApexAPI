@@ -30,7 +30,7 @@ public class GetProjectRequestByIdEndpoint : EndpointWithoutRequest
         AllowAnonymous(); // Or add your auth policy
 
         Description(b => b
-            .WithTags("ProjectRequests")
+            .WithTags("Project-Requests")
             .WithSummary("Get a project request by ID with user information")
             .WithDescription("Returns a single project request with full user details."));
     }

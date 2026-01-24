@@ -29,7 +29,9 @@ public class ProjectRequest : EntityBase, IAggregateRoot
     // Core Information
     public string Title { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
-    
+
+    public string BusinessJustification { get; private set; } = string.Empty;
+
     // Status & Priority
     public ProjectRequestStatus Status { get; private set; } = ProjectRequestStatus.Draft;
     public RequestPriority Priority { get; private set; } = RequestPriority.Medium;
@@ -59,6 +61,10 @@ public class ProjectRequest : EntityBase, IAggregateRoot
     // Project linkage (after conversion)
     public Guid? ProjectId { get; private set; }
 
+    public decimal? EstimatedBudget { get; private set; }
+    public DateTime? ProposedStartDate { get; private set; }
+    public DateTime? ProposedEndDate { get; private set; }
+
     // EF Core constructor
     private ProjectRequest() { }
 
@@ -69,13 +75,17 @@ public class ProjectRequest : EntityBase, IAggregateRoot
         TenantId tenantId,
         string title,
         string description,
+        string businessJustification,
         Guid createdByUserId,
         RequestPriority? priority = null,
-        DateTime? dueDate = null)
+        DateTime? dueDate = null,
+        decimal? estimatedBudget = null,
+        DateTime? proposedStartDate = null,
+        DateTime? proposedEndDate = null)
     {
         Guard.Against.NullOrWhiteSpace(title, nameof(title));
         Guard.Against.NullOrWhiteSpace(description, nameof(description));
-
+        Guard.Against.NullOrWhiteSpace(businessJustification, nameof(businessJustification));
         if (title.Length < 3)
             throw new ArgumentException("Title must be at least 3 characters", nameof(title));
 
@@ -85,17 +95,24 @@ public class ProjectRequest : EntityBase, IAggregateRoot
         if (description.Length < 10)
             throw new ArgumentException("Description must be at least 10 characters", nameof(description));
 
+        if (businessJustification.Length < 10)
+            throw new ArgumentException("Business Justification must be at least 10 characters", nameof(businessJustification));
+
         var projectRequest = new ProjectRequest
         {
             Id = ProjectRequestId.CreateUnique(),
             TenantId = tenantId,
             Title = title,
             Description = description,
+            BusinessJustification = businessJustification,
             Status = ProjectRequestStatus.Draft,
             Priority = priority ?? RequestPriority.Medium,
             CreatedByUserId = createdByUserId,
             CreatedDate = DateTime.UtcNow,
-            DueDate = dueDate
+            DueDate = dueDate,
+            EstimatedBudget = estimatedBudget,
+            ProposedStartDate = proposedStartDate,
+            ProposedEndDate = proposedEndDate
         };
 
         // Raise domain event
@@ -110,18 +127,23 @@ public class ProjectRequest : EntityBase, IAggregateRoot
     /// <summary>
     /// Updates project request details (only allowed in Draft status)
     /// </summary>
-    public void Update(string title, string description, RequestPriority priority, DateTime? dueDate)
+    public void Update(string title, string description, string businessJustification, RequestPriority priority, DateTime? dueDate, decimal? estimatedBudget, DateTime? proposedStartDate, DateTime? proposedEndDate)
     {
         if (!Status.CanEdit)
             throw new InvalidOperationException($"Cannot edit project request in {Status.Name} status");
 
         Guard.Against.NullOrWhiteSpace(title, nameof(title));
         Guard.Against.NullOrWhiteSpace(description, nameof(description));
+        Guard.Against.NullOrWhiteSpace(businessJustification, nameof(businessJustification));
 
         Title = title;
         Description = description;
+        BusinessJustification = businessJustification;
         Priority = priority;
         DueDate = dueDate;
+        EstimatedBudget = estimatedBudget;
+        ProposedStartDate = proposedStartDate;
+        ProposedEndDate = proposedEndDate;
         LastModifiedDate = DateTime.UtcNow;
     }
 
@@ -224,8 +246,8 @@ public class ProjectRequest : EntityBase, IAggregateRoot
     /// </summary>
     public bool IsOverdue()
     {
-        return DueDate.HasValue && 
-               DateTime.UtcNow > DueDate.Value && 
+        return DueDate.HasValue &&
+               DateTime.UtcNow > DueDate.Value &&
                !Status.IsTerminal;
     }
 
