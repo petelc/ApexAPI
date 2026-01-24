@@ -79,7 +79,10 @@ public class UpdateProjectRequestHandler : IRequestHandler<UpdateProjectRequestC
                 command.Description,
                 command.BusinessJustification,
                 priority,
-                command.DueDate);
+                command.DueDate,
+                command.EstimatedBudget,
+                command.ProposedStartDate,
+                command.ProposedEndDate);
 
             await _repository.UpdateAsync(projectRequest, cancellationToken);
 

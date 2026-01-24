@@ -33,8 +33,9 @@ public class ForgotPasswordEndpoint : Endpoint<ForgotPasswordRequest>
     {
         Post("/users/forgot-password");
         AllowAnonymous();
+        Tags("Users");
         Description(b => b
-            .WithTags("Authentication")
+            .WithTags("Users")
             .WithSummary("Initiate password reset")
             .WithDescription("Sends a password reset token to the user's email address"));
     }

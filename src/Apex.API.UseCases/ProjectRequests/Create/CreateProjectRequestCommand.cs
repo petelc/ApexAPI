@@ -12,5 +12,8 @@ public record CreateProjectRequestCommand(
     string Description,
     string BusinessJustification,
     string? Priority = null,
-    DateTime? DueDate = null
+    DateTime? DueDate = null,
+    decimal? EstimatedBudget = null,
+    DateTime? ProposedStartDate = null,
+    DateTime? ProposedEndDate = null
 ) : IRequest<Result<ProjectRequestId>>;

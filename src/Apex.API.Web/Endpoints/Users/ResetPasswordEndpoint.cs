@@ -36,8 +36,9 @@ public class ResetPasswordEndpoint : Endpoint<ResetPasswordRequest>
     {
         Post("/users/reset-password");
         AllowAnonymous();
+        Tags("Users");
         Description(b => b
-            .WithTags("Authentication")
+            .WithTags("Users")
             .WithSummary("Reset password")
             .WithDescription("Resets the user's password using a valid reset token"));
     }

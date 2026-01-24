@@ -16,6 +16,9 @@ public class UpdateProjectRequestRequest
     public string BusinessJustification { get; set; } = string.Empty;
     public string? Priority { get; set; }
     public DateTime? DueDate { get; set; }
+    public decimal? EstimatedBudget { get; set; }
+    public DateTime? ProposedStartDate { get; set; }
+    public DateTime? ProposedEndDate { get; set; }
 }
 
 /// <summary>
@@ -34,6 +37,7 @@ public class UpdateProjectRequestEndpoint : Endpoint<UpdateProjectRequestRequest
     {
         Put("/project-requests/{id}");
         Roles("User");
+        Tags("Project-Requests");
         Summary(s =>
         {
             s.Summary = "Update a request";
@@ -55,7 +59,10 @@ public class UpdateProjectRequestEndpoint : Endpoint<UpdateProjectRequestRequest
             req.Description,
             req.BusinessJustification,
             req.Priority,
-            req.DueDate);
+            req.DueDate,
+            req.EstimatedBudget,
+            req.ProposedStartDate,
+            req.ProposedEndDate);
 
         var result = await _mediator.Send(command, ct);
 

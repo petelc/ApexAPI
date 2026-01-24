@@ -27,6 +27,7 @@ public class CancelProjectRequestEndpoint : Endpoint<CancelProjectRequestRequest
     {
         Post("/project-requests/{id}/cancel");
         Roles("Manager", "TenantAdmin", "Change Manager", "CAB Member"); // Only managers and admins can cancel
+        Tags("Project-Requests");
         Summary(s =>
         {
             s.Summary = "Cancel a request";

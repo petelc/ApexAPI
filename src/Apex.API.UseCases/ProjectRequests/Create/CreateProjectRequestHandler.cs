@@ -62,7 +62,10 @@ public class CreateProjectRequestHandler : IRequestHandler<CreateProjectRequestC
                 command.BusinessJustification,
                 _currentUserService.UserId,
                 priority,
-                command.DueDate);
+                command.DueDate,
+                command.EstimatedBudget,
+                command.ProposedStartDate,
+                command.ProposedEndDate);
 
             // Save to database (domain events dispatched automatically)
             await _repository.AddAsync(projectRequest, cancellationToken);

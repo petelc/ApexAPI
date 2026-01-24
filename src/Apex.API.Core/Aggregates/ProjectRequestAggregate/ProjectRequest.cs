@@ -61,6 +61,10 @@ public class ProjectRequest : EntityBase, IAggregateRoot
     // Project linkage (after conversion)
     public Guid? ProjectId { get; private set; }
 
+    public decimal? EstimatedBudget { get; private set; }
+    public DateTime? ProposedStartDate { get; private set; }
+    public DateTime? ProposedEndDate { get; private set; }
+
     // EF Core constructor
     private ProjectRequest() { }
 
@@ -74,7 +78,10 @@ public class ProjectRequest : EntityBase, IAggregateRoot
         string businessJustification,
         Guid createdByUserId,
         RequestPriority? priority = null,
-        DateTime? dueDate = null)
+        DateTime? dueDate = null,
+        decimal? estimatedBudget = null,
+        DateTime? proposedStartDate = null,
+        DateTime? proposedEndDate = null)
     {
         Guard.Against.NullOrWhiteSpace(title, nameof(title));
         Guard.Against.NullOrWhiteSpace(description, nameof(description));
@@ -102,7 +109,10 @@ public class ProjectRequest : EntityBase, IAggregateRoot
             Priority = priority ?? RequestPriority.Medium,
             CreatedByUserId = createdByUserId,
             CreatedDate = DateTime.UtcNow,
-            DueDate = dueDate
+            DueDate = dueDate,
+            EstimatedBudget = estimatedBudget,
+            ProposedStartDate = proposedStartDate,
+            ProposedEndDate = proposedEndDate
         };
 
         // Raise domain event
@@ -117,7 +127,7 @@ public class ProjectRequest : EntityBase, IAggregateRoot
     /// <summary>
     /// Updates project request details (only allowed in Draft status)
     /// </summary>
-    public void Update(string title, string description, string businessJustification, RequestPriority priority, DateTime? dueDate)
+    public void Update(string title, string description, string businessJustification, RequestPriority priority, DateTime? dueDate, decimal? estimatedBudget, DateTime? proposedStartDate, DateTime? proposedEndDate)
     {
         if (!Status.CanEdit)
             throw new InvalidOperationException($"Cannot edit project request in {Status.Name} status");
@@ -131,6 +141,9 @@ public class ProjectRequest : EntityBase, IAggregateRoot
         BusinessJustification = businessJustification;
         Priority = priority;
         DueDate = dueDate;
+        EstimatedBudget = estimatedBudget;
+        ProposedStartDate = proposedStartDate;
+        ProposedEndDate = proposedEndDate;
         LastModifiedDate = DateTime.UtcNow;
     }
 

@@ -60,9 +60,9 @@ public static class ProjectRequestMappingExtensions
             ProjectId = request.ProjectId,
 
             // Budget & Timeline
-            EstimatedBudget = null, // Not in aggregate
-            ProposedStartDate = null, // Not in aggregate
-            ProposedEndDate = null, // Not in aggregate
+            EstimatedBudget = request.EstimatedBudget, // Not in aggregate
+            ProposedStartDate = request.ProposedStartDate, // Not in aggregate
+            ProposedEndDate = request.ProposedEndDate, // Not in aggregate
             DueDate = request.DueDate, // NEW!
 
             // Dates

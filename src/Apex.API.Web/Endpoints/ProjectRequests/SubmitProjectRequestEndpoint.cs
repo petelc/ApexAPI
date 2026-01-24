@@ -22,6 +22,7 @@ public class SubmitProjectRequestEndpoint : EndpointWithoutRequest
     {
         Post("/project-requests/{id}/submit");
         Roles("User");
+        Tags("Project-Requests");
         Summary(s =>
         {
             s.Summary = "Submit a request for review";

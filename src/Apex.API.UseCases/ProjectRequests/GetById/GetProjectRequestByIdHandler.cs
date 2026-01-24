@@ -37,7 +37,7 @@ public class GetProjectRequestByIdHandler : IRequestHandler<GetProjectRequestByI
             Id = projectRequest.Id.Value,
             Title = projectRequest.Title,
             Description = projectRequest.Description,
-            BusinessJustification = string.Empty, // Not in aggregate
+            BusinessJustification = projectRequest.BusinessJustification, // Not in aggregate
             Status = projectRequest.Status.Name,
             Priority = projectRequest.Priority.Name,
 
@@ -64,9 +64,9 @@ public class GetProjectRequestByIdHandler : IRequestHandler<GetProjectRequestByI
             ProjectId = projectRequest.ProjectId,
 
             // Budget & Timeline
-            EstimatedBudget = null, // Not in aggregate
-            ProposedStartDate = null, // Not in aggregate
-            ProposedEndDate = null, // Not in aggregate
+            EstimatedBudget = projectRequest.EstimatedBudget, // Not in aggregate
+            ProposedStartDate = projectRequest.ProposedStartDate, // Not in aggregate
+            ProposedEndDate = projectRequest.ProposedEndDate, // Not in aggregate
             DueDate = projectRequest.DueDate,
 
             // Dates

@@ -15,6 +15,9 @@ public class CreateProjectRequestRequest
     public string? Priority { get; set; }
     public DateTime? DueDate { get; set; }
     public string BusinessJustification { get; set; } = string.Empty;
+    public decimal? EstimatedBudget { get; set; }
+    public DateTime? ProposedStartDate { get; set; }
+    public DateTime? ProposedEndDate { get; set; }
 }
 
 /// <summary>
@@ -44,6 +47,7 @@ public class CreateProjectRequestEndpoint : Endpoint<CreateProjectRequestRequest
     {
         Post("/project-requests");
         Roles("User");
+        Tags("Project-Requests");
         Summary(s =>
         {
             s.Summary = "Create a new project request";
@@ -61,7 +65,10 @@ public class CreateProjectRequestEndpoint : Endpoint<CreateProjectRequestRequest
             req.Description,
             req.BusinessJustification,
             req.Priority,
-            req.DueDate);
+            req.DueDate,
+            req.EstimatedBudget,
+            req.ProposedStartDate,
+            req.ProposedEndDate);
 
         var result = await _mediator.Send(command, ct);
 

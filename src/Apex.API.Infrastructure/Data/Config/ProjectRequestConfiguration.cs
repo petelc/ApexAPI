@@ -113,6 +113,17 @@ public class ProjectRequestConfiguration : IEntityTypeConfiguration<ProjectReque
         builder.Property(r => r.LastModifiedDate)
             .IsRequired(false);
 
+        // Budget & Timeline
+        builder.Property(r => r.EstimatedBudget)
+            .IsRequired(false)
+            .HasColumnType("decimal(18,2)");
+
+        builder.Property(r => r.ProposedStartDate)
+            .IsRequired(false);
+
+        builder.Property(r => r.ProposedEndDate)
+            .IsRequired(false);
+
         // Notes
         builder.Property(r => r.ReviewNotes)
             .HasMaxLength(1000);

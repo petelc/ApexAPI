@@ -27,6 +27,7 @@ public class ApproveProjectRequestEndpoint : Endpoint<ApproveProjectRequestReque
     {
         Post("/project-requests/{id}/approve");
         Roles("TenantAdmin", "User"); // Only TenantAdmin can approve
+        Tags("Project-Requests");
         Summary(s =>
         {
             s.Summary = "Approve a request";
