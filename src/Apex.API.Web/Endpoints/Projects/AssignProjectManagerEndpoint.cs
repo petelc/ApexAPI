@@ -1,16 +1,14 @@
 using FastEndpoints;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Apex.API.UseCases.Projects.AssignProjectManager;
 using Apex.API.Core.ValueObjects;
-
 
 namespace Apex.API.Web.Endpoints.Projects;
 
 /// <summary>
 /// Endpoint to assign a project manager to a project
 /// </summary>
-public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest, AssignProjectManagerResponse>
+public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest>
 {
     private readonly IMediator _mediator;
 
@@ -23,17 +21,19 @@ public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest
     {
         Post("/projects/{projectId}/assign-pm");
         Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
-        Summary(s =>
-        {
-            s.Summary = "Assign a project manager to a project";
-            s.Description = "Assigns a specified user as the project manager for the given project.";
-        });
+        
+        Description(b => b
+            .WithTags("Projects")
+            .WithSummary("Assign a project manager to a project")
+            .WithDescription("Assigns a specified user as the project manager for the given project."));
     }
 
     public override async Task HandleAsync(AssignProjectManagerRequest req, CancellationToken ct)
     {
+        var projectId = Route<Guid>("projectId");
+        
         var command = new AssignProjectManagerCommand(
-            ProjectId.From(req.ProjectId),
+            ProjectId.From(projectId),
             req.ProjectManagerUserId
         );
 
@@ -41,28 +41,38 @@ public class AssignProjectManagerEndpoint : Endpoint<AssignProjectManagerRequest
 
         if (result.IsSuccess)
         {
-            await HttpContext.Response.WriteAsJsonAsync(new { Message = "Project manager assigned successfully." }, ct);
+            // ✅ Use HttpContext.Response pattern (same as ListUsersEndpoint)
+            HttpContext.Response.StatusCode = StatusCodes.Status204NoContent;
         }
         else
         {
-            HttpContext.Response.StatusCode = result.Status switch
+            // Handle different error statuses
+            if (result.Status == Ardalis.Result.ResultStatus.NotFound)
             {
-                Ardalis.Result.ResultStatus.NotFound => StatusCodes.Status404NotFound,
-                Ardalis.Result.ResultStatus.Forbidden => StatusCodes.Status403Forbidden,
-                _ => StatusCodes.Status400BadRequest
-            };
-            await HttpContext.Response.WriteAsJsonAsync(new { Errors = result.Errors }, ct);
+                HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                await HttpContext.Response.WriteAsJsonAsync(new { errors = result.Errors }, ct);
+                return;
+            }
+
+            if (result.Status == Ardalis.Result.ResultStatus.Forbidden)
+            {
+                HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+                await HttpContext.Response.WriteAsJsonAsync(new { errors = result.Errors }, ct);
+                return;
+            }
+
+            // Default to 400 Bad Request
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await HttpContext.Response.WriteAsJsonAsync(new { errors = result.Errors }, ct);
         }
     }
 }
 
+/// <summary>
+/// Request model for assigning project manager
+/// ✅ FIXED: Field name matches what frontend sends
+/// </summary>
 public class AssignProjectManagerRequest
 {
-    public Guid ProjectId { get; set; }
     public Guid ProjectManagerUserId { get; set; }
-}
-
-public class AssignProjectManagerResponse
-{
-    public string Message { get; set; } = string.Empty;
 }

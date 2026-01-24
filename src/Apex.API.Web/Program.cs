@@ -111,6 +111,8 @@ var app = builder.Build();
 // ✅ SEED DATABASE (roles, etc.)
 await DatabaseSeeder.SeedAsync(app.Services);
 
+
+
 // ✅ IMPORTANT: Use CORS before Authentication/Authorization
 app.UseCors();
 app.UseCors("HangfirePolicy");
