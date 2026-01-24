@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
 using Ardalis.Result;
 using Traxs.SharedKernel;
 using Apex.API.Core.Aggregates.ProjectAggregate;
@@ -9,26 +10,23 @@ using Apex.API.UseCases.Common.Interfaces;
 
 namespace Apex.API.UseCases.Projects.AssignProjectManager;
 
-/// <summary>
-/// Handler for assigning a project manager
-/// </summary>
 public class AssignProjectManagerHandler : IRequestHandler<AssignProjectManagerCommand, Result>
 {
     private readonly IRepository<Project> _projectRepository;
-    private readonly IReadRepository<User> _userRepository;
+    private readonly UserManager<User> _userManager;
     private readonly ICurrentUserService _currentUserService;
     private readonly ITenantContext _tenantContext;
     private readonly ILogger<AssignProjectManagerHandler> _logger;
 
     public AssignProjectManagerHandler(
         IRepository<Project> projectRepository,
-        IReadRepository<User> userRepository,
+        UserManager<User> userManager,
         ICurrentUserService currentUserService,
         ITenantContext tenantContext,
         ILogger<AssignProjectManagerHandler> logger)
     {
         _projectRepository = projectRepository;
-        _userRepository = userRepository;
+        _userManager = userManager;
         _currentUserService = currentUserService;
         _tenantContext = tenantContext;
         _logger = logger;
@@ -41,7 +39,6 @@ public class AssignProjectManagerHandler : IRequestHandler<AssignProjectManagerC
         try
         {
             var project = await _projectRepository.GetByIdAsync(command.ProjectId, cancellationToken);
-
             if (project == null)
             {
                 _logger.LogWarning("Project not found: ProjectId={ProjectId}", command.ProjectId);
@@ -58,16 +55,24 @@ public class AssignProjectManagerHandler : IRequestHandler<AssignProjectManagerC
                 return Result.Forbidden();
             }
 
-            // Verify user exists and belongs to tenant
-            var users = await _userRepository.ListAsync(cancellationToken);
-            var user = users.FirstOrDefault(u =>
-                u.Id == command.ProjectManagerUserId &&
-                u.TenantId == _tenantContext.CurrentTenantId);
+            // ✅ CRITICAL FIX: Convert Guid to UPPERCASE string format
+            var userIdString = command.ProjectManagerUserId.ToString().ToUpperInvariant();
+            var user = await _userManager.FindByIdAsync(userIdString);
 
             if (user == null)
             {
                 _logger.LogWarning(
-                    "User not found or doesn't belong to tenant: UserId={UserId}, TenantId={TenantId}",
+                    "User not found: UserId={UserId} (searched as {SearchString})",
+                    command.ProjectManagerUserId,
+                    userIdString);
+                return Result.NotFound("User not found.");
+            }
+
+            // Verify user belongs to the same tenant as the project
+            if (user.TenantId != _tenantContext.CurrentTenantId)
+            {
+                _logger.LogWarning(
+                    "User doesn't belong to tenant: UserId={UserId}, TenantId={TenantId}",
                     command.ProjectManagerUserId,
                     _tenantContext.CurrentTenantId);
                 return Result.NotFound("User not found or doesn't belong to this tenant.");
