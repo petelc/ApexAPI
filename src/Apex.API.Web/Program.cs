@@ -121,6 +121,8 @@ app.UseCors("HangfirePolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseStaticFiles();
+
 // FastEndpoints middleware
 app.UseFastEndpoints(config =>
 {

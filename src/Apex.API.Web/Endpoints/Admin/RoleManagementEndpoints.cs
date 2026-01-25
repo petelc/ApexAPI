@@ -1,6 +1,5 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Apex.API.Core.Aggregates.UserAggregate;
 using Apex.API.Core.Interfaces;
 
@@ -26,7 +25,7 @@ public class AssignRoleToUserEndpoint : Endpoint<AssignRoleRequest>
     {
         Post("/admin/users/{userId}/roles");
         Roles("TenantAdmin");
-        
+
         Description(b => b
             .WithTags("Admin")
             .WithSummary("Assign role to user")
@@ -46,7 +45,7 @@ public class AssignRoleToUserEndpoint : Endpoint<AssignRoleRequest>
         }
 
         // Verify user belongs to current tenant
-        if (user.TenantId != _tenantContext.CurrentTenantId)
+        if (user.TenantId.Value != _tenantContext.CurrentTenantId.Value)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
             await HttpContext.Response.WriteAsJsonAsync(new { error = "User not in your tenant" }, ct);
@@ -88,7 +87,6 @@ public class AssignRoleRequest
 
 /// <summary>
 /// Remove a role from a user
-/// ✅ FIXED: Changed to EndpointWithoutRequest (no empty DTO)
 /// </summary>
 public class RemoveRoleFromUserEndpoint : EndpointWithoutRequest
 {
@@ -107,7 +105,7 @@ public class RemoveRoleFromUserEndpoint : EndpointWithoutRequest
     {
         Delete("/admin/users/{userId}/roles/{roleName}");
         Roles("TenantAdmin");
-        
+
         Description(b => b
             .WithTags("Admin")
             .WithSummary("Remove role from user")
@@ -118,15 +116,14 @@ public class RemoveRoleFromUserEndpoint : EndpointWithoutRequest
     {
         var userId = Route<Guid>("userId");
         var roleName = Route<string>("roleName");
-        
-        // ✅ Fix null reference warning
+
         if (string.IsNullOrEmpty(roleName))
         {
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             await HttpContext.Response.WriteAsJsonAsync(new { error = "Role name is required" }, ct);
             return;
         }
-        
+
         var user = await _userManager.FindByIdAsync(userId.ToString());
 
         if (user == null)
@@ -137,7 +134,7 @@ public class RemoveRoleFromUserEndpoint : EndpointWithoutRequest
         }
 
         // Verify user belongs to current tenant
-        if (user.TenantId != _tenantContext.CurrentTenantId)
+        if (user.TenantId.Value != _tenantContext.CurrentTenantId.Value)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
             await HttpContext.Response.WriteAsJsonAsync(new { error = "User not in your tenant" }, ct);
@@ -161,39 +158,5 @@ public class RemoveRoleFromUserEndpoint : EndpointWithoutRequest
                 errors = result.Errors.Select(e => e.Description)
             }, ct);
         }
-    }
-}
-
-/// <summary>
-/// List all available roles (hardcoded list since RoleManager not available)
-/// </summary>
-public class ListRolesEndpoint : EndpointWithoutRequest
-{
-    public override void Configure()
-    {
-        Get("/admin/roles");
-        Roles("TenantAdmin");
-        
-        Description(b => b
-            .WithTags("Admin")
-            .WithSummary("List all roles")
-            .WithDescription("Returns all available roles in the system."));
-    }
-
-    public override async Task HandleAsync(CancellationToken ct)
-    {
-        // ✅ Hardcoded list since RoleManager isn't registered
-        var roles = new[]
-        {
-            new { Name = "TenantAdmin" },
-            new { Name = "Manager" },
-            new { Name = "Project Manager" },
-            new { Name = "Change Manager" },
-            new { Name = "CAB Member" },
-            new { Name = "CAB Manager" },
-            new { Name = "User" }
-        };
-
-        await HttpContext.Response.WriteAsJsonAsync(roles, ct);
     }
 }
