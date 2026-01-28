@@ -10,6 +10,7 @@ namespace Apex.API.UseCases.Tasks.GetById;
 /// <summary>
 /// Handler for getting a task by ID
 /// Returns TaskDto without user information (enriched in Web layer)
+/// ✅ ENHANCED: Maps all new fields
 /// </summary>
 public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, Result<TaskDto>>
 {
@@ -41,24 +42,45 @@ public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, Result<TaskD
             // Map to DTO using positional constructor
             var dto = new TaskDto(
                 Id: task.Id.Value,
+                ProjectId: task.ProjectId.Value,
                 Title: task.Title,
                 Description: task.Description,
                 Status: task.Status.Name,
                 Priority: task.Priority.Name,
-                ProjectId: task.ProjectId.Value,
+                
+                // ✅ NEW: Notes
+                ImplementationNotes: task.ImplementationNotes,
+                ResolutionNotes: task.ResolutionNotes,
+                
+                // Assignment
                 AssignedToUserId: task.AssignedToUserId,
+                AssignedToDepartmentId: task.AssignedToDepartmentId?.Value,  // ✅ NEW
+                
+                // Time Tracking
                 EstimatedHours: task.EstimatedHours,
                 ActualHours: task.ActualHours,
+                
+                // Dates
                 DueDate: task.DueDate,
                 CreatedDate: task.CreatedDate,
                 StartedDate: task.StartedDate,
                 CompletedDate: task.CompletedDate,
                 LastModifiedDate: task.LastModifiedDate,
+                
+                // Blocking
                 BlockedReason: task.BlockedReason,
                 BlockedDate: task.BlockedDate,
+                
+                // User Tracking
                 CreatedByUserId: task.CreatedByUserId,
-                CreatedByUser: null,    // Enriched in Web layer
-                AssignedToUser: null    // Enriched in Web layer
+                StartedByUserId: task.StartedByUserId,      // ✅ NEW
+                CompletedByUserId: task.CompletedByUserId,  // ✅ NEW
+                
+                // User objects (enriched in Web layer)
+                CreatedByUser: null,
+                AssignedToUser: null,
+                StartedByUser: null,      // ✅ NEW
+                CompletedByUser: null     // ✅ NEW
             );
 
             return Result.Success(dto);

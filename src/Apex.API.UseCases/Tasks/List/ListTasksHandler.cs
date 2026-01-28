@@ -7,6 +7,10 @@ using Apex.API.UseCases.Tasks.DTOs;
 
 namespace Apex.API.UseCases.Tasks.List;
 
+/// <summary>
+/// Handler for listing tasks
+/// ✅ ENHANCED: Maps all new TaskDto fields
+/// </summary>
 public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<ListTasksResponse>>
 {
     private readonly IRepository<Core.Aggregates.TaskAggregate.Task> _taskRepository;
@@ -39,7 +43,7 @@ public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<ListTasks
 
             // Filter by project ID
             var projectTasks = allTasks
-                .Where(t => t.ProjectId == query.ProjectId)
+                .Where(t => t.ProjectId.Value == query.ProjectId)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToList();
 
@@ -53,25 +57,46 @@ public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<ListTasks
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .Select(t => new TaskDto(
-                    Id: t.Id.Value,  // TaskId value object → Guid
+                    Id: t.Id.Value,
+                    ProjectId: t.ProjectId.Value,
                     Title: t.Title,
                     Description: t.Description,
-                    Status: t.Status.ToString(),
-                    Priority: t.Priority.ToString(),
-                    ProjectId: t.ProjectId.Value,  // Already Guid?
-                    AssignedToUserId: t.AssignedToUserId,  // Already Guid?
-                    AssignedToUser: null,  // Not stored - would need lookup
-                    EstimatedHours: t.EstimatedHours,  // decimal? - keep nullable
+                    Status: t.Status.Name,
+                    Priority: t.Priority.Name,
+                    
+                    // ✅ NEW: Notes
+                    ImplementationNotes: t.ImplementationNotes,
+                    ResolutionNotes: t.ResolutionNotes,
+                    
+                    // Assignment
+                    AssignedToUserId: t.AssignedToUserId,
+                    AssignedToDepartmentId: t.AssignedToDepartmentId?.Value,  // ✅ NEW
+                    
+                    // Time Tracking
+                    EstimatedHours: t.EstimatedHours,
                     ActualHours: t.ActualHours,
+                    
+                    // Dates
                     DueDate: t.DueDate,
                     CreatedDate: t.CreatedDate,
                     StartedDate: t.StartedDate,
                     CompletedDate: t.CompletedDate,
                     LastModifiedDate: t.LastModifiedDate,
+                    
+                    // Blocking
                     BlockedReason: t.BlockedReason,
                     BlockedDate: t.BlockedDate,
-                    CreatedByUserId: t.CreatedByUserId,  // DepartmentId? → Guid?
-                    CreatedByUser: null  // Not stored - would need lookup
+                    
+                    // User Tracking
+                    CreatedByUserId: t.CreatedByUserId,
+                    StartedByUserId: t.StartedByUserId,      // ✅ NEW
+                    CompletedByUserId: t.CompletedByUserId,  // ✅ NEW
+                    
+                    // User objects (enriched in Web layer)
+                    CreatedByUser: null,
+                    AssignedToUser: null,
+                    StartedByUser: null,      // ✅ NEW
+                    CompletedByUser: null     // ✅ NEW
                 ))
                 .ToList();
 
@@ -80,7 +105,6 @@ public class ListTasksHandler : IRequestHandler<ListTasksQuery, Result<ListTasks
                 totalCount,
                 query.PageNumber,
                 query.PageSize,
-
                 totalPages
             );
 

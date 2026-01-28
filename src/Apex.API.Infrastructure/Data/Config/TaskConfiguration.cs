@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Apex.API.Core.Aggregates.TaskAggregate;
 using Apex.API.Core.ValueObjects;
 
-namespace Apex.API.Infrastructure.Data.Configurations;
+namespace Apex.API.Infrastructure.Data.Config;
 
 /// <summary>
 /// Entity Framework configuration for Task aggregate
+/// ✅ ENHANCED: Added ImplementationNotes, ResolutionNotes, StartedByUserId, CompletedByUserId
 /// </summary>
 public class TaskConfiguration : IEntityTypeConfiguration<Core.Aggregates.TaskAggregate.Task>
 {
@@ -53,19 +54,28 @@ public class TaskConfiguration : IEntityTypeConfiguration<Core.Aggregates.TaskAg
             .IsRequired()
             .HasMaxLength(2000);
 
-        // Status (SmartEnum) - ✅ FIXED: Store as string
+        // ✅ NEW: Implementation and Resolution Notes
+        builder.Property(t => t.ImplementationNotes)
+            .IsRequired(false)
+            .HasMaxLength(5000);
+
+        builder.Property(t => t.ResolutionNotes)
+            .IsRequired(false)
+            .HasMaxLength(5000);
+
+        // Status (SmartEnum) - Store as string
         builder.Property(t => t.Status)
             .HasConversion(
-                status => status.Name,  // ✅ Store name as string
-                name => Core.ValueObjects.TaskStatus.FromName(name, ignoreCase: false))  // ✅ Load by name
+                status => status.Name,
+                name => Core.ValueObjects.TaskStatus.FromName(name, ignoreCase: false))
             .IsRequired()
             .HasMaxLength(50);
 
-        // Priority (SmartEnum) - ✅ FIXED: Store as string
+        // Priority (SmartEnum) - Store as string
         builder.Property(t => t.Priority)
             .HasConversion(
-                priority => priority.Name,  // ✅ Store name as string
-                name => RequestPriority.FromName(name, ignoreCase: false))  // ✅ Load by name
+                priority => priority.Name,
+                name => RequestPriority.FromName(name, ignoreCase: false))
             .IsRequired()
             .HasMaxLength(50);
 
@@ -93,6 +103,19 @@ public class TaskConfiguration : IEntityTypeConfiguration<Core.Aggregates.TaskAg
         // User Tracking
         builder.Property(t => t.CreatedByUserId)
             .IsRequired();
+
+        // ✅ NEW: Track who started and completed
+        builder.Property(t => t.StartedByUserId)
+            .IsRequired(false);
+
+        builder.HasIndex(t => t.StartedByUserId)
+            .HasFilter("[StartedByUserId] IS NOT NULL");
+
+        builder.Property(t => t.CompletedByUserId)
+            .IsRequired(false);
+
+        builder.HasIndex(t => t.CompletedByUserId)
+            .HasFilter("[CompletedByUserId] IS NOT NULL");
 
         // Time Tracking
         builder.Property(t => t.EstimatedHours)
@@ -130,5 +153,24 @@ public class TaskConfiguration : IEntityTypeConfiguration<Core.Aggregates.TaskAg
 
         // Ignore domain events (not persisted)
         builder.Ignore(t => t.DomainEvents);
+
+        // ✅ Navigation properties for child entities
+        builder.HasMany<TaskChecklistItem>()
+            .WithOne(i => i.Task)
+            .HasForeignKey(i => i.TaskId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany<TaskActivityLog>()
+            .WithOne(a => a.Task)
+            .HasForeignKey(a => a.TaskId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ✅ Configure to load child collections
+        builder.Navigation(nameof(Core.Aggregates.TaskAggregate.Task.ChecklistItems))
+            .AutoInclude();  // Optionally auto-include or use .Include() in queries
+
+        builder.Navigation(nameof(Core.Aggregates.TaskAggregate.Task.ActivityLogs))
+            .AutoInclude();  // Optionally auto-include or use .Include() in queries
+
     }
 }

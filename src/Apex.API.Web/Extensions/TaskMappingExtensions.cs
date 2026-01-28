@@ -7,7 +7,7 @@ namespace Apex.API.Web.Extensions;
 
 /// <summary>
 /// Mapping extensions for Task aggregate to DTO
-/// Works with positional TaskDto record
+/// ✅ ENHANCED: Maps all new fields (notes, user tracking, department)
 /// </summary>
 public static class TaskMappingExtensions
 {
@@ -24,25 +24,47 @@ public static class TaskMappingExtensions
             Description: task.Description,
             Status: task.Status.Name,
             Priority: task.Priority.Name,
+            
+            // ✅ NEW: Notes
+            ImplementationNotes: task.ImplementationNotes,
+            ResolutionNotes: task.ResolutionNotes,
+            
+            // Assignment
             AssignedToUserId: task.AssignedToUserId,
+            AssignedToDepartmentId: task.AssignedToDepartmentId?.Value,  // ✅ NEW: Extract Guid from value object
+            
+            // Time Tracking
             EstimatedHours: task.EstimatedHours,
             ActualHours: task.ActualHours,
+            
+            // Dates
             DueDate: task.DueDate,
             CreatedDate: task.CreatedDate,
             StartedDate: task.StartedDate,
             CompletedDate: task.CompletedDate,
             LastModifiedDate: task.LastModifiedDate,
+            
+            // Blocking
             BlockedReason: task.BlockedReason,
             BlockedDate: task.BlockedDate,
+            
+            // User Tracking
             CreatedByUserId: task.CreatedByUserId,
-            CreatedByUser: null,  // Populated in Web layer
-            AssignedToUser: null    // Populated in Web layer
+            StartedByUserId: task.StartedByUserId,      // ✅ NEW
+            CompletedByUserId: task.CompletedByUserId,  // ✅ NEW
+            
+            // User objects (populated in Web layer)
+            CreatedByUser: null,
+            AssignedToUser: null,
+            StartedByUser: null,      // ✅ NEW
+            CompletedByUser: null     // ✅ NEW
         );
     }
 
     /// <summary>
     /// Enriches TaskDto with user information
     /// Uses 'with' expression for immutable record
+    /// ✅ ENHANCED: Enriches starter and completer users
     /// </summary>
     public static TaskDto WithUserInfo(
         this TaskDto dto,
@@ -54,13 +76,23 @@ public static class TaskMappingExtensions
 
             AssignedToUser = dto.AssignedToUserId.HasValue
                 ? userLookup.GetValueOrDefault(dto.AssignedToUserId.Value)
+                : null,
+            
+            // ✅ NEW: Enrich starter
+            StartedByUser = dto.StartedByUserId.HasValue
+                ? userLookup.GetValueOrDefault(dto.StartedByUserId.Value)
+                : null,
+            
+            // ✅ NEW: Enrich completer
+            CompletedByUser = dto.CompletedByUserId.HasValue
+                ? userLookup.GetValueOrDefault(dto.CompletedByUserId.Value)
                 : null
-
         };
     }
 
     /// <summary>
     /// Maps multiple Tasks to DTOs with user information (batch operation)
+    /// ✅ ENHANCED: Collects starter and completer user IDs
     /// </summary>
     public static async Task<List<TaskDto>> ToDtosWithUsersAsync(
         this IEnumerable<Core.Aggregates.TaskAggregate.Task> tasks,
@@ -79,10 +111,16 @@ public static class TaskMappingExtensions
         foreach (var dto in dtos)
         {
             userIds.Add(dto.CreatedByUserId);
+            
             if (dto.AssignedToUserId.HasValue)
-            {
                 userIds.Add(dto.AssignedToUserId.Value);
-            }
+            
+            // ✅ NEW: Collect starter and completer IDs
+            if (dto.StartedByUserId.HasValue)
+                userIds.Add(dto.StartedByUserId.Value);
+            
+            if (dto.CompletedByUserId.HasValue)
+                userIds.Add(dto.CompletedByUserId.Value);
         }
 
         var userLookup = await userLookupService.GetUserSummariesByIdsAsync(userIds, cancellationToken);
@@ -92,6 +130,10 @@ public static class TaskMappingExtensions
             .ToList();
     }
 
+    /// <summary>
+    /// Maps single Task to DTO with user information
+    /// ✅ ENHANCED: Includes starter and completer
+    /// </summary>
     public static async Task<TaskDto> ToDtoWithUsersAsync(
         this Core.Aggregates.TaskAggregate.Task task,
         IUserLookupService userLookupService,
@@ -100,10 +142,16 @@ public static class TaskMappingExtensions
         var dto = task.ToDto();
 
         var userIds = new List<Guid> { dto.CreatedByUserId };
+        
         if (dto.AssignedToUserId.HasValue)
-        {
             userIds.Add(dto.AssignedToUserId.Value);
-        }
+        
+        // ✅ NEW: Add starter and completer
+        if (dto.StartedByUserId.HasValue)
+            userIds.Add(dto.StartedByUserId.Value);
+        
+        if (dto.CompletedByUserId.HasValue)
+            userIds.Add(dto.CompletedByUserId.Value);
 
         var userLookup = await userLookupService.GetUserSummariesByIdsAsync(userIds, cancellationToken);
 

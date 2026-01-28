@@ -4,6 +4,7 @@ using Apex.API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Apex.API.Infrastructure.Migrations
 {
     [DbContext(typeof(ApexDbContext))]
-    partial class ApexDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260125175015_AdddTaskEnhancements")]
+    partial class AdddTaskEnhancements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -526,17 +529,14 @@ namespace Apex.API.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Details")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TaskId");
-
-                    b.Property<Guid?>("TaskId2")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Timestamp")
@@ -547,13 +547,18 @@ namespace Apex.API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ActivityType");
+
                     b.HasIndex("TaskId");
 
-                    b.HasIndex("TaskId2");
+                    b.HasIndex("UserId");
 
-                    b.HasIndex("Timestamp");
+                    b.HasIndex("TaskId", "Timestamp")
+                        .IsDescending(false, true);
 
-                    b.ToTable("TaskActivityLogs", (string)null);
+                    b.HasIndex("TaskId", "ActivityType", "Timestamp");
+
+                    b.ToTable("TaskActivityLogs", "shared");
                 });
 
             modelBuilder.Entity("Apex.API.Core.Aggregates.TaskAggregate.TaskChecklistItem", b =>
@@ -576,25 +581,25 @@ namespace Apex.API.Infrastructure.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int>("Order")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TaskId");
-
-                    b.Property<Guid?>("TaskId2")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TaskId");
 
-                    b.HasIndex("TaskId2");
+                    b.HasIndex("TaskId", "Order");
 
-                    b.ToTable("TaskChecklistItems", (string)null);
+                    b.ToTable("TaskChecklistItems", "shared");
                 });
 
             modelBuilder.Entity("Apex.API.Core.Aggregates.TenantAggregate.Tenant", b =>
@@ -930,10 +935,6 @@ namespace Apex.API.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Apex.API.Core.Aggregates.TaskAggregate.Task", null)
-                        .WithMany("ActivityLogs")
-                        .HasForeignKey("TaskId2");
-
                     b.Navigation("Task");
                 });
 
@@ -944,10 +945,6 @@ namespace Apex.API.Infrastructure.Migrations
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Apex.API.Core.Aggregates.TaskAggregate.Task", null)
-                        .WithMany("ChecklistItems")
-                        .HasForeignKey("TaskId2");
 
                     b.Navigation("Task");
                 });
@@ -1001,13 +998,6 @@ namespace Apex.API.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Apex.API.Core.Aggregates.TaskAggregate.Task", b =>
-                {
-                    b.Navigation("ActivityLogs");
-
-                    b.Navigation("ChecklistItems");
                 });
 #pragma warning restore 612, 618
         }

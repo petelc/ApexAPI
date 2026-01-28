@@ -4,4 +4,10 @@ using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.UseCases.Tasks.Complete;
 
-public record CompleteTaskCommand(TaskId TaskId) : IRequest<Result>;
+/// <summary>
+/// Command to complete a task with optional resolution notes
+/// </summary>
+public record CompleteTaskCommand(
+    TaskId TaskId,
+    string? ResolutionNotes = null
+) : IRequest<Result>;

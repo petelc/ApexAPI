@@ -39,7 +39,10 @@ public class StartTaskHandler : IRequestHandler<StartTaskCommand, Result>
             if (task.TenantId != _tenantContext.CurrentTenantId)
                 return Result.Forbidden();
 
-            task.Start(_currentUserService.UserId);
+            // ✅ Get Guid from UserId
+            var userId = _currentUserService.UserId!;
+
+            task.Start(userId);
 
             await _taskRepository.UpdateAsync(task, cancellationToken);
 
