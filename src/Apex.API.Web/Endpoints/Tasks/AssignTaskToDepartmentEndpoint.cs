@@ -1,7 +1,7 @@
 using FastEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Apex.API.UseCases.Tasks.AssignToDepartment;
+using Apex.API.UseCases.Users;
 using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.Web.Endpoints.Tasks;

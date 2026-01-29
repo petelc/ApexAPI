@@ -1,11 +1,9 @@
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Ardalis.Result;
 using Traxs.SharedKernel;
 using Apex.API.Core.Interfaces;
 using Apex.API.Core.Aggregates.TaskAggregate;
-using Apex.API.Core.Aggregates.UserAggregate;
 using Apex.API.UseCases.Common.Interfaces;
 
 namespace Apex.API.UseCases.Tasks.Claim;
@@ -15,20 +13,17 @@ public class ClaimTaskHandler : IRequestHandler<ClaimTaskCommand, Result>
     private readonly IRepository<Core.Aggregates.TaskAggregate.Task> _taskRepository;
     private readonly ITenantContext _tenantContext;
     private readonly ICurrentUserService _currentUserService;
-    private readonly UserManager<User> _userManager;
     private readonly ILogger<ClaimTaskHandler> _logger;
 
     public ClaimTaskHandler(
         IRepository<Core.Aggregates.TaskAggregate.Task> taskRepository,
         ITenantContext tenantContext,
         ICurrentUserService currentUserService,
-        UserManager<User> userManager,
         ILogger<ClaimTaskHandler> logger)
     {
         _taskRepository = taskRepository;
         _tenantContext = tenantContext;
         _currentUserService = currentUserService;
-        _userManager = userManager;
         _logger = logger;
     }
 
@@ -44,24 +39,16 @@ public class ClaimTaskHandler : IRequestHandler<ClaimTaskCommand, Result>
             if (task.TenantId != _tenantContext.CurrentTenantId)
                 return Result.Forbidden();
 
-            // Get current user's department
-            var user = await _userManager.FindByIdAsync(_currentUserService.UserId.ToString());
-
-            if (user == null)
-                return Result.Error("User not found.");
-
-            if (!user.DepartmentId.HasValue)
-                return Result.Error("User must be assigned to a department to claim tasks.");
-
-            // Claim the task
-            task.ClaimTask(_currentUserService.UserId, user.DepartmentId.Value);
+            // ✅ SIMPLIFIED: Just pass user ID - no department required
+            var userId = _currentUserService.UserId!;
+            task.ClaimTask(userId);
 
             await _taskRepository.UpdateAsync(task, cancellationToken);
 
             _logger.LogInformation(
                 "Task claimed: TaskId={TaskId}, UserId={UserId}",
                 command.TaskId,
-                _currentUserService.UserId);
+                userId);
 
             return Result.Success();
         }

@@ -39,9 +39,16 @@ public class StartTaskHandler : IRequestHandler<StartTaskCommand, Result>
             if (task.TenantId != _tenantContext.CurrentTenantId)
                 return Result.Forbidden();
 
-            // ✅ Get Guid from UserId
+            // ✅ Get current user ID
             var userId = _currentUserService.UserId!;
 
+            // ✅ Auto-assign if not assigned
+            if (!task.AssignedToUserId.HasValue)
+            {
+                task.ClaimTask(userId);
+            }
+
+            // Start the task
             task.Start(userId);
 
             await _taskRepository.UpdateAsync(task, cancellationToken);
