@@ -8,6 +8,7 @@ namespace Apex.API.Core.Aggregates.TaskAggregate;
 /// <summary>
 /// Task aggregate root - represents a unit of work within a project
 /// Can be assigned to an individual user or to a department
+/// ENHANCED: Added implementation notes, resolution notes, and user tracking
 /// </summary>
 public class Task : EntityBase, IAggregateRoot
 {
@@ -39,6 +40,10 @@ public class Task : EntityBase, IAggregateRoot
     public string Title { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
 
+    // ✅ NEW: Notes for tracking implementation and resolution
+    public string? ImplementationNotes { get; private set; }
+    public string? ResolutionNotes { get; private set; }
+
     // Status & Priority
     public Apex.API.Core.ValueObjects.TaskStatus Status { get; private set; } = Apex.API.Core.ValueObjects.TaskStatus.NotStarted;
     public RequestPriority Priority { get; private set; } = RequestPriority.Medium;
@@ -58,6 +63,10 @@ public class Task : EntityBase, IAggregateRoot
     // User Tracking
     public Guid CreatedByUserId { get; private set; }
 
+    // ✅ NEW: Track who started and completed the task
+    public Guid? StartedByUserId { get; private set; }
+    public Guid? CompletedByUserId { get; private set; }
+
     // Time Tracking
     public decimal? EstimatedHours { get; private set; }
     public decimal ActualHours { get; private set; }
@@ -72,6 +81,47 @@ public class Task : EntityBase, IAggregateRoot
     // Blocking
     public string? BlockedReason { get; private set; }
     public DateTime? BlockedDate { get; private set; }
+
+    // Add to Task.cs aggregate
+
+    private readonly List<TaskChecklistItem> _checklistItems = new();
+    public IReadOnlyCollection<TaskChecklistItem> ChecklistItems => _checklistItems.AsReadOnly();
+
+    private readonly List<TaskActivityLog> _activityLogs = new();
+    public IReadOnlyCollection<TaskActivityLog> ActivityLogs => _activityLogs.AsReadOnly();
+
+    /// <summary>
+    /// Adds a checklist item to the task
+    /// </summary>
+    public TaskChecklistItem AddChecklistItem(string description, int order)
+    {
+        if (Status.IsTerminal)
+            throw new InvalidOperationException($"Cannot add checklist items to task in {Status.Name} status");
+
+        var item = TaskChecklistItem.Create(Id, description, order);
+        _checklistItems.Add(item);
+        LastModifiedDate = DateTime.UtcNow;
+
+        return item;
+    }
+
+    /// <summary>
+    /// Gets a specific checklist item
+    /// </summary>
+    public TaskChecklistItem? GetChecklistItem(TaskChecklistItemId itemId)
+    {
+        return _checklistItems.FirstOrDefault(i => i.Id == itemId);
+    }
+
+    /// <summary>
+    /// Logs an activity
+    /// </summary>
+    public void LogActivity(TaskActivityType type, string description, Guid userId, string? details = null)
+    {
+        var activity = TaskActivityLog.Create(Id, type, description, userId, details);
+        _activityLogs.Add(activity);
+    }
+
 
     // EF Core constructor
     private Task() { }
@@ -150,6 +200,33 @@ public class Task : EntityBase, IAggregateRoot
     }
 
     /// <summary>
+    /// ✅ NEW: Updates implementation notes
+    /// </summary>
+    public void UpdateImplementationNotes(string? notes)
+    {
+        if (Status.IsTerminal)
+            throw new InvalidOperationException($"Cannot update implementation notes for task in {Status.Name} status");
+
+        if (notes != null && notes.Length > 5000)
+            throw new ArgumentException("Implementation notes cannot exceed 5000 characters", nameof(notes));
+
+        ImplementationNotes = notes;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// ✅ NEW: Updates resolution notes (typically when completing)
+    /// </summary>
+    public void UpdateResolutionNotes(string? notes)
+    {
+        if (notes != null && notes.Length > 5000)
+            throw new ArgumentException("Resolution notes cannot exceed 5000 characters", nameof(notes));
+
+        ResolutionNotes = notes;
+        LastModifiedDate = DateTime.UtcNow;
+    }
+
+    /// <summary>
     /// Assigns task to a specific user
     /// </summary>
     public void AssignToUser(Guid userId, DepartmentId? userDepartmentId, Guid assignedByUserId)
@@ -180,7 +257,24 @@ public class Task : EntityBase, IAggregateRoot
     }
 
     /// <summary>
-    /// User claims a department-assigned task
+    /// User claims a task (simple version - no department required)
+    /// </summary>
+    public void ClaimTask(Guid userId)
+    {
+        if (Status.IsTerminal)
+            throw new InvalidOperationException($"Cannot claim task in {Status.Name} status");
+
+        if (AssignedToUserId.HasValue && AssignedToUserId.Value != userId)
+            throw new InvalidOperationException("Task is already assigned to another user");
+
+        AssignedToUserId = userId;
+        LastModifiedDate = DateTime.UtcNow;
+
+        RegisterDomainEvent(new TaskAssignedToUserEvent(Id, userId, userId));
+    }
+
+    /// <summary>
+    /// User claims a department-assigned task (original version)
     /// </summary>
     public void ClaimTask(Guid userId, DepartmentId userDepartmentId)
     {
@@ -202,16 +296,21 @@ public class Task : EntityBase, IAggregateRoot
         RegisterDomainEvent(new TaskClaimedEvent(Id, userId, userDepartmentId));
     }
 
+
     /// <summary>
     /// Starts the task (NotStarted → InProgress)
+    /// Auto-assigns to user if not already assigned
     /// </summary>
     public void Start(Guid startedByUserId)
     {
         if (!Status.CanStart)
             throw new InvalidOperationException($"Cannot start task from {Status.Name} status");
 
+        // ✅ AUTO-ASSIGN: If not assigned, assign to the user starting it
         if (!AssignedToUserId.HasValue)
-            throw new InvalidOperationException("Task must be assigned before it can be started");
+        {
+            AssignedToUserId = startedByUserId;
+        }
 
         Status = Apex.API.Core.ValueObjects.TaskStatus.InProgress;
         StartedDate = DateTime.UtcNow;
@@ -273,14 +372,22 @@ public class Task : EntityBase, IAggregateRoot
 
     /// <summary>
     /// Completes the task (InProgress → Completed)
+    /// ✅ ENHANCED: Now tracks who completed the task
     /// </summary>
-    public void Complete(Guid completedByUserId)
+    public void Complete(Guid completedByUserId, string? resolutionNotes = null)
     {
         if (!Status.CanComplete)
             throw new InvalidOperationException($"Cannot complete task from {Status.Name} status");
 
         Status = Apex.API.Core.ValueObjects.TaskStatus.Completed;
         CompletedDate = DateTime.UtcNow;
+        CompletedByUserId = completedByUserId;  // ✅ Track who completed
+
+        if (resolutionNotes != null)
+        {
+            UpdateResolutionNotes(resolutionNotes);
+        }
+
         LastModifiedDate = DateTime.UtcNow;
 
         RegisterDomainEvent(new TaskCompletedEvent(Id, completedByUserId));

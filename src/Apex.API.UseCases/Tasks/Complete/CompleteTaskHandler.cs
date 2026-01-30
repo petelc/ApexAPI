@@ -3,11 +3,13 @@ using Microsoft.Extensions.Logging;
 using Ardalis.Result;
 using Traxs.SharedKernel;
 using Apex.API.Core.Interfaces;
-using Apex.API.Core.Aggregates.TaskAggregate;
 using Apex.API.UseCases.Common.Interfaces;
 
 namespace Apex.API.UseCases.Tasks.Complete;
 
+/// <summary>
+/// Handler for completing a task with optional resolution notes
+/// </summary>
 public class CompleteTaskHandler : IRequestHandler<CompleteTaskCommand, Result>
 {
     private readonly IRepository<Core.Aggregates.TaskAggregate.Task> _taskRepository;
@@ -39,7 +41,8 @@ public class CompleteTaskHandler : IRequestHandler<CompleteTaskCommand, Result>
             if (task.TenantId != _tenantContext.CurrentTenantId)
                 return Result.Forbidden();
 
-            task.Complete(_currentUserService.UserId);
+            // ✅ Complete with resolution notes
+            task.Complete(_currentUserService.UserId, command.ResolutionNotes);
 
             await _taskRepository.UpdateAsync(task, cancellationToken);
 

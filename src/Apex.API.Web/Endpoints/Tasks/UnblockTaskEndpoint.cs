@@ -1,49 +1,47 @@
 using FastEndpoints;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Apex.API.UseCases.Users;
+using Apex.API.UseCases.Tasks.Unblock;
 using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.Web.Endpoints.Tasks;
 
-public class AssignTaskToDepartmentRequest
-{
-    public Guid DepartmentId { get; set; }
-}
-
-public class AssignTaskToDepartmentEndpoint : Endpoint<AssignTaskToDepartmentRequest>
+/// <summary>
+/// Endpoint for unblocking a task
+/// </summary>
+public class UnblockTaskEndpoint : EndpointWithoutRequest
 {
     private readonly IMediator _mediator;
 
-    public AssignTaskToDepartmentEndpoint(IMediator mediator)
+    public UnblockTaskEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     public override void Configure()
     {
-        Post("/tasks/{id}/assign-to-department");
+        Post("/tasks/{id}/unblock");
         Roles("TenantAdmin", "Manager", "Project Manager", "Change Manager", "CAB Member", "CAB Manager");
-        Summary(s =>
-        {
-            s.Summary = "Assign task to department";
-            s.Description = "Assigns task to a department - any department member can claim it";
-        });
+        
+        Description(b => b
+            .WithTags("Tasks")
+            .WithSummary("Unblock a task")
+            .WithDescription("Changes task status from Blocked back to InProgress"));
     }
 
-    public override async Task HandleAsync(AssignTaskToDepartmentRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var taskId = Route<Guid>("id");
 
-        var command = new AssignTaskToDepartmentCommand(
-            TaskId.From(taskId),
-            DepartmentId.From(req.DepartmentId));
+        var command = new UnblockTaskCommand(TaskId.From(taskId));
 
         var result = await _mediator.Send(command, ct);
 
         if (result.IsSuccess)
         {
-            await HttpContext.Response.WriteAsJsonAsync(new { Message = "Task assigned to department successfully." }, ct);
+            await HttpContext.Response.WriteAsJsonAsync(new 
+            { 
+                Message = "Task unblocked successfully." 
+            }, ct);
         }
         else
         {

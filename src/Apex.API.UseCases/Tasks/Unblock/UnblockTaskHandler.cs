@@ -3,23 +3,25 @@ using Microsoft.Extensions.Logging;
 using Ardalis.Result;
 using Traxs.SharedKernel;
 using Apex.API.Core.Interfaces;
-using Apex.API.Core.Aggregates.TaskAggregate;
 using Apex.API.UseCases.Common.Interfaces;
 
-namespace Apex.API.UseCases.Tasks.Claim;
+namespace Apex.API.UseCases.Tasks.Unblock;
 
-public class ClaimTaskHandler : IRequestHandler<ClaimTaskCommand, Result>
+/// <summary>
+/// Handler for unblocking a task
+/// </summary>
+public class UnblockTaskHandler : IRequestHandler<UnblockTaskCommand, Result>
 {
     private readonly IRepository<Core.Aggregates.TaskAggregate.Task> _taskRepository;
     private readonly ITenantContext _tenantContext;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<ClaimTaskHandler> _logger;
+    private readonly ILogger<UnblockTaskHandler> _logger;
 
-    public ClaimTaskHandler(
+    public UnblockTaskHandler(
         IRepository<Core.Aggregates.TaskAggregate.Task> taskRepository,
         ITenantContext tenantContext,
         ICurrentUserService currentUserService,
-        ILogger<ClaimTaskHandler> logger)
+        ILogger<UnblockTaskHandler> logger)
     {
         _taskRepository = taskRepository;
         _tenantContext = tenantContext;
@@ -27,40 +29,46 @@ public class ClaimTaskHandler : IRequestHandler<ClaimTaskCommand, Result>
         _logger = logger;
     }
 
-    public async Task<Result> Handle(ClaimTaskCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        UnblockTaskCommand command,
+        CancellationToken cancellationToken)
     {
         try
         {
             var task = await _taskRepository.GetByIdAsync(command.TaskId, cancellationToken);
 
             if (task == null)
+            {
+                _logger.LogWarning("Task not found: {TaskId}", command.TaskId);
                 return Result.NotFound("Task not found.");
+            }
 
             if (task.TenantId != _tenantContext.CurrentTenantId)
+            {
+                _logger.LogWarning(
+                    "Unauthorized unblock attempt: TaskId={TaskId}, TenantId={TenantId}",
+                    command.TaskId,
+                    _tenantContext.CurrentTenantId);
                 return Result.Forbidden();
+            }
 
-            // ✅ SIMPLIFIED: Just pass user ID - no department required
-            var userId = _currentUserService.UserId!;
-            task.ClaimTask(userId);
+            task.Unblock(_currentUserService.UserId);
 
             await _taskRepository.UpdateAsync(task, cancellationToken);
 
-            _logger.LogInformation(
-                "Task claimed: TaskId={TaskId}, UserId={UserId}",
-                command.TaskId,
-                userId);
+            _logger.LogInformation("Task unblocked: TaskId={TaskId}", command.TaskId);
 
             return Result.Success();
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogWarning(ex, "Cannot claim task: {Message}", ex.Message);
+            _logger.LogWarning(ex, "Cannot unblock task: {Message}", ex.Message);
             return Result.Error(ex.Message);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error claiming task: TaskId={TaskId}", command.TaskId);
-            return Result.Error("An error occurred while claiming the task.");
+            _logger.LogError(ex, "Error unblocking task: TaskId={TaskId}", command.TaskId);
+            return Result.Error("An error occurred while unblocking the task.");
         }
     }
 }

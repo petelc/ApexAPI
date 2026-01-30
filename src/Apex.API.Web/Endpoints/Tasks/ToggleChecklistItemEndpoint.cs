@@ -1,53 +1,48 @@
 using FastEndpoints;
 using MediatR;
-using Apex.API.UseCases.Tasks.Complete;
+using Apex.API.UseCases.Tasks.Checklist;
 using Apex.API.Core.ValueObjects;
 
 namespace Apex.API.Web.Endpoints.Tasks;
 
 /// <summary>
-/// Request DTO for completing task
+/// Endpoint for toggling checklist item completion
 /// </summary>
-public class CompleteTaskRequest
-{
-    public string? ResolutionNotes { get; set; }
-}
-
-/// <summary>
-/// Endpoint for completing a task with optional resolution notes
-/// </summary>
-public class CompleteTaskEndpoint : Endpoint<CompleteTaskRequest>
+public class ToggleChecklistItemEndpoint : EndpointWithoutRequest
 {
     private readonly IMediator _mediator;
 
-    public CompleteTaskEndpoint(IMediator mediator)
+    public ToggleChecklistItemEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     public override void Configure()
     {
-        Post("/tasks/{id}/complete");
+        Put("/tasks/{taskId}/checklist/{itemId}/toggle");
         Roles("TenantAdmin", "Manager", "Project Manager", "Change Implementer", "Change Manager", "CAB Member", "CAB Manager");
         
         Description(b => b
             .WithTags("Tasks")
-            .WithSummary("Complete a task")
-            .WithDescription("Changes task status from InProgress to Completed with optional resolution notes"));
+            .WithSummary("Toggle checklist item")
+            .WithDescription("Marks checklist item as completed or incomplete"));
     }
 
-    public override async Task HandleAsync(CompleteTaskRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CancellationToken ct)
     {
-        var id = Route<Guid>("id");
-        var command = new CompleteTaskCommand(
-            TaskId.From(id),
-            req.ResolutionNotes);
+        var itemId = Route<Guid>("itemId");
+
+        var command = new ToggleChecklistItemCommand(
+            TaskChecklistItemId.From(itemId));
 
         var result = await _mediator.Send(command, ct);
 
         if (result.IsSuccess)
         {
-            await HttpContext.Response.WriteAsJsonAsync(new { Message = "Task completed successfully." }, ct);
+            await HttpContext.Response.WriteAsJsonAsync(new 
+            { 
+                Message = "Checklist item toggled successfully." 
+            }, ct);
         }
         else
         {
