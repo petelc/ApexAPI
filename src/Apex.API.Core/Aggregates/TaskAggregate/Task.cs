@@ -59,6 +59,7 @@ public class Task : EntityBase, IAggregateRoot
         get => _assignedToDepartmentId;
         private set => _assignedToDepartmentId = value;
     }
+    public string? AssignedToDepartmentName { get; private set; }
 
     // User Tracking
     public Guid CreatedByUserId { get; private set; }
@@ -229,13 +230,14 @@ public class Task : EntityBase, IAggregateRoot
     /// <summary>
     /// Assigns task to a specific user
     /// </summary>
-    public void AssignToUser(Guid userId, DepartmentId? userDepartmentId, Guid assignedByUserId)
+    public void AssignToUser(Guid userId, DepartmentId? userDepartmentId, string? departmentName, Guid assignedByUserId)
     {
         if (Status.IsTerminal)
             throw new InvalidOperationException($"Cannot assign task in {Status.Name} status");
 
         AssignedToUserId = userId;
         AssignedToDepartmentId = userDepartmentId;
+        AssignedToDepartmentName = departmentName;
         LastModifiedDate = DateTime.UtcNow;
 
         RegisterDomainEvent(new TaskAssignedToUserEvent(Id, userId, assignedByUserId));
@@ -244,13 +246,14 @@ public class Task : EntityBase, IAggregateRoot
     /// <summary>
     /// Assigns task to a department (any member can claim it)
     /// </summary>
-    public void AssignToDepartment(DepartmentId departmentId, Guid assignedByUserId)
+    public void AssignToDepartment(DepartmentId departmentId, string? departmentName, Guid assignedByUserId)
     {
         if (Status.IsTerminal)
             throw new InvalidOperationException($"Cannot assign task in {Status.Name} status");
 
         AssignedToUserId = null; // Clear individual assignment
         AssignedToDepartmentId = departmentId;
+        AssignedToDepartmentName = departmentName;
         LastModifiedDate = DateTime.UtcNow;
 
         RegisterDomainEvent(new TaskAssignedToDepartmentEvent(Id, departmentId, assignedByUserId));
@@ -268,6 +271,7 @@ public class Task : EntityBase, IAggregateRoot
             throw new InvalidOperationException("Task is already assigned to another user");
 
         AssignedToUserId = userId;
+        AssignedToDepartmentName = null;
         LastModifiedDate = DateTime.UtcNow;
 
         RegisterDomainEvent(new TaskAssignedToUserEvent(Id, userId, userId));

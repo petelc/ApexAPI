@@ -13,13 +13,16 @@ public class ListTasksEndpoint : EndpointWithoutRequest
 {
     private readonly IMediator _mediator;
     private readonly IUserLookupService _userLookupService;
+    private readonly ILogger<ListTasksEndpoint> _logger;
 
     public ListTasksEndpoint(
         IMediator mediator,
-        IUserLookupService userLookupService)
+        IUserLookupService userLookupService,
+        ILogger<ListTasksEndpoint> logger)
     {
         _mediator = mediator;
         _userLookupService = userLookupService;
+        _logger = logger;
     }
 
     public override void Configure()
@@ -65,6 +68,11 @@ public class ListTasksEndpoint : EndpointWithoutRequest
 
         if (!result.IsSuccess)
         {
+            // ✅ ADD THIS LOGGING
+            _logger.LogWarning(
+                "ListTasks failed: ProjectId={ProjectId}, Errors={Errors}",
+                projectId, string.Join(", ", result.Errors));
+
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             await HttpContext.Response.WriteAsJsonAsync(new { Errors = result.Errors }, ct);
             return;

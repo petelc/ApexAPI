@@ -7,6 +7,7 @@ using Apex.API.Core.Interfaces;
 using Apex.API.Core.Aggregates.TaskAggregate;
 using Apex.API.Core.Aggregates.UserAggregate;
 using Apex.API.UseCases.Common.Interfaces;
+using Apex.API.Core.Aggregates.DepartmentAggregate;
 
 namespace Apex.API.UseCases.Tasks.AssignToUser;
 
@@ -16,6 +17,7 @@ public class AssignTaskToUserHandler : IRequestHandler<AssignTaskToUserCommand, 
     private readonly ITenantContext _tenantContext;
     private readonly ICurrentUserService _currentUserService;
     private readonly UserManager<User> _userManager;
+    private readonly IRepository<Department> _departmentRepository;
     private readonly ILogger<AssignTaskToUserHandler> _logger;
 
     public AssignTaskToUserHandler(
@@ -23,12 +25,14 @@ public class AssignTaskToUserHandler : IRequestHandler<AssignTaskToUserCommand, 
         ITenantContext tenantContext,
         ICurrentUserService currentUserService,
         UserManager<User> userManager,
+        IRepository<Department> departmentRepository,
         ILogger<AssignTaskToUserHandler> logger)
     {
         _taskRepository = taskRepository;
         _tenantContext = tenantContext;
         _currentUserService = currentUserService;
         _userManager = userManager;
+        _departmentRepository = departmentRepository;
         _logger = logger;
     }
 
@@ -55,10 +59,23 @@ public class AssignTaskToUserHandler : IRequestHandler<AssignTaskToUserCommand, 
             if (user.TenantId != _tenantContext.CurrentTenantId)
                 return Result.Error("User does not belong to this tenant.");
 
+            // ✅ NEW: Lookup department name if user has a department
+            string? departmentName = null;
+            if (user.DepartmentId.HasValue)
+            {
+                var department = await _departmentRepository.GetByIdAsync(
+                    user.DepartmentId.Value,
+                    cancellationToken);
+
+                if (department != null)
+                    departmentName = department.Name;
+            }
+
             // Assign to user
             task.AssignToUser(
                 command.AssignedToUserId,
                 user.DepartmentId,
+                departmentName,
                 _currentUserService.UserId);
 
             await _taskRepository.UpdateAsync(task, cancellationToken);

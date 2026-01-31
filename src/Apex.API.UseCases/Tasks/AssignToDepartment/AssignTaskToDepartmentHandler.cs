@@ -5,6 +5,7 @@ using Traxs.SharedKernel;
 using Apex.API.Core.Interfaces;
 using Apex.API.Core.Aggregates.TaskAggregate;
 using Apex.API.UseCases.Common.Interfaces;
+using Apex.API.Core.Aggregates.DepartmentAggregate;
 
 namespace Apex.API.UseCases.Tasks.AssignToDepartment;
 
@@ -13,17 +14,20 @@ public class AssignTaskToDepartmentHandler : IRequestHandler<AssignTaskToDepartm
     private readonly IRepository<Apex.API.Core.Aggregates.TaskAggregate.Task> _taskRepository;
     private readonly ITenantContext _tenantContext;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IRepository<Department> _departmentRepository;
     private readonly ILogger<AssignTaskToDepartmentHandler> _logger;
 
     public AssignTaskToDepartmentHandler(
         IRepository<Apex.API.Core.Aggregates.TaskAggregate.Task> taskRepository,
         ITenantContext tenantContext,
         ICurrentUserService currentUserService,
+        IRepository<Department> departmentRepository,
         ILogger<AssignTaskToDepartmentHandler> logger)
     {
         _taskRepository = taskRepository;
         _tenantContext = tenantContext;
         _currentUserService = currentUserService;
+        _departmentRepository = departmentRepository;
         _logger = logger;
     }
 
@@ -52,8 +56,16 @@ public class AssignTaskToDepartmentHandler : IRequestHandler<AssignTaskToDepartm
                 return Result.Forbidden();
             }
 
+            // ✅ NEW: Lookup department
+            var department = await _departmentRepository.GetByIdAsync(
+                command.DepartmentId,
+                cancellationToken);
+
+            if (department == null)
+                return Result.NotFound("Department not found.");
+
             // Assign to department
-            task.AssignToDepartment(command.DepartmentId, _currentUserService.UserId);
+            task.AssignToDepartment(command.DepartmentId, department.Name, _currentUserService.UserId);
 
             // Save changes
             await _taskRepository.UpdateAsync(task, cancellationToken);

@@ -2,6 +2,7 @@ using Apex.API.UseCases.Users.DTOs;
 using Apex.API.Core.Aggregates.TaskAggregate;
 using Apex.API.UseCases.Users.Interfaces;
 using Apex.API.UseCases.Tasks.DTOs;
+using Apex.API.Core.Aggregates.DepartmentAggregate;
 
 namespace Apex.API.Web.Extensions;
 
@@ -19,40 +20,41 @@ public static class TaskMappingExtensions
     {
         return new TaskDto(
             Id: task.Id.Value,
-            ProjectId: task.ProjectId.Value,
             Title: task.Title,
             Description: task.Description,
             Status: task.Status.Name,
             Priority: task.Priority.Name,
-            
-            // ✅ NEW: Notes
-            ImplementationNotes: task.ImplementationNotes,
-            ResolutionNotes: task.ResolutionNotes,
-            
+            ProjectId: task.ProjectId.Value,
+
             // Assignment
             AssignedToUserId: task.AssignedToUserId,
             AssignedToDepartmentId: task.AssignedToDepartmentId?.Value,  // ✅ NEW: Extract Guid from value object
-            
+            AssignedToDepartmentName: task.AssignedToDepartmentName,     // ✅ NEW
+
+            // ✅ NEW: Notes
+            ImplementationNotes: task.ImplementationNotes,
+            ResolutionNotes: task.ResolutionNotes,
+
             // Time Tracking
             EstimatedHours: task.EstimatedHours,
             ActualHours: task.ActualHours,
-            
+
             // Dates
             DueDate: task.DueDate,
             CreatedDate: task.CreatedDate,
             StartedDate: task.StartedDate,
             CompletedDate: task.CompletedDate,
             LastModifiedDate: task.LastModifiedDate,
-            
+
             // Blocking
             BlockedReason: task.BlockedReason,
             BlockedDate: task.BlockedDate,
-            
+
             // User Tracking
             CreatedByUserId: task.CreatedByUserId,
             StartedByUserId: task.StartedByUserId,      // ✅ NEW
             CompletedByUserId: task.CompletedByUserId,  // ✅ NEW
-            
+
             // User objects (populated in Web layer)
             CreatedByUser: null,
             AssignedToUser: null,
@@ -77,12 +79,12 @@ public static class TaskMappingExtensions
             AssignedToUser = dto.AssignedToUserId.HasValue
                 ? userLookup.GetValueOrDefault(dto.AssignedToUserId.Value)
                 : null,
-            
+
             // ✅ NEW: Enrich starter
             StartedByUser = dto.StartedByUserId.HasValue
                 ? userLookup.GetValueOrDefault(dto.StartedByUserId.Value)
                 : null,
-            
+
             // ✅ NEW: Enrich completer
             CompletedByUser = dto.CompletedByUserId.HasValue
                 ? userLookup.GetValueOrDefault(dto.CompletedByUserId.Value)
@@ -111,14 +113,14 @@ public static class TaskMappingExtensions
         foreach (var dto in dtos)
         {
             userIds.Add(dto.CreatedByUserId);
-            
+
             if (dto.AssignedToUserId.HasValue)
                 userIds.Add(dto.AssignedToUserId.Value);
-            
+
             // ✅ NEW: Collect starter and completer IDs
             if (dto.StartedByUserId.HasValue)
                 userIds.Add(dto.StartedByUserId.Value);
-            
+
             if (dto.CompletedByUserId.HasValue)
                 userIds.Add(dto.CompletedByUserId.Value);
         }
@@ -142,14 +144,14 @@ public static class TaskMappingExtensions
         var dto = task.ToDto();
 
         var userIds = new List<Guid> { dto.CreatedByUserId };
-        
+
         if (dto.AssignedToUserId.HasValue)
             userIds.Add(dto.AssignedToUserId.Value);
-        
+
         // ✅ NEW: Add starter and completer
         if (dto.StartedByUserId.HasValue)
             userIds.Add(dto.StartedByUserId.Value);
-        
+
         if (dto.CompletedByUserId.HasValue)
             userIds.Add(dto.CompletedByUserId.Value);
 
